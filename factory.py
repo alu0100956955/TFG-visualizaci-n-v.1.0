@@ -3,6 +3,7 @@ from grafica_mat import Linea_mat
 from grafica_bokeh import Grafica_bokeh
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
+from grafica_ploty import Lineas_plotly, Barras_plotly
 
 class Factory:
 
@@ -14,13 +15,15 @@ class Factory:
 # tengo que hacer varias funciones y en funcion de la eleccion en el switch llarmarlas, ya que si intento devolver la clase directamente no me deja
 
     def lineas_mat() -> Grafica:
-        #aux = Linea_mat
         return Linea_mat
     def lineas_pygal() -> Grafica:
         return Linea_pygal
     def lineas_bokeh() -> Grafica:
         return Grafica_bokeh
-
+    def lineas_plotly() -> Grafica:
+        return Lineas_plotly
+    def barras_plotly() -> Grafica:
+        return Barras_plotly
 
     # Nos devolera el tipo de grafica dependiendo de la eleccion
     # todavia esta muy rudo pero es que no esta definido correctamente la cantidad de grafica y como van a estar estructuradas
@@ -34,7 +37,9 @@ class Factory:
         fun = switcher.get(eleccion)
         print (type(fun))
         #aux = fun()
-        aux = Factory.lineas_mat()
+        #aux = Factory.lineas_mat()
+        #aux = Factory.lineas_plotly()
+        aux = Factory.barras_plotly()
         #print (type(aux))
         #return fun
         return aux
