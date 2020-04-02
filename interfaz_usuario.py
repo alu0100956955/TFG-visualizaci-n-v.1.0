@@ -6,7 +6,8 @@ class Usuario:
     # metodo inicial muy basico
     # TO DO: controlar el rango de valores por si el usuario se equivoca e introduce un valor no registrado
     def pedirGrafica():
-        print("Que tipo de grafica desea: 1.linea1, 2.linea2, 3.linea3")
+        print(" 1.Linea matplotlib, 2.Linea pygal, 3.Linea plotly, 4.Barras plotly, 5.Cajas pygal, 0.Exit")
+        print("Que tipo de grafica desea:")
         return input()
 
 

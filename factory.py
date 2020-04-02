@@ -45,6 +45,22 @@ class Factory:
         return aux
 
 
+    # To do comprobar porque si encuentra la primera opcion por que me hace la segunda
+    def grafica(eleccion,contexto) -> Grafica:
+        switcher = {
+             1: Factory.mat(contexto)#,
+             #2: Factory.pygal(contexto)
+        }
+        elec = switcher.get(eleccion)
+        # no se si hacer return del propio contexto o con cambiar su atributo basta
+
+    def mat(contexto):
+        contexto.setGrafica(Linea_mat)
+
+    def pygal(contexto):
+        contexto.setGrafica(Linea_pygal)
+
+
 
 
 #gfsdfgsdf

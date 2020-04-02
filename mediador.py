@@ -4,6 +4,7 @@ from leerDatos import Lector
 #from grafica_pygal import Linea_pygal, Box_pygal
 from interfaz_usuario import Usuario
 from factory import Factory
+from estrategia import ContextoGrafica
 
 # La clase mediador debe de tener todas las clases ya que sera la que medie entre ellas
 
@@ -15,14 +16,20 @@ class Mediador:
     # Llamo a la interfaz de usuario, esta me devuelve los valores del usuario, se los paso al parse, que me devulve las clases que necesito y ejecuto los metodos principales
     # TO DO: parametrizar la ruta de los datos
     def show():
-        aux = Usuario.pedirGrafica()
-        #print(type(aux))
-        grafica = Factory.grafica(aux)
-        #print(type(grafica))
-        ruta = 'data/casos_2019.csv'
-        ruta2 = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
-        parse = Factory.parse(ruta2) # la ruta la pongo a mano por ahora ya vere como parametrizarla
-        grafica.show(parse)
+        aux = 20
+        contextoG = ContextoGrafica()
+        while aux != 0:
+
+            aux = Usuario.pedirGrafica()
+            #print(type(aux))
+            #grafica = Factory.grafica(aux) #El primer metodo que probe para el factory
+            Factory.grafica(aux,contextoG)  # Le pasamos el contexto para que le indique que tipo de grafica usara
+            #print(type(grafica))
+            ruta = 'data/casos_2019.csv'
+            ruta2 = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
+            parse = Factory.parse(ruta2) # la ruta la pongo a mano por ahora ya vere como parametrizarla | hay que habilitar el contexto para los parse
+            #grafica.show(parse)
+            contextoG.show(parse)
 
 
 
