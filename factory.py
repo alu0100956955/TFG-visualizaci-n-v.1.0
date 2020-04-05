@@ -53,8 +53,10 @@ class Factory:
         # con el get sacamos la funcion
         # Con la cadena le ponemos los parentesis para ejecutarla
         switcher = {
-             1: Factory.mat,
-             2: Factory.pygal,
+             1: Factory.lineaMat,
+             2: Factory.lineaPygal,
+             3: Factory.lineaPlotly,
+             4: Factory.barrasPlotly,
              0: Factory.finPrograma
         }
         #print(type(eleccion))
@@ -63,12 +65,18 @@ class Factory:
 
         # no se si hacer return del propio contexto o con cambiar su atributo basta
 
-    def mat(contexto):
+    def lineaMat(contexto):
         contexto.setGrafica(Linea_mat)
 
-    def pygal(contexto):
+    def lineaPygal(contexto):
         contexto.setGrafica(Linea_pygal)
 
+    def lineaPlotly(contexto):
+        contexto.setGrafica(Lineas_plotly)
+
+    def barrasPlotly(contexto):
+        contexto.setGrafica(Barras_plotly)
+        
     def finPrograma(a):
         print("Fin de la ejecución")
 

@@ -1,5 +1,8 @@
-from leerDatos import Lector
+from leerDatos import ParseCasosConfirmados
 import seaborn as sns
+from clases_base import Grafica
+
+#To DO: hacer la clase de linea_sea, hacer funcionar la grafica de tipo linea
 
 #df = sns.load_dataset("casos_2019")
 l = Lector('data/casos_2019.csv')

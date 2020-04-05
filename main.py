@@ -1,4 +1,4 @@
-from leerDatos import Lector
+from leerDatos import ParseCasosConfirmados
 from mediador import Mediador
 
 # main simple inicial para probar las graficas
