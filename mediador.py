@@ -9,9 +9,6 @@ from estrategia import ContextoGrafica
 # La clase mediador debe de tener todas las clases ya que sera la que medie entre ellas
 
 class Mediador:
-    # el mediador no deberia de ser inicializado con la ruta ya que esa no es su principal labor o puede ser alterada mas adelante
-    #def __init__(self,ruta): # con la ruta le pediremos al factory el parse
-        #self.parse = Factory.parse(ruta)  # le pedimos al factory el parse que necesitamos dependiendo del fichero que le pasemos | Podria inicializarlo con la ruta
 
     # Llamo a la interfaz de usuario, esta me devuelve los valores del usuario, se los paso al parse, que me devulve las clases que necesito y ejecuto los metodos principales
     # TO DO: parametrizar la ruta de los datos
