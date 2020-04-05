@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from leerDatos import Lector
+from leerDatos import ParseCasosConfirmados
 import numpy as np
 from clases_base import Grafica
 
@@ -20,16 +20,19 @@ class Linea_mat(Grafica):
 # El metodo para poder rotar entre los distintso tipos de lineas ( mirar hojas)
 # probar mas tipos de graficas
 # Permitir distintos tipos de graficas o tener distintos metodos para hacere las graficas
-    def show(l):
-        paises = ['Spain','Italy','China','Portugal']
-        for i in range(len(paises)):
-            plt.plot(l.ejeX(),l.ejeY(paises[i]), marker = Linea_mat.marker(i), linestyle = Linea_mat.line(i), markeredgecolor = Linea_mat.color(i), label = paises[i]) # TO DO ver como alterar el tipo de grafica y sus opciones en cada iteracion
-        plt.xticks(ticks=l.rango(),labels=l.ejeX(),rotation=70)
-        plt.title('Casos confirmados')
+    def show(data, seleccionados):
+        #paises = ['Spain','Italy','China','Portugal']
+        for i in range(len(seleccionados)):
+            plt.plot(data.getEjeX(),data.getEjeY(seleccionados[i]), marker = Linea_mat.marker(i), linestyle = Linea_mat.line(i), markeredgecolor = Linea_mat.color(i), label = seleccionados[i]) # TO DO ver como alterar el tipo de grafica y sus opciones en cada iteracion
+        plt.xticks(ticks=Linea_mat.rango(data),labels=data.getEjeX(),rotation=70)
+        plt.title(data.getTitle())
         plt.legend()
         plt.grid()
         plt.show()
 
+
+    def rango(dataset):
+        return np.arange(0,dataset.getEjeX().size,3).tolist()
 # Controlar cuando se salga del limite
     # Metodo que devuelve el tipo de marca
     def marker(indice):

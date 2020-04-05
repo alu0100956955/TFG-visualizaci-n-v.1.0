@@ -1,10 +1,11 @@
-from leerDatos import Lector
+from leerDatos import ParseCasosConfirmados
 from bokeh.plotting import figure, output_file, show
+from clases_base import Grafica
 
 #l = Lector('data/casos_2019.csv')
-class Grafica_bokeh:
+class Grafica_bokeh(Grafica):
 
-# TO DO 
+# TO DO
 # Arreglar el ejeX
 # Probar mas graficas
     def show(l):

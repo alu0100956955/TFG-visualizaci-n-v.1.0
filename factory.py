@@ -1,16 +1,17 @@
-from leerDatos import Lector
+from leerDatos import ParseCasosConfirmados
 from grafica_mat import Linea_mat
 from grafica_bokeh import Grafica_bokeh
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
 from grafica_ploty import Lineas_plotly, Barras_plotly
 
+# NO ES UN PATRON FACTORY, tengo que cambiarle el nombre y actualizar las referencias
 class Factory:
 
     # este metodo devolvera el tipo de parse dependiendo de la ruta
     # To do analizar la ruta para decidir el tipo de parse | para esto primero hay que arreglar la estructura de los parse
     def parse(ruta):
-        return Lector(ruta)
+        return ParseCasosConfirmados(ruta)
 
 # tengo que hacer varias funciones y en funcion de la eleccion en el switch llarmarlas, ya que si intento devolver la clase directamente no me deja
 
@@ -27,6 +28,7 @@ class Factory:
 
     # Nos devolera el tipo de grafica dependiendo de la eleccion
     # todavia esta muy rudo pero es que no esta definido correctamente la cantidad de grafica y como van a estar estructuradas
+    # Antiguo metodo que no funcina
     def grafica(eleccion) -> Grafica:
         switcher = {
              1: Factory.lineas_mat(),
@@ -46,12 +48,19 @@ class Factory:
 
 
     # To do comprobar porque si encuentra la primera opcion por que me hace la segunda
-    def grafica(eleccion,contexto) -> Grafica:
+    def grafica(eleccion,contexto):
+        # Funcionamiento del switch: declaramos un diccionario con las funciones, ( fijarse que en la declaracion de las funciones no estan los parentesis para que no las ejecute si no que las pase en tipo str)
+        # con el get sacamos la funcion
+        # Con la cadena le ponemos los parentesis para ejecutarla
         switcher = {
-             1: Factory.mat(contexto)#,
-             #2: Factory.pygal(contexto)
+             1: Factory.mat,
+             2: Factory.pygal,
+             0: Factory.finPrograma
         }
-        elec = switcher.get(eleccion)
+        #print(type(eleccion))
+        elec = switcher.get(int(eleccion))
+        elec(contexto)
+
         # no se si hacer return del propio contexto o con cambiar su atributo basta
 
     def mat(contexto):
@@ -59,6 +68,9 @@ class Factory:
 
     def pygal(contexto):
         contexto.setGrafica(Linea_pygal)
+
+    def finPrograma(a):
+        print("Fin de la ejecución")
 
 
 
