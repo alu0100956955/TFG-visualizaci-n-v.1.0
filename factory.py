@@ -1,6 +1,5 @@
 from leerDatos import ParseCasosConfirmados
 from grafica_mat import Linea_mat
-from grafica_bokeh import Grafica_bokeh
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
 from grafica_ploty import Lineas_plotly, Barras_plotly
@@ -76,7 +75,7 @@ class Factory:
 
     def barrasPlotly(contexto):
         contexto.setGrafica(Barras_plotly)
-        
+
     def finPrograma(a):
         print("Fin de la ejecución")
 

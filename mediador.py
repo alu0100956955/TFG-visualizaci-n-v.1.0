@@ -1,6 +1,5 @@
 from leerDatos import ParseCasosConfirmados
 #from grafica_mat import Linea_mat
-#from grafica_bokeh import Grafica_bokeh
 #from grafica_pygal import Linea_pygal, Box_pygal
 from interfaz_usuario import Usuario
 from factory import Factory
