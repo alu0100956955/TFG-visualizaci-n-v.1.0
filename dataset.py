@@ -10,7 +10,6 @@ class Dataset:
         self.ejey = matriz
 
     def getEjeY(self,eleccion):
-        #return self.ejex # Hay que parametrizar el tipo de pais
         return self.searchRow(self.searchIndex(eleccion))
 
     def setEjeX(self,array):
@@ -38,7 +37,6 @@ class Dataset:
     # Le pasamos las posiciones del pais, busca las filas corresponcientes, las suma y nos devuelve el array resultado
     def searchRow(self,posicion):
         primera = True
-        #print(self.ejey)
         for i in posicion:
             if(primera):
                 primera = False

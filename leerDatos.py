@@ -14,7 +14,6 @@ class ParseCasosConfirmados(Parse):
 
     # Nos devolvera los valores del ejeX que en este caso seran los dias |
     # TO DO :si el fichero no tubiese cabezeras o elementos necesarios para el ejex se mandara un array de numeros por defecto que coincidiran con la cantidad de columnas o datos
-    # este NO hay que modificarlo para pasarselo al dataset
     def ejeX(self):
         cabeceras = self.df.columns.values
         # es desde la 4 porque las primeras son datos que no necesitamos y en la columna 4 empiezan las fechas
@@ -23,14 +22,9 @@ class ParseCasosConfirmados(Parse):
 
     # Hay que modificarlo, devolvera una matriz que seera un array de arrays y en cada fila esta una fila del data set pero solo con las columnas que nos interesan
     def ejeY(self):
-        #columnas = self.df.columns
-        #return self.getRows(columnas,self.index(self.df,pais))
         filas = []
-        #rango = self.ar.size -1
         x,y = self.df.shape # el shape nos devuelve la cantidad de filas y columnas , si no lo hiciese asi me meteria en la misma variable las dos (x,y)
-        #print(x)
         for i in range(x):
-            #print(i)
             filas.append(self.getRow(i))
         return filas
 
@@ -58,7 +52,6 @@ class ParseCasosConfirmados(Parse):
     def getDataset(self):
         # Dentro de cada parse se configurara el titulo
         data = Dataset("casos Confirmados")
-        #data.setTitle(data,"Casos confirmados")
         data.setEjeX(self.ejeX())
         data.setEjeY(self.ejeY())
         data.setPaises(self.getPaises())
