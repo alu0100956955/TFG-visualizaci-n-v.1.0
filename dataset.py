@@ -26,7 +26,7 @@ class Dataset:
     def setPaises(self, array):
         self.paises = array
 
-    # Le pasamos un pais y nos devulve un array con la posición o posiciones del pais
+    # Le pasamos un pais y nos devulve un array con la posicion o posiciones del pais
     def searchIndex(self, pais):
         posicion = []
         for index in range(self.paises.size):
