@@ -25,15 +25,23 @@ class Linea_mat(Grafica):
         for i in range(len(seleccionados)):
             plt.plot(data.getEjeX(),data.getEjeY(seleccionados[i]), marker = Linea_mat.marker(i), linestyle = Linea_mat.line(i), markeredgecolor = Linea_mat.color(i), label = seleccionados[i]) # TO DO ver como alterar el tipo de grafica y sus opciones en cada iteracion
         #plt.xticks(ticks=Linea_mat.rango(data),labels=data.getEjeX(),rotation=70)
-        plt.xticks(labels=data.getEjeX(),rotation=70)
+        plt.xticks(ticks=Linea_mat.rango(data.getEjeX()),labels=data.getEjeX(),rotation=70)
         plt.title(data.getTitle())
         plt.legend()
         plt.grid()
         plt.show()
 
+    # metodo encargado de genrar un array para el eje x que sea mucho mas visible, para ello combertira algunos valores en string vacios
+    # array: sera el array del ejeX que contendra los elementos string de las fechas
+    def rango(array):
+        #return np.arange(0,dataset.getEjeX().size,3).tolist()
+        #rango = []
+        for i in range(array.size):
+            if(i%3 != 0):
+                array[i] = ""
+        return array
 
-    def rango(dataset):
-        return np.arange(0,dataset.getEjeX().size,3).tolist()
+
 # Controlar cuando se salga del limite
     # Metodo que devuelve el tipo de marca
     def marker(indice):
