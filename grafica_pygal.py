@@ -1,6 +1,7 @@
 from leerDatos import ParseCasosConfirmados
 import pygal
 from clases_base import Grafica
+import numpy as np
 
 
 
@@ -15,20 +16,22 @@ class Linea_pygal(Grafica):
         #chart = pygal.bar() # de tipo barras
 
         chart.title = data.getTitle()
-        chart.x_labels = data.getEjeX()  #para añadirle datos al ejex, se ve muy pequeño pero si se pasa el raton se ve bien
+        chart.x_labels = Linea_pygal.espaciar(data.getEjeX())  #para añadirle datos al ejex, se ve muy pequeño pero si se pasa el raton se ve bien
         for selec in seleccionados:
             chart.add(selec, data.getEjeY(selec))
 
         #chart.x_labels = l.labelsX(l.ejeX()) # no los reconoce como valores asique los apila igual pero como son menos pos quedan todos apretados al principio
         chart.render_to_file('output/lineas_pygal.html')
+        #chart.render_in_browser()
 
     # del array de labels para el eje x, como no puedo alterar los espacios voy a dejar vacias las posiciones que no me interesan para que quede limpio en la grafica
     def espaciar(valores):
         for i in np.arange(0,valores.size):
-            #if(): # si esta en el rango de valorees iniciales
-                # añadir espacio
-            print('Sin terminar')
+            if(i%3 != 0): # si esta en el rango de valorees iniciales
+                # añadir espcios
+                valores[i] = ""
         # devolver el array con las fechas sobreescritas
+        return valores
 
 
 class Box_pygal(Grafica):
