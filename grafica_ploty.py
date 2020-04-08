@@ -11,7 +11,7 @@ class Barras_plotly(Grafica):
         #paises = ['Spain','Italy','China','Portugal']
         fig = go.Figure()
         for selec in seleccionados:
-            fig.add_trace(go.Bar(y = data.getEjeY(selec)))
+            fig.add_trace(go.Bar(y = data.getEjeY(selec), name = selec))
         #fig.update_layout(title = 'Casos confirmados', xaxis_title="fecha",yaxis_title="Numero de casos")
         fig.update_layout(title = data.getTitle())
         # range(data.getEjeX().size)
@@ -31,7 +31,7 @@ class Lineas_plotly(Grafica):
         #paises = ['Spain','Italy','China','Portugal']
         fig = go.Figure()
         for selec in seleccionados:
-            fig.add_trace(go.Scatter(y = data.getEjeY(selec)))
+            fig.add_trace(go.Scatter(y = data.getEjeY(selec), name = selec))
         #fig.update_layout(title = 'Casos confirmados', xaxis_title="fecha",yaxis_title="Numero de casos")
         #fig.update_layout(xaxis_title=l.ejeX())
         #fig.write_html('output/lineas_ploty.html', auto_open=True)   # para guardar la grafica en un html
