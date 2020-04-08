@@ -24,7 +24,8 @@ class Linea_mat(Grafica):
         #paises = ['Spain','Italy','China','Portugal']
         for i in range(len(seleccionados)):
             plt.plot(data.getEjeX(),data.getEjeY(seleccionados[i]), marker = Linea_mat.marker(i), linestyle = Linea_mat.line(i), markeredgecolor = Linea_mat.color(i), label = seleccionados[i]) # TO DO ver como alterar el tipo de grafica y sus opciones en cada iteracion
-        plt.xticks(ticks=Linea_mat.rango(data),labels=data.getEjeX(),rotation=70)
+        #plt.xticks(ticks=Linea_mat.rango(data),labels=data.getEjeX(),rotation=70)
+        plt.xticks(labels=data.getEjeX(),rotation=70)
         plt.title(data.getTitle())
         plt.legend()
         plt.grid()

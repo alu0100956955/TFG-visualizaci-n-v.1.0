@@ -20,9 +20,10 @@ class Mediador:
         while int(aux) != 0:
             contextoG.setSeleccionados(paises)  # le pasamos al contexto los paises que se van a representar, es decir los elementos seleccionados de entre todos
             aux = Usuario.pedirGrafica() # Pedimos al usuario el tipo de grafica que quiere
-            Factory.grafica(aux,contextoG)  # Le pasamos el contexto para que le indique que tipo de grafica usara
-            parse = Factory.parse(ruta2) # la ruta la pongo a mano por ahora ya vere como parametrizarla | hay que habilitar el contexto para los parse
-            contextoG.show(parse)
+            if (int(aux) != 0):
+                Factory.grafica(aux,contextoG)  # Le pasamos el contexto para que le indique que tipo de grafica usara
+                parse = Factory.parse(ruta2) # la ruta la pongo a mano por ahora ya vere como parametrizarla | hay que habilitar el contexto para los parse
+                contextoG.show(parse)
 
 
 
