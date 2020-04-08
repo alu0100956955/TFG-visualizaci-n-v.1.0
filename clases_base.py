@@ -3,7 +3,7 @@
 
 class Grafica:
 
-    def show(l):
+    def show(data, seleccionados):
         pass
 
 

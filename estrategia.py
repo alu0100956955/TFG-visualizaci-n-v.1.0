@@ -8,9 +8,9 @@ class ContextoGrafica:
 
     # la operacion de las graficas es el show por eso este nombre
     def show(self,parse):
-        self.grafica.show(parse.getDataset(),self.paises) # le pasamos el parse (por ahora) y el array de paises
+        self.grafica.show(parse.getDataset(),self.seleccionados) # le pasamos el parse (por ahora) y el array de paises
 
-    def setPaises(self,p):
-        self.paises = p
+    def setSeleccionados(self,p):
+        self.seleccionados = p
 
 #hgsfhsd

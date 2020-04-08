@@ -1,9 +1,9 @@
 from leerDatos import ParseCasosConfirmados
 import pygal
 from clases_base import Grafica
-#from factory import Factory
 
-#l = Lector('data/casos_2019.csv')
+
+
 class Linea_pygal(Grafica):
 
 # TO DO

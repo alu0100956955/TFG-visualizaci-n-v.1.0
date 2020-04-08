@@ -14,6 +14,12 @@ class Barras_plotly(Grafica):
             fig.add_trace(go.Bar(y = data.getEjeY(selec)))
         #fig.update_layout(title = 'Casos confirmados', xaxis_title="fecha",yaxis_title="Numero de casos")
         fig.update_layout(title = data.getTitle())
+        # range(data.getEjeX().size)
+        ticksy = []
+        for i in range(data.getEjeX().size):
+            ticksy.append(i)
+        # Para cambiar el eje X
+        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = data.getEjeX()))
         fig.show()
 
 
@@ -30,6 +36,11 @@ class Lineas_plotly(Grafica):
         #fig.update_layout(xaxis_title=l.ejeX())
         #fig.write_html('output/lineas_ploty.html', auto_open=True)   # para guardar la grafica en un html
         fig.update_layout(title = data.getTitle())
+        ticksy = []
+        for i in range(data.getEjeX().size):
+            ticksy.append(i)
+        # Para cambiar los valores del eje X
+        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = data.getEjeX()))
         fig.show()
 
 #asdfasdfasd

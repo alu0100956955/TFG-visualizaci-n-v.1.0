@@ -18,7 +18,7 @@ class Mediador:
         ruta2 = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
         paises = ['Spain','Italy','China','Portugal']
         while int(aux) != 0:
-            contextoG.setPaises(paises)  # le pasamos al contexto los paises que se van a representar
+            contextoG.setSeleccionados(paises)  # le pasamos al contexto los paises que se van a representar, es decir los elementos seleccionados de entre todos
             aux = Usuario.pedirGrafica() # Pedimos al usuario el tipo de grafica que quiere
             Factory.grafica(aux,contextoG)  # Le pasamos el contexto para que le indique que tipo de grafica usara
             parse = Factory.parse(ruta2) # la ruta la pongo a mano por ahora ya vere como parametrizarla | hay que habilitar el contexto para los parse
