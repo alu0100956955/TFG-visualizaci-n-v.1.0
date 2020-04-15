@@ -60,8 +60,6 @@ class Mapa_plotly(Grafica):
 
         fig.show()
 
-    def show(data, seleccionados):
-
 
 
 

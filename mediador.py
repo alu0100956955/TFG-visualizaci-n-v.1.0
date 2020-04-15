@@ -14,8 +14,8 @@ class Mediador:
     def show():
         aux = 20
         contextoG = ContextoGrafica()
-        ruta = 'data/casos_2019.csv'
-        ruta2 = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
+        ruta = 'data/casos_2019.csv'  #Datos en el pc
+        ruta2 = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv' # Datos gitHub
         paises = ['Spain','Italy','China','Portugal']
         while int(aux) != 0:
             contextoG.setSeleccionados(paises)  # le pasamos al contexto los paises que se van a representar, es decir los elementos seleccionados de entre todos
