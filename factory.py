@@ -2,7 +2,7 @@ from leerDatos import ParseCasosConfirmados
 from grafica_mat import Linea_mat
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
-from grafica_ploty import Lineas_plotly, Barras_plotly
+from grafica_ploty import Lineas_plotly, Barras_plotly, Mapa_plotly
 
 # NO ES UN PATRON FACTORY, tengo que cambiarle el nombre y actualizar las referencias
 class Factory:
@@ -22,6 +22,7 @@ class Factory:
              2: Factory.lineaPygal,
              3: Factory.lineaPlotly,
              4: Factory.barrasPlotly,
+             5: Factory.mapaPlotly,
              0: Factory.finPrograma
         }
         #print(type(eleccion))
@@ -41,6 +42,9 @@ class Factory:
 
     def barrasPlotly(contexto):
         contexto.setGrafica(Barras_plotly)
+
+    def mapaPlotly(contexto):
+        contexto.setGrafica(Mapa_plotly)
 
     def finPrograma(a):
         print("Fin de la ejecución")

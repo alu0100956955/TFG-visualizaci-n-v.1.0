@@ -1,6 +1,8 @@
 import plotly.graph_objects as go
-from leerDatos import ParseCasosConfirmados
 import numpy as np
+from urllib.request import urlopen
+#Mis clases
+from leerDatos import ParseCasosConfirmados
 from clases_base import Grafica
 
 # El resultado de plotly es un html
@@ -42,5 +44,25 @@ class Lineas_plotly(Grafica):
         # Para cambiar los valores del eje X
         fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = data.getEjeX()))
         fig.show()
+
+
+class Mapa_plotly(Grafica):
+    #TO DO: Hay que quitar el parametro seleccionados y meterlo en el data directamente
+    def show(data, seleccionados):
+        fig = go.Figure(go.Scattergeo())
+        fig.update_geos(
+            projection_type="natural earth",
+            showcountries=True, countrycolor="Purple",
+            showland=True, landcolor="LightGreen",
+            showocean=True, oceancolor="LightBlue"
+        )
+        fig.update_layout(height=300, margin={"r":0,"t":0,"l":0,"b":0})
+
+        fig.show()
+
+    def show(data, seleccionados):
+
+
+
 
 #asdfasdfasd

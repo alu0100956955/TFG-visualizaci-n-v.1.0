@@ -12,6 +12,6 @@ class Instalador:
             spec = importlib.util.find_spec(i)
             if spec is None:
                 os.system('pip install '+ i)
-        
+
 
 #

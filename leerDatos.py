@@ -51,7 +51,7 @@ class ParseCasosConfirmados(Parse):
 
     def getDataset(self):
         # Dentro de cada parse se configurara el titulo
-        data = Dataset("casos Confirmados")
+        data = Dataset("Casos Confirmados")
         data.setEjeX(self.ejeX())
         data.setEjeY(self.ejeY())
         data.setPaises(self.getPaises())
