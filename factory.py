@@ -9,46 +9,21 @@ class Factory:
 
     # este metodo devolvera el tipo de parse dependiendo de la ruta
     # To do analizar la ruta para decidir el tipo de parse | para esto primero hay que arreglar la estructura de los parse
-    def parse(ruta):
+    def getParse(ruta):
         return ParseCasosConfirmados(ruta)
 
-    # To do comprobar porque si encuentra la primera opcion por que me hace la segunda
-    def grafica(eleccion,contexto):
-        # Funcionamiento del switch: declaramos un diccionario con las funciones, ( fijarse que en la declaracion de las funciones no estan los parentesis para que no las ejecute si no que las pase en tipo str)
-        # con el get sacamos la funcion
-        # Con la cadena le ponemos los parentesis para ejecutarla
+
+    def grafica(eleccion, contexto):
         switcher = {
-             1: Factory.lineaMat,
-             2: Factory.lineaPygal,
-             3: Factory.lineaPlotly,
-             4: Factory.barrasPlotly,
-             5: Factory.mapaPlotly,
-             0: Factory.finPrograma
+            1: Linea_mat,
+            2: Linea_pygal,
+            3: Lineas_plotly,
+            4: Barras_plotly,
+            5: Mapa_plotly
         }
-        #print(type(eleccion))
+
         elec = switcher.get(int(eleccion))
-        elec(contexto)
-
-        # no se si hacer return del propio contexto o con cambiar su atributo basta
-
-    def lineaMat(contexto):
-        contexto.setGrafica(Linea_mat)
-
-    def lineaPygal(contexto):
-        contexto.setGrafica(Linea_pygal)
-
-    def lineaPlotly(contexto):
-        contexto.setGrafica(Lineas_plotly)
-
-    def barrasPlotly(contexto):
-        contexto.setGrafica(Barras_plotly)
-
-    def mapaPlotly(contexto):
-        contexto.setGrafica(Mapa_plotly)
-
-    def finPrograma(a):
-        print("Fin de la ejecución")
-
+        contexto.setGrafica(elec)
 
 
 
