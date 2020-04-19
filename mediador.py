@@ -17,6 +17,8 @@ class Mediador:
         contextoG.setSeleccionados(seleccionados)
         contextoG.show(parse)
 
+    def getParse(url):
+        return Factory.getParse(url)
 
     # Metodo antiguo
     # Llamo a la interfaz de usuario, esta me devuelve los valores del usuario, se los paso al parse, que me devulve las clases que necesito y ejecuto los metodos principales

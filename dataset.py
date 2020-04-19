@@ -45,4 +45,12 @@ class Dataset:
             rows += self.ejey[i]
         return rows
 
+    #Array con las distintas opciones de lo que se puede representar
+    def setOpciones(self, opciones_):
+        self.opciones= opciones_
+
+    def getOpciones(self):
+        return self.opciones
+
+
 #asdfasf

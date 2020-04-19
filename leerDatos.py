@@ -37,6 +37,10 @@ class ParseCasosConfirmados(Parse):
     def getPaises(self):
         return self.df.loc[:,'Country/Region'].to_numpy()
 
+    # Devuelve un array con todos los paises ( segunda columna) para poder llenar la dropdownList
+    def getOpciones(self):
+        return np.unique(self.df.loc[:,'Country/Region'].to_numpy())
+
     # Este metodo nos dira en que filas esta el pais que estamos buscando,si son varios devolvera varios indices por eso devuelve un array
     # df: Dataframe que contiene los datos en donde buscar el pais
     # pais: String que contiene el pais que queremos buscar en que posiciones se encuentra
@@ -49,12 +53,14 @@ class ParseCasosConfirmados(Parse):
 
 
 
+
     def getDataset(self):
         # Dentro de cada parse se configurara el titulo
         data = Dataset("Casos Confirmados")
         data.setEjeX(self.ejeX())
         data.setEjeY(self.ejeY())
         data.setPaises(self.getPaises())
+        data.setOpciones(self.getOpciones())
         return data
 
 
