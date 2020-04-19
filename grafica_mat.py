@@ -43,7 +43,7 @@ class Linea_mat(Grafica):
                 array[i] = ""
         return array
 
-
+# To do : controlar cuando se sale de rango, si se pasa restarle la cantidad del array o hacer % o una division...
 # Controlar cuando se salga del limite
     # Metodo que devuelve el tipo de marca
     def marker(indice):

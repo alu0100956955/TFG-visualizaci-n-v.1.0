@@ -42,23 +42,26 @@ class Usuario:
             seleccionado = StringVar(ventana)   # la variable encargado despues de almacenar lo que seleccione el usuario
             opciones = dataS.getOpciones()
             seleccionado.set(opciones[0])   # le asigno el primero como default
-            dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones)
+            dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
             dropDownSeleccion.pack()
             getBotonShow()  # para que se añada el boton de
 
 
         # Añade a la ventana los radiobutton para escoger el tipo de grafica
         def graficas():
-            # Declaro los radiobutton para el tipo de grafica y la etiqueta
-            linea_mat = Radiobutton(ventana, text="Linea_mat", variable=grafica,value=1, command=getSeleccionados)
-            linea_pygal = Radiobutton(ventana, text="Linea_pygal", variable=grafica,value=2, command=getSeleccionados)
-            linea_plotly = Radiobutton(ventana, text="Linea_plotly", variable=grafica,value=3, command=getSeleccionados)
-            label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
+
             # Ahora los introduzco en la ventana
             label2.pack(pady=10)
             linea_mat.pack()
             linea_pygal.pack()
             linea_plotly.pack()
+
+        def addSeleccion(seleccion):
+
+            elegidos.append(seleccion)
+            lContSeleccionados.config(text=len(elegidos))
+            lSeleccionados.pack()
+            lContSeleccionados.pack()
 
         #--------------------- Declaracion de los elementos princiapales ---------------------------
         urlConfirmados = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
@@ -67,6 +70,14 @@ class Usuario:
         grafica = IntVar() # Variabla para controlar la opcion seleccionada por el usuario
         fuenteDatos = StringVar()
         dataS = Dataset('default')
+
+
+        # Declaro los radiobutton para el tipo de grafica y la etiqueta
+        linea_mat = Radiobutton(ventana, text="Linea_mat", variable=grafica,value=1, command=getSeleccionados)
+        linea_pygal = Radiobutton(ventana, text="Linea_pygal", variable=grafica,value=2, command=getSeleccionados)
+        linea_plotly = Radiobutton(ventana, text="Linea_plotly", variable=grafica,value=3, command=getSeleccionados)
+        label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
+
 
 
         label1 = tk.Label(ventana, text="MARQUE la fuente de datos")
@@ -85,7 +96,8 @@ class Usuario:
 
         # El dropdownList para elegir que seleccionar
         #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones)
-
+        lSeleccionados = tk.Label(ventana, text="Cantidad de seleccionados")
+        lContSeleccionados = tk.Label(ventana)
         label4 = tk.Label(ventana, text="funciona la funcion")
 
         rbCasosConfirmados.deselect()
