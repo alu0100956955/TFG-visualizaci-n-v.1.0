@@ -29,7 +29,7 @@ class Usuario:
 
         def getBotonShow(): # La funcion que Añade el boton para hacer la grafica | esta separado porque se puede pedir dentro de seleccionados o si es un mapa se pide solo
             # En la funcion recibe la opcion de grafica (int), el array con los elementos elegidos para mostrar (array), y la url de la fuente de datos para obtener el dataset (string)
-            botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: Mediador.show( grafica.get(),elegidos,fuenteDatos.get()))
+
             botonGrafica.pack(pady=20)
 
         # Metodo para añadir a la ventana el dropdownList para quel usuario escoja los elementos que quiere seleccionar
@@ -37,20 +37,18 @@ class Usuario:
 
             dataS = Mediador.getParse(fuenteDatos.get()).getDataset()
             #label4.pack()
-            label3 = tk.Label(ventana, text="Selecciona los elementos a representar" )
+
             label3.pack(pady=10)
-            seleccionado = StringVar(ventana)   # la variable encargado despues de almacenar lo que seleccione el usuario
+
             opciones = dataS.getOpciones()
             seleccionado.set(opciones[0])   # le asigno el primero como default
-            dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
+
             dropDownSeleccion.pack()
             getBotonShow()  # para que se añada el boton de
 
 
         # Añade a la ventana los radiobutton para escoger el tipo de grafica
         def graficas():
-
-            # Ahora los introduzco en la ventana
             label2.pack(pady=10)
             linea_mat.pack()
             linea_pygal.pack()
@@ -63,7 +61,7 @@ class Usuario:
             lSeleccionados.pack()
             lContSeleccionados.pack()
 
-        #--------------------- Declaracion de los elementos princiapales ---------------------------
+        #--------------------- Declaracion de los elementos para la ventana ---------------------------
         urlConfirmados = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
         ventana = tk.Tk()
         ventana.geometry('400x550')
@@ -71,28 +69,38 @@ class Usuario:
         fuenteDatos = StringVar()
         dataS = Dataset('default')
 
+        # Los radiobutton para el tipo de fuente
+        rbCasosConfirmados = Radiobutton(ventana, text="Casos confirmados", variable=fuenteDatos,value='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv', command=graficas)
+        rbSegunda = Radiobutton(ventana, text="Sin terminar", variable=fuenteDatos,value='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv')
 
+
+        # Elementos de getGrafica
         # Declaro los radiobutton para el tipo de grafica y la etiqueta
         linea_mat = Radiobutton(ventana, text="Linea_mat", variable=grafica,value=1, command=getSeleccionados)
         linea_pygal = Radiobutton(ventana, text="Linea_pygal", variable=grafica,value=2, command=getSeleccionados)
         linea_plotly = Radiobutton(ventana, text="Linea_plotly", variable=grafica,value=3, command=getSeleccionados)
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
 
-
+        # Elementos de getSeleccionados
+        opciones = [''] # La dejo vacia al princio para que no salte error al declarar el OptionMenu
+        seleccionado = StringVar(ventana)   # la variable encargado despues de almacenar lo que seleccione el usuario
+        label3 = tk.Label(ventana, text="Selecciona los elementos a representar" )
+        dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
 
         label1 = tk.Label(ventana, text="MARQUE la fuente de datos")
         #cajaTexto = tk.Entry(ventana)
-        # Los radiobutton para el tipo de fuente
-        rbCasosConfirmados = Radiobutton(ventana, text="Casos confirmados", variable=fuenteDatos,value='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv', command=graficas)
-        rbSegunda = Radiobutton(ventana, text="Sin terminar", variable=fuenteDatos,value='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv')
 
-        #Añadir los elementos a la ventana
+        # Elementos de getBotonShow
+        botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: Mediador.show( grafica.get(),elegidos,fuenteDatos.get()))
+
+        # ---------------------- Añadimos los elementos a la ventana -----------------------------
         label1.pack()
-        #cajaTexto.pack()
         rbCasosConfirmados.pack()
         rbSegunda.pack()
 
-        elegidos = ['Spain','Italy','China','Portugal']# Por ahora lo dejo cableado pero esto dependera de lo que escoga el usuario y se añadira un elemento por cada vez que el usuario lo indique ( habra que controlar los duplicados)
+        # Por ahora lo dejo cableado pero esto dependera de lo que escoga el usuario 
+        #elegidos = ['Spain','Italy','China','Portugal']
+        elegidos = [] # se añadira un elemento por cada vez que el usuario lo indique ( habra que controlar los duplicados)
 
         # El dropdownList para elegir que seleccionar
         #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones)
