@@ -52,5 +52,11 @@ class Dataset:
     def getOpciones(self):
         return self.opciones
 
+    def setSeleccionados(self, selec):
+        self.seleccionados = selec
+
+    def getSeleccionados(self):
+        return self.seleccionados
+
 
 #asdfasf

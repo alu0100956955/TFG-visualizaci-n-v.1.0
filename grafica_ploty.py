@@ -1,4 +1,5 @@
 import plotly.graph_objects as go
+import plotly.express as px
 import numpy as np
 from urllib.request import urlopen
 #Mis clases
@@ -9,8 +10,9 @@ from clases_base import Grafica
 
 class Barras_plotly(Grafica):
 
-    def show(data, seleccionados):
+    def show(data):
         #paises = ['Spain','Italy','China','Portugal']
+        seleccionados =  data.getSeleccionados()
         fig = go.Figure()
         for selec in seleccionados:
             fig.add_trace(go.Bar(y = data.getEjeY(selec), name = selec))
@@ -29,8 +31,9 @@ class Barras_plotly(Grafica):
 #  Pillar el titulo del parse
 class Lineas_plotly(Grafica):
 
-    def show(data, seleccionados):
+    def show(data):
         #paises = ['Spain','Italy','China','Portugal']
+        seleccionados = data.getSeleccionados()
         fig = go.Figure()
         for selec in seleccionados:
             fig.add_trace(go.Scatter(y = data.getEjeY(selec), name = selec))
@@ -46,9 +49,22 @@ class Lineas_plotly(Grafica):
         fig.show()
 
 
+class Scatter_plotly(Grafica):
+
+    def show(data):
+        seleccionados = data.getSeleccionados()
+        fig = go.Figure()
+        for elemento in data.getOpciones():
+            fig.add_trace(go.Scatter(y = data.getEjeY(elemento), mode='markers', name = elemento))
+        fig.update_layout(title = data.getTitle())
+
+        fig.show()
+
+
+
 class Mapa_plotly(Grafica):
-    #TO DO: Hay que quitar el parametro seleccionados y meterlo en el data directamente
-    def show(data, seleccionados):
+    
+    def show(data):
         fig = go.Figure(go.Scattergeo())
         fig.update_geos(
             projection_type="natural earth",

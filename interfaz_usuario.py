@@ -23,27 +23,29 @@ class Usuario:
         #Pedir seleccionados si es necesario
         # Botton (Button) para que muestre la grafica, esta la opcion de que se muestre cada vez que escoga un radiobutton pero esa me parece mas peligrosa porque hay que seleccionar los elementos salvo en mapa
 
+        #opcionesPack = False # Esta variable es para controlar si ya esta dentro el optionMenu, debido a que puede cambiar seguna la grafica y tengo que redeclararla para evitar que se añada multiples veces a la ventana
+
         # --------------------------Funciones para las distintas opciones ---------------------------------------
         def showGrafica(grafica, seleccionados, urlDatos):
             mediador.show2(grafica, seleccionados, urlDatos)
 
         def getBotonShow(): # La funcion que Añade el boton para hacer la grafica | esta separado porque se puede pedir dentro de seleccionados o si es un mapa se pide solo
             # En la funcion recibe la opcion de grafica (int), el array con los elementos elegidos para mostrar (array), y la url de la fuente de datos para obtener el dataset (string)
-
             botonGrafica.pack(pady=20)
 
         # Metodo para añadir a la ventana el dropdownList para quel usuario escoja los elementos que quiere seleccionar
         def getSeleccionados():
-
             dataS = Mediador.getParse(fuenteDatos.get()).getDataset()
             #label4.pack()
-
             label3.pack(pady=10)
-
             opciones = dataS.getOpciones()
             seleccionado.set(opciones[0])   # le asigno el primero como default
+            dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
+            if (dropDownSeleccion.winfo_ismapped() == False):
+                dropDownSeleccion.pack()
+                #opcionesPack = True;
 
-            dropDownSeleccion.pack()
+
             getBotonShow()  # para que se añada el boton de
 
 
@@ -69,9 +71,10 @@ class Usuario:
         fuenteDatos = StringVar()
         dataS = Dataset('default')
 
+
         # Los radiobutton para el tipo de fuente
         rbCasosConfirmados = Radiobutton(ventana, text="Casos confirmados", variable=fuenteDatos,value='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv', command=graficas)
-        rbSegunda = Radiobutton(ventana, text="Sin terminar", variable=fuenteDatos,value='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv')
+        rbSegunda = Radiobutton(ventana, text="Accidentes trafico", variable=fuenteDatos,value='data/muertos_en_accidentes_de_trafico.csv', command=graficas)
 
 
         # Elementos de getGrafica
@@ -79,6 +82,9 @@ class Usuario:
         linea_mat = Radiobutton(ventana, text="Linea_mat", variable=grafica,value=1, command=getSeleccionados)
         linea_pygal = Radiobutton(ventana, text="Linea_pygal", variable=grafica,value=2, command=getSeleccionados)
         linea_plotly = Radiobutton(ventana, text="Linea_plotly", variable=grafica,value=3, command=getSeleccionados)
+        barras_plotly = Radiobutton(ventana, text="Linea_mat", variable=grafica,value=4, command=getSeleccionados)
+        mapa_pygal = Radiobutton(ventana, text="Linea_pygal", variable=grafica,value=5, command=getBotonShow) # Como no hay que seleccionar pais le pongo el boton de representar directamente
+        scatter_plotly = Radiobutton(ventana, text="Linea_plotly", variable=grafica,value=6, command=getSeleccionados)
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
 
         # Elementos de getSeleccionados
@@ -98,7 +104,7 @@ class Usuario:
         rbCasosConfirmados.pack()
         rbSegunda.pack()
 
-        # Por ahora lo dejo cableado pero esto dependera de lo que escoga el usuario 
+        # Por ahora lo dejo cableado pero esto dependera de lo que escoga el usuario
         #elegidos = ['Spain','Italy','China','Portugal']
         elegidos = [] # se añadira un elemento por cada vez que el usuario lo indique ( habra que controlar los duplicados)
 

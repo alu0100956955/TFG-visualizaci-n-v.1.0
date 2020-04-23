@@ -20,12 +20,13 @@ class Linea_mat(Grafica):
 # El metodo para poder rotar entre los distintso tipos de lineas ( mirar hojas)
 # probar mas tipos de graficas
 # Permitir distintos tipos de graficas o tener distintos metodos para hacere las graficas
-    def show(data, seleccionados):
+    def show(data):
         #paises = ['Spain','Italy','China','Portugal']
+        seleccionados = data.getSeleccionados()
         for i in range(len(seleccionados)):
              # TO DO ver como alterar el tipo de grafica y sus opciones en cada iteracion
             plt.plot(data.getEjeX(),data.getEjeY(seleccionados[i]), marker = Linea_mat.marker(i), linestyle = Linea_mat.line(i), markeredgecolor = Linea_mat.color(i))
-            plt.text(data.getEjeX().size,data.getEjeY(seleccionados[i])[-1],s = seleccionados[i])
+            plt.text(data.getEjeX().size,data.getEjeY(seleccionados[i])[-1],s = seleccionados[i]) # Para que aparezcan los nombres de los elementos al final de la linea
         #plt.xticks(ticks=Linea_mat.rango(data),labels=data.getEjeX(),rotation=70)
         plt.xticks(ticks=Linea_mat.rango(data.getEjeX()),labels=data.getEjeX(),rotation=70)
         plt.title(data.getTitle())

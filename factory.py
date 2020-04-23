@@ -1,8 +1,8 @@
-from leerDatos import ParseCasosConfirmados
+from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico
 from grafica_mat import Linea_mat
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
-from grafica_ploty import Lineas_plotly, Barras_plotly, Mapa_plotly
+from grafica_ploty import Lineas_plotly, Barras_plotly, Mapa_plotly, Scatter_plotly
 
 # NO ES UN PATRON FACTORY, tengo que cambiarle el nombre y actualizar las referencias
 class Factory:
@@ -11,7 +11,7 @@ class Factory:
     # To do analizar la ruta para decidir el tipo de parse | para esto primero hay que arreglar la estructura de los parse
     def getParse(ruta):
         return ParseCasosConfirmados(ruta)
-
+        #return ParseAccidentesTrafico(ruta)
 
     def grafica(eleccion, contexto):
         switcher = {
@@ -19,7 +19,8 @@ class Factory:
             2: Linea_pygal,
             3: Lineas_plotly,
             4: Barras_plotly,
-            5: Mapa_plotly
+            5: Mapa_plotly,
+            6: Scatter_plotly
         }
 
         elec = switcher.get(int(eleccion))
