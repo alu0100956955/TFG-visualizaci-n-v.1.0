@@ -55,6 +55,9 @@ class Usuario:
             linea_mat.pack()
             linea_pygal.pack()
             linea_plotly.pack()
+            barras_plotly.pack()
+            mapa_pygal.pack()
+            scatter_plotly.pack()
 
         def addSeleccion(seleccion):
 
