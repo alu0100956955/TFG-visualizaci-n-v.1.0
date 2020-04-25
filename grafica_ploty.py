@@ -1,6 +1,8 @@
 import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
+import json
+import pandas as pd
 from urllib.request import urlopen
 #Mis clases
 from leerDatos import ParseCasosConfirmados
@@ -61,11 +63,32 @@ class Scatter_plotly(Grafica):
         fig.show()
 
 
-
+# Esta hecho exclusivamente para data que contenga todos los paises si no fallara
 class Mapa_plotly(Grafica):
-    
+
     def show(data):
-        fig = go.Figure(go.Scattergeo())
+        # El Json que contiene los paises
+        with open('data/countries.json') as file:
+            countries = json.load(file)
+
+        id = [] # Los id de cada pais correspondientes a los del json para que se represente correctamente cada dato
+        valores = []
+        #for pais in data.getOpciones():
+        for pais in countries['features']:
+            x = data.getEjeY(pais['properties']['SOVEREIGNT']) # Este es el nombre del pais
+            id.append(pais['id'])
+            valores.append(x[-1]) # EL -1 es para sacar el ultimo elemento de la lista que es el del ultimo dia
+
+        df = pd.DataFrame({"id":id,"valores":valores})
+
+        #fig = go.Figure(go.Scattergeo())
+
+        fig = px.choropleth(df, geojson=countries, locations='id', color='valores',
+                                   color_continuous_scale="Viridis",
+                                   range_color=(0, 1000),
+                                   labels={'Casos':'Casos confirmados covid'}
+                                  )
+
         fig.update_geos(
             projection_type="natural earth",
             showcountries=True, countrycolor="Purple",

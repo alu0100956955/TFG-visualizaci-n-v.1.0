@@ -85,9 +85,9 @@ class Usuario:
         linea_mat = Radiobutton(ventana, text="Linea_mat", variable=grafica,value=1, command=getSeleccionados)
         linea_pygal = Radiobutton(ventana, text="Linea_pygal", variable=grafica,value=2, command=getSeleccionados)
         linea_plotly = Radiobutton(ventana, text="Linea_plotly", variable=grafica,value=3, command=getSeleccionados)
-        barras_plotly = Radiobutton(ventana, text="Linea_mat", variable=grafica,value=4, command=getSeleccionados)
-        mapa_pygal = Radiobutton(ventana, text="Linea_pygal", variable=grafica,value=5, command=getBotonShow) # Como no hay que seleccionar pais le pongo el boton de representar directamente
-        scatter_plotly = Radiobutton(ventana, text="Linea_plotly", variable=grafica,value=6, command=getSeleccionados)
+        barras_plotly = Radiobutton(ventana, text="Barras_plotly", variable=grafica,value=4, command=getSeleccionados)
+        mapa_pygal = Radiobutton(ventana, text="Mapa_plotly", variable=grafica,value=5, command=getBotonShow) # Como no hay que seleccionar pais le pongo el boton de representar directamente
+        scatter_plotly = Radiobutton(ventana, text="Scatter_plotly", variable=grafica,value=6, command=getSeleccionados)
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
 
         # Elementos de getSeleccionados

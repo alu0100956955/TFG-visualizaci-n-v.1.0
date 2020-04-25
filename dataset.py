@@ -34,9 +34,10 @@ class Dataset:
                 posicion.append(index)
         return posicion
 
-    # Le pasamos las posiciones del pais, busca las filas corresponcientes, las suma y nos devuelve el array resultado
+    # Le pasamos las posiciones del pais, busca las filas corresponcientes, las suma y nos devuelve el array resultado, si no encuentra nada devuelve el array con un cero 
     def searchRow(self,posicion):
         primera = True
+        rows = [0]
         for i in posicion:
             if(primera):
                 primera = False
