@@ -56,8 +56,9 @@ class Usuario:
             linea_pygal.pack()
             linea_plotly.pack()
             barras_plotly.pack()
-            mapa_pygal.pack()
+            mapa_plotly.pack()
             scatter_plotly.pack()
+            box_pygal.pack()
 
         def addSeleccion(seleccion):
 
@@ -69,7 +70,7 @@ class Usuario:
         #--------------------- Declaracion de los elementos para la ventana ---------------------------
         urlConfirmados = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
         ventana = tk.Tk()
-        ventana.geometry('400x550')
+        ventana.geometry('400x550') # Cambiar las dimensiones cuando se mejore los elementos 
         grafica = IntVar() # Variabla para controlar la opcion seleccionada por el usuario
         fuenteDatos = StringVar()
         dataS = Dataset('default')
@@ -86,8 +87,9 @@ class Usuario:
         linea_pygal = Radiobutton(ventana, text="Linea_pygal", variable=grafica,value=2, command=getSeleccionados)
         linea_plotly = Radiobutton(ventana, text="Linea_plotly", variable=grafica,value=3, command=getSeleccionados)
         barras_plotly = Radiobutton(ventana, text="Barras_plotly", variable=grafica,value=4, command=getSeleccionados)
-        mapa_pygal = Radiobutton(ventana, text="Mapa_plotly", variable=grafica,value=5, command=getBotonShow) # Como no hay que seleccionar pais le pongo el boton de representar directamente
+        mapa_plotly = Radiobutton(ventana, text="Mapa_plotly", variable=grafica,value=5, command=getBotonShow) # Como no hay que seleccionar pais le pongo el boton de representar directamente
         scatter_plotly = Radiobutton(ventana, text="Scatter_plotly", variable=grafica,value=6, command=getSeleccionados)
+        box_pygal = Radiobutton(ventana, text="Box_pygal", variable=grafica,value=7, command=getSeleccionados)
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
 
         # Elementos de getSeleccionados

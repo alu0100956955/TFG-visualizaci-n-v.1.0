@@ -47,9 +47,18 @@ class Lineas_plotly(Grafica):
         for i in range(data.getEjeX().size):
             ticksy.append(i)
         # Para cambiar los valores del eje X
-        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = data.getEjeX()))
+        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Lineas_plotly.espaciar(data.getEjeX())))
         fig.show()
 
+    def espaciar(valores):
+        tam = valores.size
+        z = tam/7   # Este es para la cantidad de ticks, como quiero que solo salgan 7 etiquetas pos el modulo sera con el numero que salga como resultado
+        for i in np.arange(0,tam):
+            if(i%int(z) != 0): # Cada 10 valores dejo el original para que no este tan aglomerado
+                # añadir espcios
+                valores[i] = ""
+        # devolver el array con las fechas sobreescritas
+        return valores
 
 class Scatter_plotly(Grafica):
 
@@ -73,19 +82,22 @@ class Mapa_plotly(Grafica):
 
         id = [] # Los id de cada pais correspondientes a los del json para que se represente correctamente cada dato
         valores = []
+        nombrePais = [] # El nombre del pais segun el fichero json ( para ver que nombre le asigna ya que hay paises que no me los encuentra)
         #for pais in data.getOpciones():
         for pais in countries['features']:
-            x = data.getEjeY(pais['properties']['SOVEREIGNT']) # Este es el nombre del pais
+            nombre = pais['properties']['SOVEREIGNT'] # Este es el nombre del pais
+            nombrePais.append(nombre)
+            x = data.getEjeY(nombre)
             id.append(pais['id'])
             valores.append(x[-1]) # EL -1 es para sacar el ultimo elemento de la lista que es el del ultimo dia
 
-        df = pd.DataFrame({"id":id,"valores":valores})
+        df = pd.DataFrame({"id":id,"Casos Confirmados":valores,"Pais":nombrePais}) # El nombre para cada uno determinara lo que se vera al pasar el raton por cada pais
 
         #fig = go.Figure(go.Scattergeo())
 
-        fig = px.choropleth(df, geojson=countries, locations='id', color='valores',
+        fig = px.choropleth(df, geojson=countries, locations='id', color='Casos Confirmados',
                                    color_continuous_scale="Viridis",
-                                   range_color=(0, 1000),
+                                   range_color=(0, 30),
                                    labels={'Casos':'Casos confirmados covid'}
                                   )
 

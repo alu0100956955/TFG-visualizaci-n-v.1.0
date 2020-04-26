@@ -20,7 +20,8 @@ class Factory:
             3: Lineas_plotly,
             4: Barras_plotly,
             5: Mapa_plotly,
-            6: Scatter_plotly
+            6: Scatter_plotly,
+            7: Box_pygal
         }
 
         elec = switcher.get(int(eleccion))

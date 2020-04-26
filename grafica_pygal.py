@@ -11,8 +11,10 @@ class Linea_pygal(Grafica):
 # probar mas tipos de graficas
 # Cambiar la forma de pedir los datos en las graficas
 #Comprobar el self de show
-    def show(data, seleccionados):
-        chart = pygal.Line(x_label_rotation=60) # de tipo linea la grafica
+    def show(data):
+        seleccionados = data.getSeleccionados()
+        chart = pygal.Line(x_label_rotation=1) # de tipo linea la grafica
+        #chart = pygal.Line()
         #chart = pygal.bar() # de tipo barras
 
         chart.title = data.getTitle()
@@ -27,7 +29,7 @@ class Linea_pygal(Grafica):
     # del array de labels para el eje x, como no puedo alterar los espacios voy a dejar vacias las posiciones que no me interesan para que quede limpio en la grafica
     def espaciar(valores):
         for i in np.arange(0,valores.size):
-            if(i%3 != 0): # si esta en el rango de valorees iniciales
+            if(i%15 != 0): # Cada 10 valores dejo el original para que no este tan aglomerado
                 # añadir espcios
                 valores[i] = ""
         # devolver el array con las fechas sobreescritas
@@ -37,13 +39,29 @@ class Linea_pygal(Grafica):
 class Box_pygal(Grafica):
 
         # es lo mismo pero solo varia la primera linea es decir la instancia pero en python tengo problemas para devolver nuevas instancias
-    def show(l):
+    def show(data):
+        seleccionados = data.getSeleccionados()
         chart = pygal.Box(box_mode="pstdev")
-        chart.add('Casos España', l.ejeY('Spain'))
-        chart.add('Casos Italia',l.ejeY('Italy'))
-        chart.add('Casos China', l.ejeY('China'))
-        chart.render_to_file('output/box_coronavirus.svg')
 
+
+        chart.title = data.getTitle()
+        chart.x_labels = Linea_pygal.espaciar(data.getEjeX())
+
+        for selec in seleccionados:
+            chart.add(selec, data.getEjeY(selec))
+        chart.render_to_file('output/box_pygal.html')
+
+
+    # del array de labels para el eje x, como no puedo alterar los espacios voy a dejar vacias las posiciones que no me interesan para que quede limpio en la grafica
+    def espaciar(valores):
+        tam = valores.size
+        z = tam/7   # Este es para la cantidad de ticks, como quiero que solo salgan 7 etiquetas pos el modulo sera con el numero que salga como resultado
+        for i in np.arange(0,tam):
+            if(i%z != 0): # Cada 10 valores dejo el original para que no este tan aglomerado
+                # añadir espcios
+                valores[i] = ""
+        # devolver el array con las fechas sobreescritas
+        return valores
 
 #parse = Factory.parse('data/casos_2019.csv')
 #Box_pygal.show(parse)
