@@ -25,7 +25,7 @@ class Barras_plotly(Grafica):
         for i in range(data.getEjeX().size):
             ticksy.append(i)
         # Para cambiar el eje X
-        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = data.getEjeX()))
+        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Grafica.espaciar(data.getEjeX()) ) )
         fig.show()
 
 
@@ -47,18 +47,9 @@ class Lineas_plotly(Grafica):
         for i in range(data.getEjeX().size):
             ticksy.append(i)
         # Para cambiar los valores del eje X
-        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Lineas_plotly.espaciar(data.getEjeX())))
+        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Grafica.espaciar(data.getEjeX())))
         fig.show()
 
-    def espaciar(valores):
-        tam = valores.size
-        z = tam/7   # Este es para la cantidad de ticks, como quiero que solo salgan 7 etiquetas pos el modulo sera con el numero que salga como resultado
-        for i in np.arange(0,tam):
-            if(i%int(z) != 0): # Cada 10 valores dejo el original para que no este tan aglomerado
-                # añadir espcios
-                valores[i] = ""
-        # devolver el array con las fechas sobreescritas
-        return valores
 
 class Scatter_plotly(Grafica):
 

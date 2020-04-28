@@ -28,21 +28,11 @@ class Linea_mat(Grafica):
             plt.plot(data.getEjeX(),data.getEjeY(seleccionados[i]), marker = Linea_mat.marker(i), linestyle = Linea_mat.line(i), markeredgecolor = Linea_mat.color(i))
             plt.text(data.getEjeX().size,data.getEjeY(seleccionados[i])[-1],s = seleccionados[i]) # Para que aparezcan los nombres de los elementos al final de la linea
         #plt.xticks(ticks=Linea_mat.rango(data),labels=data.getEjeX(),rotation=70)
-        plt.xticks(ticks=Linea_mat.rango(data.getEjeX()),labels=data.getEjeX(),rotation=70)
+        plt.xticks(ticks=Grafica.espaciar(data.getEjeX()),labels=data.getEjeX(),rotation=1)
         plt.title(data.getTitle())
         plt.legend()
         plt.grid()
         plt.show()
-
-    # metodo encargado de genrar un array para el eje x que sea mucho mas visible, para ello combertira algunos valores en string vacios
-    # array: sera el array del ejeX que contendra los elementos string de las fechas
-    def rango(array):
-        #return np.arange(0,dataset.getEjeX().size,3).tolist()
-        #rango = []
-        for i in range(array.size):
-            if(i%3 != 0):
-                array[i] = ""
-        return array
 
 # To do : controlar cuando se sale de rango, si se pasa restarle la cantidad del array o hacer % o una division...
 # Controlar cuando se salga del limite
