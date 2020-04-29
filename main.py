@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from leerDatos import ParseCasosConfirmados
 from mediador import Mediador
 from instalador import Instalador

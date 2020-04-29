@@ -23,10 +23,11 @@ class Linea_pygal(Grafica):
             chart.add(selec, data.getEjeY(selec))
 
         #chart.x_labels = l.labelsX(l.ejeX()) # no los reconoce como valores asique los apila igual pero como son menos pos quedan todos apretados al principio
-        chart.render_to_file('output/lineas_pygal.html')
+        #chart.render_to_file('output/lineas_pygal.html')
         #chart.render_in_browser()
+        chart.render()
 
-    
+
 
 class Box_pygal(Grafica):
 

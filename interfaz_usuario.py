@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import tkinter as tk
 from tkinter import *
 from mediador import Mediador
@@ -70,7 +72,7 @@ class Usuario:
         #--------------------- Declaracion de los elementos para la ventana ---------------------------
         urlConfirmados = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
         ventana = tk.Tk()
-        ventana.geometry('400x550') # Cambiar las dimensiones cuando se mejore los elementos 
+        ventana.geometry('400x550') # Cambiar las dimensiones cuando se mejore los elementos
         grafica = IntVar() # Variabla para controlar la opcion seleccionada por el usuario
         fuenteDatos = StringVar()
         dataS = Dataset('default')
