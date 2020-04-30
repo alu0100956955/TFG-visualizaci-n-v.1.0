@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 import tkinter as tk
 from tkinter import *
+from tkinter import ttk
 from mediador import Mediador
 from dataset import Dataset
+
 
 # Clase encargada en la interaccion con el usuario
 class Usuario:
@@ -25,7 +27,7 @@ class Usuario:
         #Pedir seleccionados si es necesario
         # Botton (Button) para que muestre la grafica, esta la opcion de que se muestre cada vez que escoga un radiobutton pero esa me parece mas peligrosa porque hay que seleccionar los elementos salvo en mapa
 
-        #opcionesPack = False # Esta variable es para controlar si ya esta dentro el optionMenu, debido a que puede cambiar seguna la grafica y tengo que redeclararla para evitar que se añada multiples veces a la ventana
+
 
         # --------------------------Funciones para las distintas opciones ---------------------------------------
         def showGrafica(grafica, seleccionados, urlDatos):
@@ -36,17 +38,20 @@ class Usuario:
             botonGrafica.pack(pady=20)
 
         # Metodo para añadir a la ventana el dropdownList para quel usuario escoja los elementos que quiere seleccionar
-        def getSeleccionados():
+        def getSeleccionados(opcionesPack):
+            #opcionesPack = dropDownSeleccion.winfo_ismapped() # Asi pregunto si ya esta metido dentro de la ventana antes de volver a declararlo
             dataS = Mediador.getParse(fuenteDatos.get()).getDataset()
             #label4.pack()
             label3.pack(pady=10)
             opciones = dataS.getOpciones()
             seleccionado.set(opciones[0])   # le asigno el primero como default
-            dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
-            if (dropDownSeleccion.winfo_ismapped() == False):
+            #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
+            #dropDownSeleccion = ttk.Combobox( opciones.all())
+            dropDownSeleccion["values"] = [*opciones];
+            #if (dropDownSeleccion.winfo_ismapped() == False): #Esto no funciona ya que declaro arriba el dropdown asique cuenta como nuevo
+            if ( opcionesPack == False):
                 dropDownSeleccion.pack()
                 #opcionesPack = True;
-
 
             getBotonShow()  # para que se añada el boton de
 
@@ -82,10 +87,19 @@ class Usuario:
         rbCasosConfirmados = Radiobutton(ventana, text="Casos confirmados", variable=fuenteDatos,value='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv', command=graficas)
         rbSegunda = Radiobutton(ventana, text="Accidentes trafico", variable=fuenteDatos,value='data/muertos_en_accidentes_de_trafico.csv', command=graficas)
 
+        # Elementos de getSeleccionados
+        opciones = [''] # La dejo vacia al princio para que no salte error al declarar el OptionMenu
+        seleccionado = StringVar(ventana)   # la variable encargado despues de almacenar lo que seleccione el usuario
+        label3 = tk.Label(ventana, text="Selecciona los elementos a representar" )
+        #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
+        dropDownSeleccion = ttk.Combobox(state = "readonly")
+        opcionesPack = False # Esta variable es para controlar si ya esta dentro el optionMenu, debido a que puede cambiar seguna la grafica y tengo que redeclararla para evitar que se añada multiples veces a la ventana
+        label1 = tk.Label(ventana, text="MARQUE la fuente de datos")
+        #cajaTexto = tk.Entry(ventana)
 
         # Elementos de getGrafica
         # Declaro los radiobutton para el tipo de grafica y la etiqueta
-        linea_mat = Radiobutton(ventana, text="Linea_mat", variable=grafica,value=1, command=getSeleccionados)
+        linea_mat = Radiobutton(ventana, text="Linea_mat", variable=grafica,value=1, command= lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
         linea_pygal = Radiobutton(ventana, text="Linea_pygal", variable=grafica,value=2, command=getSeleccionados)
         linea_plotly = Radiobutton(ventana, text="Linea_plotly", variable=grafica,value=3, command=getSeleccionados)
         barras_plotly = Radiobutton(ventana, text="Barras_plotly", variable=grafica,value=4, command=getSeleccionados)
@@ -94,14 +108,7 @@ class Usuario:
         box_pygal = Radiobutton(ventana, text="Box_pygal", variable=grafica,value=7, command=getSeleccionados)
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
 
-        # Elementos de getSeleccionados
-        opciones = [''] # La dejo vacia al princio para que no salte error al declarar el OptionMenu
-        seleccionado = StringVar(ventana)   # la variable encargado despues de almacenar lo que seleccione el usuario
-        label3 = tk.Label(ventana, text="Selecciona los elementos a representar" )
-        dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
 
-        label1 = tk.Label(ventana, text="MARQUE la fuente de datos")
-        #cajaTexto = tk.Entry(ventana)
 
         # Elementos de getBotonShow
         botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: Mediador.show( grafica.get(),elegidos,fuenteDatos.get()))
