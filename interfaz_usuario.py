@@ -48,6 +48,7 @@ class Usuario:
             #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
             #dropDownSeleccion = ttk.Combobox( opciones.all())
             dropDownSeleccion["values"] = [*opciones];
+            dropDownSeleccion.bind("<<ComboboxSelected>>", addSeleccion)
             #if (dropDownSeleccion.winfo_ismapped() == False): #Esto no funciona ya que declaro arriba el dropdown asique cuenta como nuevo
             if ( opcionesPack == False):
                 dropDownSeleccion.pack()
@@ -67,9 +68,11 @@ class Usuario:
             scatter_plotly.pack()
             box_pygal.pack()
 
-        def addSeleccion(seleccion):
-
-            elegidos.append(seleccion)
+        # Metodo para añadir el elemento seleccionado por el usuario
+        def addSeleccion(event):
+            #print(event)
+            #seleccion = event
+            elegidos.append(dropDownSeleccion.get())
             lContSeleccionados.config(text=len(elegidos))
             lSeleccionados.pack()
             lContSeleccionados.pack()
@@ -93,6 +96,7 @@ class Usuario:
         label3 = tk.Label(ventana, text="Selecciona los elementos a representar" )
         #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
         dropDownSeleccion = ttk.Combobox(state = "readonly")
+        dropDownSeleccion.bind("<<comboboxselected>>", addSeleccion)
         opcionesPack = False # Esta variable es para controlar si ya esta dentro el optionMenu, debido a que puede cambiar seguna la grafica y tengo que redeclararla para evitar que se añada multiples veces a la ventana
         label1 = tk.Label(ventana, text="MARQUE la fuente de datos")
         #cajaTexto = tk.Entry(ventana)
