@@ -23,18 +23,21 @@ class Dataset:
     def getTitle(self):
         return self.title
 
-    def setPaises(self, array):
-        self.paises = array
+    # Esto hay que eliminarlo no es optimo
+    # En vez de set paises deberia ser setTodasLasOpciones, esto es debido a que son todas las opciones incluidos duplicados
+    def setTodasLasOpciones(self, array):
+        self.TOpciones = array
 
-    # Le pasamos un pais y nos devulve un array con la posicion o posiciones del pais
-    def searchIndex(self, pais):
-        posicion = []
-        for index in range(self.paises.size):
-            if(self.paises[index] == pais):
+    # Le pasamos un pais y nos devulve un array con la posicion o posiciones del pais | en vez de pais que sea
+    # Le indicamos la opcion que escogio el usuario y nos indica el indice de la fila en la que se encuentra
+    def searchIndex(self, opcion):
+        posicion = []   # Lo hago array por si hay mas de una opcion
+        for index in range(len(self.TOpciones)):
+            if(self.TOpciones[index] == opcion):
                 posicion.append(index)
         return posicion
 
-    # Le pasamos las posiciones del pais, busca las filas corresponcientes, las suma y nos devuelve el array resultado, si no encuentra nada devuelve el array con un cero 
+    # Le pasamos las posiciones del pais, busca las filas corresponcientes, las suma y nos devuelve el array resultado, si no encuentra nada devuelve el array con un cero
     def searchRow(self,posicion):
         primera = True
         rows = [0]
@@ -58,6 +61,14 @@ class Dataset:
 
     def getSeleccionados(self):
         return self.seleccionados
+
+    # Los datos para cada eje
+    def addElementoMatrizOpcionesEje(self,opciones):
+        self.matrizEje.append(opciones)
+
+    # Las opciones para cada eje
+    def setArrayOpcionesEje(self,array ):
+        self.OpcionesEje = array
 
 
 #asdfasf

@@ -12,13 +12,14 @@ class Mediador:
     # Metodo nuevo
     def show(grafica, seleccionados, urlDatos):
         contextoG = ContextoGrafica()
-        parse = Factory.getParse(urlDatos) # Llamarlo getParse
+        parse = Factory.getParse(urlDatos) 
         Factory.grafica(grafica,contextoG)
         contextoG.setSeleccionados(seleccionados)
         contextoG.show(parse)
 
-    def getParse(url):
-        return Factory.getParse(url)
+    def getParse(eleccion):  # le indicamos a la clase se seleccion que ha seleccionado el usuario y nos devuelve el parse correspondiente
+        #return Factory.getParse(url)
+        return Factory.getParse(eleccion)
 
     # Metodo antiguo
     # Llamo a la interfaz de usuario, esta me devuelve los valores del usuario, se los paso al parse, que me devulve las clases que necesito y ejecuto los metodos principales

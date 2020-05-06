@@ -9,8 +9,15 @@ class Factory:
 
     # este metodo devolvera el tipo de parse dependiendo de la ruta
     # To do analizar la ruta para decidir el tipo de parse | para esto primero hay que arreglar la estructura de los parse
+    # antes que analizar la ruta hacer lo mismo que con el tipo de grafica
     def getParse(ruta):
-        return ParseCasosConfirmados(ruta)
+        switcher = {
+            1: ParseCasosConfirmados,
+            2: ParseAccidentesTrafico
+        }
+
+        return switcher.get(int(ruta))
+        #return ParseCasosConfirmados(ruta)
         #return ParseAccidentesTrafico(ruta)
 
     def grafica(eleccion, contexto):

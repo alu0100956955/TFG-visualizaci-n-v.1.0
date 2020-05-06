@@ -78,6 +78,7 @@ class Mapa_plotly(Grafica):
         for pais in countries['features']:
             nombre = pais['properties']['SOVEREIGNT'] # Este es el nombre del pais
             nombrePais.append(nombre)
+            # Hay que controlar si el nombre es correcto
             x = data.getEjeY(nombre)
             id.append(pais['id'])
             valores.append(x[-1]) # EL -1 es para sacar el ultimo elemento de la lista que es el del ultimo dia
@@ -102,6 +103,12 @@ class Mapa_plotly(Grafica):
 
         fig.show()
 
+    #Si el nombre que esta registrado en el json es correcto devuelve el nombre que se le paso, en caso contrario pasara el que corresponda
+    def nombreCorrecto(nombre):
+        # Por ahora solo hay un nombre que es el de US, para poder admitir multiples nombres meter un dicionario
+        if (nombre == ""):
+            return "US1"
+        return nombre
 
 
 

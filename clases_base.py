@@ -8,7 +8,7 @@ class Grafica:
 
     # Este metodo sirve para hacer que sean los elementos espacios menos 7, que seran los ticks del eje X
     def espaciar(valores):
-        tam = valores.size
+        tam = len(valores)
         z = tam/7   # Este es para la cantidad de ticks, como quiero que solo salgan 7 etiquetas pos el modulo sera con el numero que salga como resultado
         for i in np.arange(0,tam):
             if(i%int(z) != 0): # Cada 10 valores dejo el original para que no este tan aglomerado
