@@ -14,13 +14,14 @@ class ParseCasosConfirmados(Parse):
 
     # Nos devolvera los valores del ejeX que en este caso seran los dias |
     # TO DO :si el fichero no tubiese cabezeras o elementos necesarios para el ejex se mandara un array de numeros por defecto que coincidiran con la cantidad de columnas o datos
+    # Este es ahora el metodo que extrae el array de dias necesario para una de las opciones de eje
     def ejeX(self):
         cabeceras = self.df.columns.values
         # es desde la 4 porque las primeras son datos que no necesitamos y en la columna 4 empiezan las fechas
         return cabeceras[4:cabeceras.size]
 
 
-    # Hay que modificarlo, devolvera una matriz que seera un array de arrays y en cada fila esta una fila del data set pero solo con las columnas que nos interesan
+    # CAMBIAR: este tiene que ser un metodo que me devuelva la matriz con todos los paises ( un pais por fila) representando la cantidad de contagios y no sera garantizado el ejeY
     def ejeY(self):
         filas = []
         x,y = self.df.shape # el shape nos devuelve la cantidad de filas y columnas , si no lo hiciese asi me meteria en la misma variable las dos (x,y)
@@ -28,7 +29,7 @@ class ParseCasosConfirmados(Parse):
             filas.append(self.getRow(i))
         return filas
 
-
+    # Nos devuelve en tipo array la fila del indice que le indiquemos
     def getRow(self,index):
         columnas = self.df.columns
         return self.df.loc[index , columnas[4]:columnas[len(columnas)-1]].to_numpy()
@@ -37,7 +38,7 @@ class ParseCasosConfirmados(Parse):
     def getPaises(self):
         return self.df.loc[:,'Country/Region'].to_numpy()
 
-    # Devuelve un array con todos los paises ( segunda columna) para poder llenar la dropdownList
+    # Devuelve un array con todos los paises ( segunda columna) que seran las opciones para poder representar
     def getOpciones(self):
         return np.unique(self.df.loc[:,'Country/Region'].to_numpy())
 
@@ -51,17 +52,59 @@ class ParseCasosConfirmados(Parse):
                 posicion.append(index)
         return posicion
 
-
-
-
     def getDataset(self):
         # Dentro de cada parse se configurara el titulo
         data = Dataset("Casos Confirmados")
         data.setEjeX(self.ejeX())
-        data.setEjeY(self.ejeY())
+        #data.setEjeY(self.ejeY())
+        data.setEjeY(self.getMatrizCasosConfirmados())
         data.setTodasLasOpciones(self.getPaises())  #Todas las opciones mantiene los duplicados por si hay mas de una linea con la misma opcion (pais)
         data.setOpciones(self.getOpciones())
+
+        #Modificacion del parse
+        data.addOpcionEje("Dias")
+        data.addOpcionEje("Cantidad de contagios")
+        data.addOpcionEje("% de contagios")
+        data.addElementoEje(self.ejeX())
+        data.addElementoEje(self.getMatrizCasosConfirmados())
+
         return data
+
+
+#--------------------------------------Actualizacion-------------------------------------
+    # Le pasamos un pais que sera la opcion y nos dice en cuantas filas se encuentra
+    def indicesPais(self, opcion):
+        posicion = []   # Lo hago array por si hay mas de una opcion
+        paises = self.getPaises()
+        for index in range(len(paises)):
+            if(paises[index] == opcion):
+                posicion.append(index)
+        return posicion
+
+    # Le pasamos las posiciones del pais, busca las filas corresponcientes, las suma y nos devuelve el array resultado, si no encuentra nada devuelve el array con un cero
+    def searchRow(self,posiciones):
+        primera = True
+        rows = [0]
+        for i in posiciones:
+            if(primera):
+                primera = False
+                rows = self.getRow(i)
+                continue
+            rows += self.getRow(i)
+        return rows
+
+    def getMatrizCasosConfirmados(self):
+        opciones = self.getOpciones()
+        matriz = []
+        for opcion in opciones:
+            matriz.append(self.searchRow(self.indicesPais(opcion)))
+        return matriz
+
+    # Nos devuelve la matriz pero con el porcentaje con respecto al global de contagios
+    def porcentajesDeContagios(self):
+        print("sin terminar")
+
+#----------------------------------------------------------------------------------------
 
 
 class ParseAccidentesTrafico:
