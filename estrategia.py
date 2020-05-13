@@ -7,9 +7,9 @@ class ContextoGrafica:
         self.grafica = Grafica
 
     # la operacion de las graficas es el show por eso este nombre
-    def show(self,parse):
-         data = parse().getDataset()
-         data.setSeleccionados(self.seleccionados) # añadimos al dataset los seleccionados para las graficas que lo necesiten
+    def show(self,data):
+         #data = parse().getDataset()
+         #data.setSeleccionados(self.seleccionados) # añadimos al dataset los seleccionados para las graficas que lo necesiten
          self.grafica.show(data) # le pasamos el dataset
 
     def setSeleccionados(self,p):

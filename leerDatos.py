@@ -67,6 +67,7 @@ class ParseCasosConfirmados(Parse):
         data.addOpcionEje("% de contagios")
         data.addElementoEje(self.ejeX())
         data.addElementoEje(self.getMatrizCasosConfirmados())
+        data.addElementoEje(self.porcentajesDeContagios())
 
         return data
 
@@ -102,7 +103,41 @@ class ParseCasosConfirmados(Parse):
 
     # Nos devuelve la matriz pero con el porcentaje con respecto al global de contagios
     def porcentajesDeContagios(self):
-        print("sin terminar")
+        contagiosTotales = []   # Contendra la cantidad de contagios totales por dia
+        # En la columna 4 comienzan los dias, hasta el maximo de columnas
+        for i in range(4,self.df.columns.size):
+            contagiosTotales.append(self.cantidadContagios(i))
+
+
+        opciones = self.getOpciones()
+        matriz = []
+        for opcion in opciones:
+            matriz.append(self.getRowPorcentaje(self.indicesPais(opcion),contagiosTotales))
+        return matriz
+
+    # Le pasamos un dia en concreto y nos devuelve la cantidad de contagios que han ocurrido ese dia ( el dia sera la posicion en el array)
+    def cantidadContagios(self,dia):
+        aux = 0
+        for i in self.ar:
+            aux += i[dia]
+        return aux
+
+    # Nos devuele la fila del pais que le pasemos (posiciones) y acada valor representa el porcentaje de contagios con respecto al total global de contagios
+    def getRowPorcentaje(self,posiciones,contagios):
+        primera = True
+        row = [0]
+        for i in posiciones:
+            if(primera):
+                primera = False
+                row = self.getRow(i)
+                continue
+            row += self.getRow(i)
+
+        # Aqui calculo el porcentaje
+        for i in range(0,row.size):
+            row[i] = row[i]/contagios[i] * 100
+        return row
+
 
 #----------------------------------------------------------------------------------------
 

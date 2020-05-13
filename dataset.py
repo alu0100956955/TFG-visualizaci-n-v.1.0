@@ -104,6 +104,13 @@ class Dataset:
 
     # Le pasamos un eje y nos dice en que posicion se encuenta en la matriz de eje | innecesario ?¿
     def indexEje(self, eje):
+        #print(self.OpcionesEje)
         return self.OpcionesEje.index(eje)
+
+    def setSeleccionEje(self, eleccion):
+        self.eje = eleccion
+
+    def getSeleccionEje(self):
+        return self.eje
 
 #asdfasf

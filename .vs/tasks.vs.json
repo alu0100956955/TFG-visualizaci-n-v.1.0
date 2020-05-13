@@ -1,0 +1,15 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "tarea-TFG-visualizaci-n-v.1",
+      "appliesTo": "/",
+      "type": "launch"
+    },
+    {
+      "taskLabel": "tarea-TFG-visualizaci-n-v.1",
+      "appliesTo": "/",
+      "type": "launch"
+    }
+  ]
+}

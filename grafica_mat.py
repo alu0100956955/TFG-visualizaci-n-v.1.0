@@ -25,8 +25,8 @@ class Linea_mat(Grafica):
         #paises = ['Spain','Italy','China','Portugal']
         seleccionados = data.getSeleccionados()
         for i in range(len(seleccionados)):
-            #TO DO: pasar de forma parametrizada el eje que se quiere representar 
-            plt.plot(data.getEje("Dias",0),data.getEje("Cantidad de contagios",seleccionados[i]), marker = Linea_mat.marker(i), linestyle = Linea_mat.line(i), markeredgecolor = Linea_mat.color(i))
+            #TO DO: pasar de forma parametrizada el eje que se quiere representar
+            plt.plot(data.getEje("Dias",0),data.getEje(data.getSeleccionEje(),seleccionados[i]), marker = Linea_mat.marker(i), linestyle = Linea_mat.line(i), markeredgecolor = Linea_mat.color(i))
             #plt.text(len(data.getEjeX()),data.getEjeY(seleccionados[i])[-1],s = seleccionados[i]) # Para que aparezcan los nombres de los elementos al final de la linea
         #plt.xticks(ticks=Linea_mat.rango(data),labels=data.getEjeX(),rotation=70)
         plt.xticks(ticks=Grafica.espaciar(data.getEje("Dias",0)),labels=data.getEjeX(),rotation=1)

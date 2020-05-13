@@ -31,8 +31,10 @@ class Usuario:
 
 
         # --------------------------Funciones para las distintas opciones ---------------------------------------
-        def showGrafica(grafica, seleccionados, urlDatos):
-            mediador.show2(grafica, seleccionados, urlDatos)
+        def show(grafica, elegidos, eje, dataS):
+            dataS.setSeleccionados(elegidos)
+            dataS.setSeleccionEje(eje)
+            Mediador.show(grafica, dataS)
 
         def getBotonShow(): # La funcion que Añade el boton para hacer la grafica | esta separado porque se puede pedir dentro de seleccionados o si es un mapa se pide solo
             # En la funcion recibe la opcion de grafica (int), el array con los elementos elegidos para mostrar (array), y la url de la fuente de datos para obtener el dataset (string)
@@ -44,20 +46,28 @@ class Usuario:
             #opcionesPack = dropDownSeleccion.winfo_ismapped() # Asi pregunto si ya esta metido dentro de la ventana antes de volver a declararlo
             #dataS = Mediador.getParse(fuenteDatos.get()).getDataset()
             parse = Mediador.getParse(fuenteDatos.get())    # le pasamos la eleccion del usuario sobre la fuente de datos
-            dataS = parse().getDataset()    # Le pido el dataset al parse
+            #dataS = parse().getDataset()    # Le pido el dataset al parse
+            dataS.append(parse().getDataset())
             #label4.pack()
             #label3.pack(pady=10)
-            label3.grid(column = 2, row = 14)
-            opciones = dataS.getOpciones()
+            label3.grid(column = 2, row = 16)
+            opciones = dataS[0].getOpciones()
+            ejes = dataS[0].getOpcionesEje()
             seleccionado.set(opciones[0])   # le asigno el primero como default
             #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
             #dropDownSeleccion = ttk.Combobox( opciones.all())
             dropDownSeleccion["values"] = [*opciones];
             dropDownSeleccion.bind("<<ComboboxSelected>>", addSeleccion)
+            opcionesEjes["values"] = [*ejes]
+            #opcionesEjes.bind("<<comboboxselected>>", elegirEje)
+
+            labelEspacio.grid(column = 2, row = 13 )
+            labelEje.grid(column = 2, row = 14)
             #if (dropDownSeleccion.winfo_ismapped() == False): #Esto no funciona ya que declaro arriba el dropdown asique cuenta como nuevo
             if ( opcionesPack == False):
                 #dropDownSeleccion.pack()
-                dropDownSeleccion.grid(column = 2, row = 15 )
+                dropDownSeleccion.grid(column = 2, row = 17 )
+                opcionesEjes.grid(column = 2, row = 15) # esto es para elegir que representara el eje
                 #opcionesPack = True;
 
             #Para mostrar los seleccionados
@@ -65,19 +75,9 @@ class Usuario:
             #lContSeleccionados.pack(side=tk.RIGHT)
 
 
-
-
         # Añade a la ventana los radiobutton para escoger el tipo de grafica
         def graficas():
-            #label2.pack(pady=10)
-            #linea_mat.pack()
-            #linea_pygal.pack()
-            #linea_plotly.pack()
-            #barras_plotly.pack()
-            #mapa_plotly.pack()
-            #scatter_plotly.pack()
-            #box_pygal.pack()
-
+            labelEspacio.grid(column = 2, row = 3 )
             label2.grid(column = 2, row = 4)
             linea_mat.grid(column = 2, row = 6)
             linea_pygal.grid(column = 2, row = 7)
@@ -96,14 +96,15 @@ class Usuario:
             elementosSeleccionados.insert(tk.INSERT, dropDownSeleccion.get())
             elementosSeleccionados.insert(tk.INSERT, '\n')
             lContSeleccionados.config(text=len(elegidos))
-            lSeleccionados.grid(column = 2, row = 16 )
-            lContSeleccionados.grid(column = 3, row = 16 )
-            elementosSeleccionados.grid(column = 2, row = 18)
-            botonQuitarSeleccionado.grid(column = 3, row = 18)
+            lSeleccionados.grid(column = 2, row = 18 )
+            lContSeleccionados.grid(column = 3, row = 18 )
+            elementosSeleccionados.grid(column = 2, row = 20)
+            botonQuitarSeleccionado.grid(column = 3, row = 20)
 
             elementosSeleccionados.configure(state="disabled")  # no quiero que el usuario escriba es para mostrar los elementos que han sido seleccionados
             getBotonShow()  # para que se añada el boton de
 
+        # Para quitar uno de los elementos seleccionados
         def quitarSeleccionado():
             if (len(elegidos) > 0 ):    # Si no hay elementos no se puede hacer pop
                 elegidos.pop()  # Le quito el ultimo elemento
@@ -115,14 +116,27 @@ class Usuario:
                     elementosSeleccionados.insert(tk.INSERT, '\n')
                 elementosSeleccionados.configure(state="disabled")
 
+        #Para poder escoger las opciones de cada eje
+        def elegirEje(event):
+            #eleccionEje = opcionesEjes.get()
+            seleccionEje.append(opcionesEjes.get())
+             #seleccionEjeX[0] = opcionesEjesX.get()
+             #print("Se escogio = " + opcionesEjes.get())
+
+        def elegirEjeY(event):
+            seleccionEjeY[1] = opcionesEjesY.get()
+
+
         #--------------------- Declaracion de los elementos para la ventana ---------------------------
         urlConfirmados = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
         ventana = tk.Tk()
         ventana.geometry('380x550') # Cambiar las dimensiones cuando se mejore los elementos
         grafica = IntVar() # Variabla para controlar la opcion seleccionada por el usuario
         fuenteDatos = StringVar()
-        dataS = Dataset('default')
+        #dataS = Dataset('default')
+        dataS = []  # Lo hago list por que sino no me guarda el dataset dentro de la funcion
 
+        labelEspacio = tk.Label(ventana, text="        ")
 
         # Los radiobutton para el tipo de fuente
         rbCasosConfirmados = Radiobutton(ventana, text="Casos confirmados", variable=fuenteDatos,value= 1, command=graficas)
@@ -130,37 +144,44 @@ class Usuario:
         rbSegunda.configure(state="disabled")   #Lo desactivo mientras mejoro el sistema, despues me pongo arreglar el parse
 
 
-        # Elementos de getSeleccionados
+        # --------------- Elementos de getSeleccionados ---------------
         opciones = [''] # La dejo vacia al princio para que no salte error al declarar el OptionMenu
         seleccionado = StringVar(ventana)   # la variable encargado despues de almacenar lo que seleccione el usuario
         label3 = tk.Label(ventana, text="Selecciona los elementos a representar" )
         #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
         dropDownSeleccion = ttk.Combobox(state = "readonly")
-        dropDownSeleccion.bind("<<comboboxselected>>", addSeleccion)
+        dropDownSeleccion.bind("<<ComboboxSelected>>", addSeleccion)
         opcionesPack = False # Esta variable es para controlar si ya esta dentro el optionMenu, debido a que puede cambiar seguna la grafica y tengo que redeclararla para evitar que se añada multiples veces a la ventana
         label1 = tk.Label(ventana, text="MARQUE la fuente de datos")
         elementosSeleccionados = st.ScrolledText(ventana, height=5, width=20)
 
         botonQuitarSeleccionado = Button(ventana, text ="Quitar ultimo seleccionado" , pady= 5, command = quitarSeleccionado)
-        #cajaTexto = tk.Entry(ventana)
 
-        # Elementos de getGrafica
+        #Esto tendria que estar en un metodo aparte pero por ahora lo mando junto con la seleccionde elementos
+        labelEje = tk.Label(ventana, text = "Escoge el eje Y" )
+        opcionesEjes= ttk.Combobox(state = "readonly")
+        opcionesEjes.bind("<<ComboboxSelected>>", elegirEje)
+        seleccionEje = []
+
+
+
+        # ------------ Elementos de getGrafica --------------
         # Declaro los radiobutton para el tipo de grafica y la etiqueta
         linea_mat = Radiobutton(ventana, text="Linea_mat", variable=grafica,value=1, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
         linea_pygal = Radiobutton(ventana, text="Linea_pygal", variable=grafica,value=2, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
         linea_plotly = Radiobutton(ventana, text="Linea_plotly", variable=grafica,value=3, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
         barras_plotly = Radiobutton(ventana, text="Barras_plotly", variable=grafica,value=4, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
-        mapa_plotly = Radiobutton(ventana, text="Mapa_plotly", variable=grafica,value=5, command = getBotonShow) # Como no hay que seleccionar pais le pongo el boton de representar directamente
+        mapa_plotly = Radiobutton(ventana, text="Mapa_plotly", variable=grafica,value=5, command = getBotonShow) # Como no hay que seleccionar pais ni el eje le pongo el boton de representar directamente
         scatter_plotly = Radiobutton(ventana, text="Scatter_plotly", variable=grafica,value=6, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
         box_pygal = Radiobutton(ventana, text="Box_pygal", variable=grafica,value=7, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
 
-
+        #print("------------------------------------------------------------------")
 
         # Elementos de getBotonShow
-        botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: Mediador.show( grafica.get(),elegidos,fuenteDatos.get()))
+        botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: show( grafica.get(),elegidos,seleccionEje[0],dataS[0])) # El boton de graficas
 
-        # ---------------------- Añadimos los elementos a la ventana -----------------------------
+        # ---------------------- Añadimos los elementos principales a la ventana -----------------------------
         #label1.pack()
         #rbCasosConfirmados.pack()
         #rbSegunda.pack()

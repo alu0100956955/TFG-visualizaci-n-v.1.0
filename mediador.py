@@ -10,12 +10,13 @@ from estrategia import ContextoGrafica
 class Mediador:
 
     # Metodo nuevo
-    def show(grafica, seleccionados, urlDatos):
+    def show(grafica, Datos):
         contextoG = ContextoGrafica()
-        parse = Factory.getParse(urlDatos) 
+        #parse = Factory.getParse(urlDatos)
         Factory.grafica(grafica,contextoG)
-        contextoG.setSeleccionados(seleccionados)
-        contextoG.show(parse)
+        #contextoG.setSeleccionados(seleccionados)
+        #contextoG.show(parse)
+        contextoG.show(Datos)
 
     def getParse(eleccion):  # le indicamos a la clase se seleccion que ha seleccionado el usuario y nos devuelve el parse correspondiente
         #return Factory.getParse(url)
