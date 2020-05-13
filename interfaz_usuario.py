@@ -167,13 +167,13 @@ class Usuario:
 
         # ------------ Elementos de getGrafica --------------
         # Declaro los radiobutton para el tipo de grafica y la etiqueta
-        linea_mat = Radiobutton(ventana, text="Linea_mat", variable=grafica,value=1, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
-        linea_pygal = Radiobutton(ventana, text="Linea_pygal", variable=grafica,value=2, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
-        linea_plotly = Radiobutton(ventana, text="Linea_plotly", variable=grafica,value=3, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
-        barras_plotly = Radiobutton(ventana, text="Barras_plotly", variable=grafica,value=4, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
-        mapa_plotly = Radiobutton(ventana, text="Mapa_plotly", variable=grafica,value=5, command = getBotonShow) # Como no hay que seleccionar pais ni el eje le pongo el boton de representar directamente
-        scatter_plotly = Radiobutton(ventana, text="Scatter_plotly", variable=grafica,value=6, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
-        box_pygal = Radiobutton(ventana, text="Box_pygal", variable=grafica,value=7, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
+        linea_mat = Radiobutton(ventana, text="Grafica tipo linea por terminal", variable=grafica,value=1, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
+        linea_pygal = Radiobutton(ventana, text="Grafica tipo linea en Html", variable=grafica,value=2, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
+        linea_plotly = Radiobutton(ventana, text="Grafica tipo linea en navegador", variable=grafica,value=3, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
+        barras_plotly = Radiobutton(ventana, text="Grafica tipo barras en navegador", variable=grafica,value=4, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
+        mapa_plotly = Radiobutton(ventana, text="Grafica tipo Mapa en navegador", variable=grafica,value=5, command = getBotonShow) # Como no hay que seleccionar pais ni el eje le pongo el boton de representar directamente
+        scatter_plotly = Radiobutton(ventana, text="Grafica tipo dispersion (scatter) en navegador", variable=grafica,value=6, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
+        box_pygal = Radiobutton(ventana, text="Grafica tipo caja en navegador", variable=grafica,value=7, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
 
         #print("------------------------------------------------------------------")
