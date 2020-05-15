@@ -161,7 +161,7 @@ class Usuario:
         labelEje = tk.Label(ventana, text = "Escoge el eje Y" )
         opcionesEjes= ttk.Combobox(state = "readonly")
         opcionesEjes.bind("<<ComboboxSelected>>", elegirEje)
-        seleccionEje = []
+        seleccionEje = ['']
 
 
 
@@ -173,7 +173,7 @@ class Usuario:
         barras_plotly = Radiobutton(ventana, text="Grafica tipo barras en navegador", variable=grafica,value=4, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
         mapa_plotly = Radiobutton(ventana, text="Grafica tipo Mapa en navegador", variable=grafica,value=5, command = getBotonShow) # Como no hay que seleccionar pais ni el eje le pongo el boton de representar directamente
         scatter_plotly = Radiobutton(ventana, text="Grafica tipo dispersion (scatter) en navegador", variable=grafica,value=6, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
-        box_pygal = Radiobutton(ventana, text="Grafica tipo caja en navegador", variable=grafica,value=7, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
+        box_pygal = Radiobutton(ventana, text="Grafica tipo caja en Html", variable=grafica,value=7, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
 
         #print("------------------------------------------------------------------")

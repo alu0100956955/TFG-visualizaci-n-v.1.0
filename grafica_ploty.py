@@ -38,7 +38,7 @@ class Lineas_plotly(Grafica):
         seleccionados = data.getSeleccionados()
         fig = go.Figure()
         for selec in seleccionados:
-            fig.add_trace(go.Scatter(y = data.getEjeY(selec), name = selec))
+            fig.add_trace(go.Scatter(y = data.getEje(data.getSeleccionEje(),selec), name = selec))
         #fig.update_layout(title = 'Casos confirmados', xaxis_title="fecha",yaxis_title="Numero de casos")
         #fig.update_layout(xaxis_title=l.ejeX())
         #fig.write_html('output/lineas_ploty.html', auto_open=True)   # para guardar la grafica en un html
