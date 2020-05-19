@@ -107,10 +107,16 @@ class Dataset:
         #print(self.OpcionesEje)
         return self.OpcionesEje.index(eje)
 
-    def setSeleccionEje(self, eleccion):
-        self.eje = eleccion
+    def setSeleccionEjeX(self, eleccion):
+        self.ejeX = eleccion
 
-    def getSeleccionEje(self):
-        return self.eje
+    def getSeleccionEjeX(self):
+        return self.ejeX
+
+    def setSeleccionEjeY(self, eleccion):
+        self.ejeY = eleccion
+
+    def getSeleccionEjeY(self):
+        return self.ejeY
 
 #asdfasf

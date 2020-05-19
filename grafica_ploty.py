@@ -44,10 +44,10 @@ class Lineas_plotly(Grafica):
         #fig.write_html('output/lineas_ploty.html', auto_open=True)   # para guardar la grafica en un html
         fig.update_layout(title = data.getTitle())
         ticksy = []
-        for i in range(data.getEjeX().size):
+        for i in range(data.getEje("Dias",0).size):   # Este es el eje X por eso pongo Dias
             ticksy.append(i)
         # Para cambiar los valores del eje X
-        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Grafica.espaciar(data.getEjeX())))
+        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Grafica.espaciar(data.getEje("Dias",0))))
         fig.show()
 
 
@@ -79,7 +79,7 @@ class Mapa_plotly(Grafica):
             nombre = pais['properties']['SOVEREIGNT'] # Este es el nombre del pais
             nombrePais.append(nombre)
             # Hay que controlar si el nombre es correcto
-            x = data.getEjeY(nombre)
+            x = data.getEje("Cantidad de contagios",nombre)
             id.append(pais['id'])
             valores.append(x[-1]) # EL -1 es para sacar el ultimo elemento de la lista que es el del ultimo dia
 

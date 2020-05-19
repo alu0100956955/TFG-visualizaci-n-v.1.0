@@ -31,43 +31,50 @@ class Usuario:
 
 
         # --------------------------Funciones para las distintas opciones ---------------------------------------
-        def show(grafica, elegidos, eje, dataS):
+        def show(grafica, elegidos, ejeX, ejeY, dataS):
             dataS.setSeleccionados(elegidos)
-            dataS.setSeleccionEje(eje)
+            dataS.setSeleccionEjeX(ejeX)
+            dataS.setSeleccionEjeY(ejeY)
             Mediador.show(grafica, dataS)
 
         def getBotonShow(): # La funcion que Añade el boton para hacer la grafica | esta separado porque se puede pedir dentro de seleccionados o si es un mapa se pide solo
             # En la funcion recibe la opcion de grafica (int), el array con los elementos elegidos para mostrar (array), y la url de la fuente de datos para obtener el dataset (string)
             #botonGrafica.pack(pady=20)
-            botonGrafica.grid(column = 2, row = 22)
+            seleccionEjeX.append("vacio")   # Esto lo hago por los mapas ya que se muestra directamente el boton y si no añado (appned) un elemento peta 
+            seleccionEjeY.append("vacio")
+            botonGrafica.grid(column = 2, row = 24)
 
         # Metodo para añadir a la ventana el dropdownList para quel usuario escoja los elementos que quiere seleccionar
-        def getSeleccionados(opcionesPack):
+        def getSeleccionados(opcionesPack,data):
             #opcionesPack = dropDownSeleccion.winfo_ismapped() # Asi pregunto si ya esta metido dentro de la ventana antes de volver a declararlo
             #dataS = Mediador.getParse(fuenteDatos.get()).getDataset()
-            parse = Mediador.getParse(fuenteDatos.get())    # le pasamos la eleccion del usuario sobre la fuente de datos
-            #dataS = parse().getDataset()    # Le pido el dataset al parse
-            dataS.append(parse().getDataset())
+            
             #label4.pack()
             #label3.pack(pady=10)
-            label3.grid(column = 2, row = 16)
-            opciones = dataS[0].getOpciones()
-            ejes = dataS[0].getOpcionesEje()
+            label3.grid(column = 2, row = 18)
+            #opciones = dataS.getOpciones()
+            #ejes = dataS.getOpcionesEje()
+            opciones_ = data.getOpciones()
+            ejes = data.getOpcionesEje()
+
             seleccionado.set(opciones[0])   # le asigno el primero como default
             #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
             #dropDownSeleccion = ttk.Combobox( opciones.all())
-            dropDownSeleccion["values"] = [*opciones];
+            dropDownSeleccion["values"] = [*opciones_];
             dropDownSeleccion.bind("<<ComboboxSelected>>", addSeleccion)
-            opcionesEjes["values"] = [*ejes]
+            opcionesEjesY["values"] = [*ejes]
+            opcionesEjesX["values"] = [*ejes]
             #opcionesEjes.bind("<<comboboxselected>>", elegirEje)
 
             labelEspacio.grid(column = 2, row = 13 )
-            labelEje.grid(column = 2, row = 14)
+            labelEjeX.grid(column = 2, row = 14)
+            labelEjeY.grid(column = 2, row = 16)
             #if (dropDownSeleccion.winfo_ismapped() == False): #Esto no funciona ya que declaro arriba el dropdown asique cuenta como nuevo
             if ( opcionesPack == False):
                 #dropDownSeleccion.pack()
-                dropDownSeleccion.grid(column = 2, row = 17 )
-                opcionesEjes.grid(column = 2, row = 15) # esto es para elegir que representara el eje
+                dropDownSeleccion.grid(column = 2, row = 19 )
+                opcionesEjesX.grid(column = 2, row = 15)
+                opcionesEjesY.grid(column = 2, row = 17) # esto es para elegir que representara el eje
                 #opcionesPack = True;
 
             #Para mostrar los seleccionados
@@ -77,6 +84,13 @@ class Usuario:
 
         # Añade a la ventana los radiobutton para escoger el tipo de grafica
         def graficas():
+            #Saco el dataset donde estaran los datos
+            parse = Mediador.getParse(fuenteDatos.get())    # le pasamos la eleccion del usuario sobre la fuente de datos
+            dataS.append(parse().getDataset())
+            #global dataS
+            #dataS = parse().getDataset()
+
+
             labelEspacio.grid(column = 2, row = 3 )
             label2.grid(column = 2, row = 4)
             linea_mat.grid(column = 2, row = 6)
@@ -96,10 +110,10 @@ class Usuario:
             elementosSeleccionados.insert(tk.INSERT, dropDownSeleccion.get())
             elementosSeleccionados.insert(tk.INSERT, '\n')
             lContSeleccionados.config(text=len(elegidos))
-            lSeleccionados.grid(column = 2, row = 18 )
-            lContSeleccionados.grid(column = 3, row = 18 )
-            elementosSeleccionados.grid(column = 2, row = 20)
-            botonQuitarSeleccionado.grid(column = 3, row = 20)
+            lSeleccionados.grid(column = 2, row = 20 )
+            lContSeleccionados.grid(column = 3, row = 20 )
+            elementosSeleccionados.grid(column = 2, row = 22)
+            botonQuitarSeleccionado.grid(column = 3, row = 22)
 
             elementosSeleccionados.configure(state="disabled")  # no quiero que el usuario escriba es para mostrar los elementos que han sido seleccionados
             getBotonShow()  # para que se añada el boton de
@@ -117,24 +131,31 @@ class Usuario:
                 elementosSeleccionados.configure(state="disabled")
 
         #Para poder escoger las opciones de cada eje
-        def elegirEje(event):
-            #eleccionEje = opcionesEjes.get()
-            seleccionEje.append(opcionesEjes.get())
-             #seleccionEjeX[0] = opcionesEjesX.get()
-             #print("Se escogio = " + opcionesEjes.get())
-
         def elegirEjeY(event):
-            seleccionEjeY[1] = opcionesEjesY.get()
+            #eleccionEje = opcionesEjes.get()
+            if (len(seleccionEjeY) > 0):    # Si ya tiene un eje guardado lo saco para poder guardar la nueva eleccion
+                while( len(seleccionEjeY) > 0):
+                    seleccionEjeY.pop() 
+            seleccionEjeY.append(opcionesEjesY.get())
+            #opcionesEjesY = ttk.Combobox(state = "disabled")    # Al seleccionar hay que desactivar el dropbox
+            #seleccionEjeX[0] = opcionesEjesX.get()
+            #print("Se escogio = " + opcionesEjes.get())
+
+        def elegirEjeX(event):
+            if (len(seleccionEjeX) > 0):
+                while( len(seleccionEjeY) > 0):
+                    seleccionEjeX.pop()
+            seleccionEjeX.append(opcionesEjesX.get())
 
 
         #--------------------- Declaracion de los elementos para la ventana ---------------------------
         urlConfirmados = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
         ventana = tk.Tk()
-        ventana.geometry('380x550') # Cambiar las dimensiones cuando se mejore los elementos
+        ventana.geometry('430x600') # Cambiar las dimensiones cuando se mejore los elementos
         grafica = IntVar() # Variabla para controlar la opcion seleccionada por el usuario
         fuenteDatos = StringVar()
         #dataS = Dataset('default')
-        dataS = []  # Lo hago list por que sino no me guarda el dataset dentro de la funcion
+        dataS = [] # Lo hago list por que sino no me guarda el dataset dentro de la funcion
 
         labelEspacio = tk.Label(ventana, text="        ")
 
@@ -158,16 +179,22 @@ class Usuario:
         botonQuitarSeleccionado = Button(ventana, text ="Quitar ultimo seleccionado" , pady= 5, command = quitarSeleccionado)
 
         #Esto tendria que estar en un metodo aparte pero por ahora lo mando junto con la seleccionde elementos
-        labelEje = tk.Label(ventana, text = "Escoge el eje Y" )
-        opcionesEjes= ttk.Combobox(state = "readonly")
-        opcionesEjes.bind("<<ComboboxSelected>>", elegirEje)
-        seleccionEje = ['']
+        labelEjeX = tk.Label(ventana, text = "Escoge el eje X" )
+        opcionesEjesX= ttk.Combobox(state = "readonly")
+        opcionesEjesX.bind("<<ComboboxSelected>>", elegirEjeX)
 
+        labelEjeY = tk.Label(ventana, text = "Escoge el eje Y" )
+        opcionesEjesY= ttk.Combobox(state = "readonly")
+        opcionesEjesY.bind("<<ComboboxSelected>>", elegirEjeY)
+
+        #Para lo que seleccione el usuario de los ejes
+        seleccionEjeY = []
+        seleccionEjeX = []
 
 
         # ------------ Elementos de getGrafica --------------
         # Declaro los radiobutton para el tipo de grafica y la etiqueta
-        linea_mat = Radiobutton(ventana, text="Grafica tipo linea por terminal", variable=grafica,value=1, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
+        linea_mat = Radiobutton(ventana, text="Grafica tipo linea por terminal", variable=grafica,value=1, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
         linea_pygal = Radiobutton(ventana, text="Grafica tipo linea en Html", variable=grafica,value=2, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
         linea_plotly = Radiobutton(ventana, text="Grafica tipo linea en navegador", variable=grafica,value=3, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
         barras_plotly = Radiobutton(ventana, text="Grafica tipo barras en navegador", variable=grafica,value=4, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
@@ -179,7 +206,7 @@ class Usuario:
         #print("------------------------------------------------------------------")
 
         # Elementos de getBotonShow
-        botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: show( grafica.get(),elegidos,seleccionEje[0],dataS[0])) # El boton de graficas
+        botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: show( grafica.get(),elegidos,seleccionEjeX[0],seleccionEjeY[0],dataS[0])) # El boton de graficas
 
         # ---------------------- Añadimos los elementos principales a la ventana -----------------------------
         #label1.pack()
