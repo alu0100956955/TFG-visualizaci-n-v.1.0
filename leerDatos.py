@@ -31,6 +31,7 @@ class ParseCasosConfirmados(Parse):
 
     # Nos devuelve en tipo array la fila del indice que le indiquemos
     def getRow(self,index):
+        #print(index)
         columnas = self.df.columns
         return self.df.loc[index , columnas[4]:columnas[len(columnas)-1]].to_numpy()
 
@@ -57,7 +58,7 @@ class ParseCasosConfirmados(Parse):
         data = Dataset("Casos Confirmados")
         data.setEjeX(self.ejeX())
         #data.setEjeY(self.ejeY())
-        data.setEjeY(self.getMatrizCasosConfirmados())
+        #data.setEjeY(self.getMatrizCasosConfirmados())
         data.setTodasLasOpciones(self.getPaises())  #Todas las opciones mantiene los duplicados por si hay mas de una linea con la misma opcion (pais)
         data.setOpciones(self.getOpciones())
 
@@ -65,6 +66,7 @@ class ParseCasosConfirmados(Parse):
         data.addOpcionEje("Dias")
         data.addOpcionEje("Cantidad de contagios")
         data.addOpcionEje("% de contagios")
+        #data.addElementoEje(self.espaciar())
         data.addElementoEje(self.ejeX())
         data.addElementoEje(self.getMatrizCasosConfirmados())
         data.addElementoEje(self.porcentajesDeContagios())
@@ -80,24 +82,27 @@ class ParseCasosConfirmados(Parse):
         for index in range(len(paises)):
             if(paises[index] == opcion):
                 posicion.append(index)
-        return posicion
+        return posicion 
 
     # Le pasamos las posiciones del pais, busca las filas corresponcientes, las suma y nos devuelve el array resultado, si no encuentra nada devuelve el array con un cero
     def searchRow(self,posiciones):
         primera = True
         rows = [0]
+        #print(posiciones)
         for i in posiciones:
             if(primera):
                 primera = False
-                rows = self.getRow(i)
+                rows = self.getRow(i)   # ERROR AQUI
                 continue
             rows += self.getRow(i)
         return rows
 
     def getMatrizCasosConfirmados(self):
         opciones = self.getOpciones()
+        #print(opciones)
         matriz = []
         for opcion in opciones:
+            #print(opcion)
             matriz.append(self.searchRow(self.indicesPais(opcion)))
         return matriz
 
@@ -138,6 +143,20 @@ class ParseCasosConfirmados(Parse):
             row[i] = row[i]/contagios[i] * 100
         return row
 
+    # Metodo para covnertir en espacios los dias que no quiero que se muestren
+    def espaciar(self):
+        cabeceras = self.df.columns.values
+        # es desde la 4 porque las primeras son datos que no necesitamos y en la columna 4 empiezan las fechas
+        dias = cabeceras[4:cabeceras.size]
+
+        tam = len(dias)
+        z = tam/7   # Este es para la cantidad de ticks, como quiero que solo salgan 7 etiquetas pos el modulo sera con el numero que salga como resultado
+        for i in np.arange(0,tam):
+            if(i%int(z) != 0):
+                # añadir espcios
+                dias[i] = ""
+        # devolver el array con las fechas sobreescritas
+        return dias
 
 #----------------------------------------------------------------------------------------
 

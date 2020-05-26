@@ -83,7 +83,7 @@ class Usuario:
 
 
         # Añade a la ventana los radiobutton para escoger el tipo de grafica
-        def graficas():
+        def graficasAntiguo():
             #Saco el dataset donde estaran los datos
             parse = Mediador.getParse(fuenteDatos.get())    # le pasamos la eleccion del usuario sobre la fuente de datos
             dataS.append(parse().getDataset())
@@ -100,6 +100,14 @@ class Usuario:
             mapa_plotly.grid(column = 2, row = 10)
             scatter_plotly.grid(column = 2, row = 11)
             box_pygal.grid(column = 2, row = 12)
+
+        def graficasNuevo():
+            parse = Mediador.getParse(fuenteDatos.get())    # le pasamos la eleccion del usuario sobre la fuente de datos
+            dataS.append(parse().getDataset())
+            tipoGrafica.grid(column = 2, row = 3 )
+            tipos = ["1:  Linea Terminal", "2: Linea html", "3: Linea navegador"]
+            tipoGrafica["values"] = [*tipos]
+
 
         # Metodo para añadir el elemento seleccionado por el usuario
         def addSeleccion(event):
@@ -160,8 +168,8 @@ class Usuario:
         labelEspacio = tk.Label(ventana, text="        ")
 
         # Los radiobutton para el tipo de fuente
-        rbCasosConfirmados = Radiobutton(ventana, text="Casos confirmados", variable=fuenteDatos,value= 1, command=graficas)
-        rbSegunda = Radiobutton(ventana, text="Accidentes trafico", variable=fuenteDatos,value=2, command=graficas)
+        rbCasosConfirmados = Radiobutton(ventana, text="Casos confirmados", variable=fuenteDatos,value= 1, command=graficasAntiguo)
+        rbSegunda = Radiobutton(ventana, text="Accidentes trafico", variable=fuenteDatos,value=2, command=graficasAntiguo)
         rbSegunda.configure(state="disabled")   #Lo desactivo mientras mejoro el sistema, despues me pongo arreglar el parse
 
 
@@ -195,13 +203,15 @@ class Usuario:
         # ------------ Elementos de getGrafica --------------
         # Declaro los radiobutton para el tipo de grafica y la etiqueta
         linea_mat = Radiobutton(ventana, text="Grafica tipo linea por terminal", variable=grafica,value=1, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
-        linea_pygal = Radiobutton(ventana, text="Grafica tipo linea en Html", variable=grafica,value=2, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
-        linea_plotly = Radiobutton(ventana, text="Grafica tipo linea en navegador", variable=grafica,value=3, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
-        barras_plotly = Radiobutton(ventana, text="Grafica tipo barras en navegador", variable=grafica,value=4, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
+        linea_pygal = Radiobutton(ventana, text="Grafica tipo linea en Html", variable=grafica,value=2, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
+        linea_plotly = Radiobutton(ventana, text="Grafica tipo linea en navegador", variable=grafica,value=3, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
+        barras_plotly = Radiobutton(ventana, text="Grafica tipo barras en navegador", variable=grafica,value=4, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
         mapa_plotly = Radiobutton(ventana, text="Grafica tipo Mapa en navegador", variable=grafica,value=5, command = getBotonShow) # Como no hay que seleccionar pais ni el eje le pongo el boton de representar directamente
-        scatter_plotly = Radiobutton(ventana, text="Grafica tipo dispersion (scatter) en navegador", variable=grafica,value=6, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
-        box_pygal = Radiobutton(ventana, text="Grafica tipo caja en Html", variable=grafica,value=7, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped()))
+        scatter_plotly = Radiobutton(ventana, text="Grafica tipo dispersion (scatter) en navegador", variable=grafica,value=6, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
+        box_pygal = Radiobutton(ventana, text="Grafica tipo caja en Html", variable=grafica,value=7, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
+        tipoGrafica= ttk.Combobox(state = "readonly")
+        tipoGrafica.bind("<<ComboboxSelected>>",lambda event: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
 
         #print("------------------------------------------------------------------")
 

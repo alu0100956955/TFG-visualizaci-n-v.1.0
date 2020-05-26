@@ -1,10 +1,22 @@
-
+import matplotlib
 import matplotlib.pyplot as plt
 from leerDatos import ParseCasosConfirmados
 import numpy as np
 from clases_base import Grafica
+from datetime import datetime
 
 #l = Lector('data/casos_2019.csv')
+class auxiliar():
+    def comprobarDias(data, eleccion):
+        if (eleccion == "Dias"):
+            diasFormateado = []
+            for i in data:
+                diasFormateado.append(datetime.strptime(i,'%m/%d/%y'))
+            #diasMat = matplotlib.dates.date2num(diasFormateado)
+            return diasFormateado
+        return data #Si no es la elección dias devolvera el conjunto de datos igual
+
+
 
 class Linea_mat(Grafica):
 
@@ -26,11 +38,18 @@ class Linea_mat(Grafica):
         seleccionados = data.getSeleccionados()
         for i in range(len(seleccionados)): # Lo hago con el rango para los metodos complementarios
             #TO DO: pasar de forma parametrizada el eje que se quiere representar
-            plt.plot(data.getEje(data.getSeleccionEjeX(),0),data.getEje(data.getSeleccionEjeY(),seleccionados[i]), marker = Linea_mat.marker(i), linestyle = Linea_mat.line(i), markeredgecolor = Linea_mat.color(i) , label = seleccionados[i])
+            # SE BUGEA PORQUE AL PASARLE LOS DIAS YA ESPACIADOS NO RECONOCE ESE DATO Y LO PONE MAL
+
+            ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),seleccionados[i]), data.getSeleccionEjeX())
+            ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),seleccionados[i]), data.getSeleccionEjeY())
+
+            plt.plot(ejeX,ejeY, marker = Linea_mat.marker(i), linestyle = Linea_mat.line(i), markeredgecolor = Linea_mat.color(i) , label = seleccionados[i])
             # TO DO falta quitar lo de ejeY y poner solo getEje
             #plt.text(len(data.getEje("Dias",0)),data.getEjeY(seleccionados[i])[-1],s = seleccionados[i]) # Para que aparezcan los nombres de los elementos al final de la linea
         #plt.xticks(ticks=Linea_mat.rango(data),labels=data.getEjeX(),rotation=70)
-        plt.xticks(ticks=Grafica.espaciar(data.getEje("Dias",0)),labels=data.getEjeX(),rotation=1)  # ARREGLAR
+        #plt.xticks(ticks=Grafica.espaciar(data.getEje("Dias",0)),labels=data.getEjeX(),rotation=1)  # ARREGLAR
+        #plt.xticks(ticks=data.getEje("Dias",0),labels=data.getEje("Dias",0),rotation=1)
+        plt.xticks(rotation=1)
         plt.title(data.getTitle())
         plt.legend()
         plt.grid()

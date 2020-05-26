@@ -7,8 +7,18 @@ from urllib.request import urlopen
 #Mis clases
 from leerDatos import ParseCasosConfirmados
 from clases_base import Grafica
+from datetime import datetime
 
 # El resultado de plotly es un html
+
+class auxiliar():
+    def comprobarDias(data, eleccion):
+        if (eleccion == "Dias"):
+            diasFormateado = []
+            for i in data:
+                diasFormateado.append(datetime.strptime(i,'%m/%d/%y'))
+            return diasFormateado
+        return data #Si no es la elección dias devolvera el conjunto de datos igual
 
 class Barras_plotly(Grafica):
 
@@ -17,15 +27,17 @@ class Barras_plotly(Grafica):
         seleccionados =  data.getSeleccionados()
         fig = go.Figure()
         for selec in seleccionados:
-            fig.add_trace(go.Bar(y = data.getEjeY(selec), name = selec))
+            ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),selec), data.getSeleccionEjeX())
+            ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            fig.add_trace(go.Bar(y = data.getEje(data.getSeleccionEjeY(),selec), name = selec))
         #fig.update_layout(title = 'Casos confirmados', xaxis_title="fecha",yaxis_title="Numero de casos")
         fig.update_layout(title = data.getTitle())
         # range(data.getEjeX().size)
         ticksy = []
-        for i in range(data.getEjeX().size):
+        for i in range(data.getEje(data.getSeleccionEjeX(),0).size):    
             ticksy.append(i)
         # Para cambiar el eje X
-        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Grafica.espaciar(data.getEjeX()) ) )
+        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Grafica.espaciar(data.getEje(data.getSeleccionEjeX(),0)) ) )
         fig.show()
 
 
@@ -37,18 +49,24 @@ class Lineas_plotly(Grafica):
         #paises = ['Spain','Italy','China','Portugal']
         seleccionados = data.getSeleccionados()
         fig = go.Figure()
+
         for selec in seleccionados:
-            fig.add_trace(go.Scatter(y = data.getEje(data.getSeleccionEje(),selec), name = selec))
+            ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),selec), data.getSeleccionEjeX())
+            ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            fig.add_trace(go.Scatter(x = ejeX, y = ejeY, name = selec))
         #fig.update_layout(title = 'Casos confirmados', xaxis_title="fecha",yaxis_title="Numero de casos")
         #fig.update_layout(xaxis_title=l.ejeX())
         #fig.write_html('output/lineas_ploty.html', auto_open=True)   # para guardar la grafica en un html
         fig.update_layout(title = data.getTitle())
-        ticksy = []
-        for i in range(data.getEje("Dias",0).size):   # Este es el eje X por eso pongo Dias
-            ticksy.append(i)
+        #ticksy = []
+        #for i in range(data.getEje("Dias",0).size):   # Este es el eje X por eso pongo Dias
+        #    ticksy.append(i)
         # Para cambiar los valores del eje X
-        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Grafica.espaciar(data.getEje("Dias",0))))
+        #fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Grafica.espaciar(data.getEje("Dias",0))))
         fig.show()
+
+    # Metodo para comprobar si la eleccion del eje es de tipo dia, para arreglar el tipo de dato
+    
 
 
 class Scatter_plotly(Grafica):
@@ -56,9 +74,13 @@ class Scatter_plotly(Grafica):
     def show(data):
         seleccionados = data.getSeleccionados()
         fig = go.Figure()
-        for elemento in data.getOpciones():
-            fig.add_trace(go.Scatter(y = data.getEjeY(elemento), mode='markers', name = elemento))
-        fig.update_layout(title = data.getTitle())
+
+        for selec in seleccionados:
+            ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),selec), data.getSeleccionEjeX())
+            ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+
+            fig.add_trace(go.Scatter(x = ejeX, y = ejeY, mode='markers', name = selec))
+        fig.update_layout(title = data.getTitle(), xaxis_title= data.getSeleccionEjeX(), yaxis_title= data.getSeleccionEjeY())
 
         fig.show()
 
