@@ -50,6 +50,8 @@ class Linea_mat(Grafica):
         #plt.xticks(ticks=Grafica.espaciar(data.getEje("Dias",0)),labels=data.getEjeX(),rotation=1)  # ARREGLAR
         #plt.xticks(ticks=data.getEje("Dias",0),labels=data.getEje("Dias",0),rotation=1)
         plt.xticks(rotation=1)
+        plt.set_ylabel(data.getSeleccionEjeY())
+        plt.set_xlabel(data.getSeleccionEjeX())
         plt.title(data.getTitle())
         plt.legend()
         plt.grid()
