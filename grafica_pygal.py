@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from leerDatos import ParseCasosConfirmados
 import pygal
 from clases_base import Grafica

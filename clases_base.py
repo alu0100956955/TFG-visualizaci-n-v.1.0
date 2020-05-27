@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #Aqui estaran las clases base o padre | la herencia no funciona igual de bien en python con respecto a java
 import numpy as np
 

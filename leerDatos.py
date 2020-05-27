@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #Aqui leer los datos del csv y se parametrizaran de forma correcta
 import pandas as pd
 import numpy as np

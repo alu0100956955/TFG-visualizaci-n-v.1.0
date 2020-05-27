@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from leerDatos import ParseCasosConfirmados
 #from grafica_mat import Linea_mat
 #from grafica_pygal import Linea_pygal, Box_pygal

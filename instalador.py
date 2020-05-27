@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #Fichero encargado de comprobar que el usuario tenga todas las librerias necesarias para la ejecución del entorno
 import os
 import importlib.util
