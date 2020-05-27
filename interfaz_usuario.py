@@ -40,8 +40,8 @@ class Usuario:
         def getBotonShow(): # La funcion que Añade el boton para hacer la grafica | esta separado porque se puede pedir dentro de seleccionados o si es un mapa se pide solo
             # En la funcion recibe la opcion de grafica (int), el array con los elementos elegidos para mostrar (array), y la url de la fuente de datos para obtener el dataset (string)
             #botonGrafica.pack(pady=20)
-            seleccionEjeX.append("vacio")   # Esto lo hago por los mapas ya que se muestra directamente el boton y si no añado (appned) un elemento peta 
-            seleccionEjeY.append("vacio")
+            #seleccionEjeX.append("vacio")   # Esto lo hago por los mapas ya que se muestra directamente el boton y si no añado (appned) un elemento peta 
+            #seleccionEjeY.append("vacio")
             botonGrafica.grid(column = 2, row = 24)
 
         # Metodo para añadir a la ventana el dropdownList para quel usuario escoja los elementos que quiere seleccionar
@@ -85,8 +85,9 @@ class Usuario:
         # Añade a la ventana los radiobutton para escoger el tipo de grafica
         def graficasAntiguo():
             #Saco el dataset donde estaran los datos
+            nonlocal dataS
             parse = Mediador.getParse(fuenteDatos.get())    # le pasamos la eleccion del usuario sobre la fuente de datos
-            dataS.append(parse().getDataset())
+            dataS = parse().getDataset()
             #global dataS
             #dataS = parse().getDataset()
 
@@ -141,19 +142,24 @@ class Usuario:
         #Para poder escoger las opciones de cada eje
         def elegirEjeY(event):
             #eleccionEje = opcionesEjes.get()
-            if (len(seleccionEjeY) > 0):    # Si ya tiene un eje guardado lo saco para poder guardar la nueva eleccion
-                while( len(seleccionEjeY) > 0):
-                    seleccionEjeY.pop() 
-            seleccionEjeY.append(opcionesEjesY.get())
+            #if (len(seleccionEjeY) > 0):    # Si ya tiene un eje guardado lo saco para poder guardar la nueva eleccion
+            #    while( len(seleccionEjeY) > 0):
+            #        seleccionEjeY.pop() 
+            #seleccionEjeY.append(opcionesEjesY.get())
             #opcionesEjesY = ttk.Combobox(state = "disabled")    # Al seleccionar hay que desactivar el dropbox
             #seleccionEjeX[0] = opcionesEjesX.get()
             #print("Se escogio = " + opcionesEjes.get())
+            nonlocal seleccionEjeY
+            seleccionEjeY = opcionesEjesY.get()
+
 
         def elegirEjeX(event):
-            if (len(seleccionEjeX) > 0):
-                while( len(seleccionEjeY) > 0):
-                    seleccionEjeX.pop()
-            seleccionEjeX.append(opcionesEjesX.get())
+           #if (len(seleccionEjeX) > 0):
+            #    while( len(seleccionEjeY) > 0):
+            #        seleccionEjeX.pop()
+            #seleccionEjeX.append(opcionesEjesX.get())
+            nonlocal seleccionEjeX
+            seleccionEjeX = opcionesEjesX.get()
 
 
         #--------------------- Declaracion de los elementos para la ventana ---------------------------
@@ -162,10 +168,10 @@ class Usuario:
         ventana.geometry('430x600') # Cambiar las dimensiones cuando se mejore los elementos
         grafica = IntVar() # Variabla para controlar la opcion seleccionada por el usuario
         fuenteDatos = StringVar()
-        #dataS = Dataset('default')
-        dataS = [] # Lo hago list por que sino no me guarda el dataset dentro de la funcion
+        dataS = Dataset('default')
+        #dataS = [] # Lo hago list por que sino no me guarda el dataset dentro de la funcion
 
-        labelEspacio = tk.Label(ventana, text="        ")
+        labelEspacio = tk.Label(ventana, text = "        ")
 
         # Los radiobutton para el tipo de fuente
         rbCasosConfirmados = Radiobutton(ventana, text="Casos confirmados", variable=fuenteDatos,value= 1, command=graficasAntiguo)
@@ -196,19 +202,19 @@ class Usuario:
         opcionesEjesY.bind("<<ComboboxSelected>>", elegirEjeY)
 
         #Para lo que seleccione el usuario de los ejes
-        seleccionEjeY = []
-        seleccionEjeX = []
+        seleccionEjeY = ""
+        seleccionEjeX = ""
 
 
         # ------------ Elementos de getGrafica --------------
         # Declaro los radiobutton para el tipo de grafica y la etiqueta
-        linea_mat = Radiobutton(ventana, text="Grafica tipo linea por terminal", variable=grafica,value=1, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
-        linea_pygal = Radiobutton(ventana, text="Grafica tipo linea en Html", variable=grafica,value=2, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
-        linea_plotly = Radiobutton(ventana, text="Grafica tipo linea en navegador", variable=grafica,value=3, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
-        barras_plotly = Radiobutton(ventana, text="Grafica tipo barras en navegador", variable=grafica,value=4, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
+        linea_mat = Radiobutton(ventana, text="Grafica tipo linea por terminal", variable=grafica,value=1, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
+        linea_pygal = Radiobutton(ventana, text="Grafica tipo linea en Html", variable=grafica,value=2, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
+        linea_plotly = Radiobutton(ventana, text="Grafica tipo linea en navegador", variable=grafica,value=3, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
+        barras_plotly = Radiobutton(ventana, text="Grafica tipo barras en navegador", variable=grafica,value=4, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
         mapa_plotly = Radiobutton(ventana, text="Grafica tipo Mapa en navegador", variable=grafica,value=5, command = getBotonShow) # Como no hay que seleccionar pais ni el eje le pongo el boton de representar directamente
-        scatter_plotly = Radiobutton(ventana, text="Grafica tipo dispersion (scatter) en navegador", variable=grafica,value=6, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
-        box_pygal = Radiobutton(ventana, text="Grafica tipo caja en Html", variable=grafica,value=7, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
+        scatter_plotly = Radiobutton(ventana, text="Grafica tipo dispersion (scatter) en navegador", variable=grafica,value=6, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
+        box_pygal = Radiobutton(ventana, text="Grafica tipo caja en Html", variable=grafica,value=7, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
         tipoGrafica= ttk.Combobox(state = "readonly")
         tipoGrafica.bind("<<ComboboxSelected>>",lambda event: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
@@ -216,7 +222,7 @@ class Usuario:
         #print("------------------------------------------------------------------")
 
         # Elementos de getBotonShow
-        botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: show( grafica.get(),elegidos,seleccionEjeX[0],seleccionEjeY[0],dataS[0])) # El boton de graficas
+        botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: show( grafica.get(),elegidos,seleccionEjeX,seleccionEjeY,dataS)) # El boton de graficas
 
         # ---------------------- Añadimos los elementos principales a la ventana -----------------------------
         #label1.pack()
