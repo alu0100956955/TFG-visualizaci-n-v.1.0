@@ -45,21 +45,22 @@ class Usuario:
             botonGrafica.grid(column = 2, row = 24)
 
         # Metodo para añadir a la ventana el dropdownList para quel usuario escoja los elementos que quiere seleccionar
-        def getSeleccionados(opcionesPack,data):
+        def getSeleccionados(event):
             #opcionesPack = dropDownSeleccion.winfo_ismapped() # Asi pregunto si ya esta metido dentro de la ventana antes de volver a declararlo
             #dataS = Mediador.getParse(fuenteDatos.get()).getDataset()
-            
+            nonlocal dataS
             #label4.pack()
             #label3.pack(pady=10)
             label3.grid(column = 2, row = 18)
             #opciones = dataS.getOpciones()
             #ejes = dataS.getOpcionesEje()
-            opciones_ = data.getOpciones()
-            ejes = data.getOpcionesEje()
+            opciones_ = dataS.getOpciones()
+            ejes = dataS.getOpcionesEje()
 
             seleccionado.set(opciones[0])   # le asigno el primero como default
             #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
             #dropDownSeleccion = ttk.Combobox( opciones.all())
+            nonlocal dropDownSeleccion
             dropDownSeleccion["values"] = [*opciones_];
             dropDownSeleccion.bind("<<ComboboxSelected>>", addSeleccion)
             opcionesEjesY["values"] = [*ejes]
@@ -70,7 +71,7 @@ class Usuario:
             labelEjeX.grid(column = 2, row = 14)
             labelEjeY.grid(column = 2, row = 16)
             #if (dropDownSeleccion.winfo_ismapped() == False): #Esto no funciona ya que declaro arriba el dropdown asique cuenta como nuevo
-            if ( opcionesPack == False):
+            if ( dropDownSeleccion.winfo_ismapped() == False):
                 #dropDownSeleccion.pack()
                 dropDownSeleccion.grid(column = 2, row = 19 )
                 opcionesEjesX.grid(column = 2, row = 15)
@@ -103,12 +104,17 @@ class Usuario:
             box_pygal.grid(column = 2, row = 12)
 
         def graficasNuevo():
+            nonlocal dataS
             parse = Mediador.getParse(fuenteDatos.get())    # le pasamos la eleccion del usuario sobre la fuente de datos
-            dataS.append(parse().getDataset())
+            dataS = parse().getDataset()
             tipoGrafica.grid(column = 2, row = 3 )
-            tipos = ["1:  Linea Terminal", "2: Linea html", "3: Linea navegador"]
+            tipos = ["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador", "6: dispersion navegador", "7: box html"]
             tipoGrafica["values"] = [*tipos]
 
+            # Tengo que pasarle la string que se escoja 
+        def EleccionGrafica():
+            s = tipoGrafica.get()
+            return int(s[0])
 
         # Metodo para añadir el elemento seleccionado por el usuario
         def addSeleccion(event):
@@ -174,9 +180,9 @@ class Usuario:
         labelEspacio = tk.Label(ventana, text = "        ")
 
         # Los radiobutton para el tipo de fuente
-        rbCasosConfirmados = Radiobutton(ventana, text="Casos confirmados", variable=fuenteDatos,value= 1, command=graficasAntiguo)
-        rbSegunda = Radiobutton(ventana, text="Accidentes trafico", variable=fuenteDatos,value=2, command=graficasAntiguo)
-        rbSegunda.configure(state="disabled")   #Lo desactivo mientras mejoro el sistema, despues me pongo arreglar el parse
+        rbCasosConfirmados = Radiobutton(ventana, text="Casos confirmados", variable=fuenteDatos,value= 1, command=graficasNuevo)
+        rbSegunda = Radiobutton(ventana, text="Accidentes trafico", variable=fuenteDatos,value=2, command=graficasNuevo)
+        #rbSegunda.configure(state="disabled")   #Lo desactivo mientras mejoro el sistema, despues me pongo arreglar el parse
 
 
         # --------------- Elementos de getSeleccionados ---------------
@@ -208,21 +214,22 @@ class Usuario:
 
         # ------------ Elementos de getGrafica --------------
         # Declaro los radiobutton para el tipo de grafica y la etiqueta
-        linea_mat = Radiobutton(ventana, text="Grafica tipo linea por terminal", variable=grafica,value=1, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
+        linea_mat = Radiobutton(ventana, text="Grafica tipo linea por terminal", variable=grafica,value=1, command = lambda: getSeleccionados( ))
         linea_pygal = Radiobutton(ventana, text="Grafica tipo linea en Html", variable=grafica,value=2, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
-        linea_plotly = Radiobutton(ventana, text="Grafica tipo linea en navegador", variable=grafica,value=3, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
-        barras_plotly = Radiobutton(ventana, text="Grafica tipo barras en navegador", variable=grafica,value=4, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
+        linea_plotly = Radiobutton(ventana, text="Grafica tipo linea en navegador", variable=grafica,value=3, command = lambda: getSeleccionados( dataS ))
+        barras_plotly = Radiobutton(ventana, text="Grafica tipo barras en navegador", variable=grafica,value=4, command = lambda: getSeleccionados( dataS ))
         mapa_plotly = Radiobutton(ventana, text="Grafica tipo Mapa en navegador", variable=grafica,value=5, command = getBotonShow) # Como no hay que seleccionar pais ni el eje le pongo el boton de representar directamente
-        scatter_plotly = Radiobutton(ventana, text="Grafica tipo dispersion (scatter) en navegador", variable=grafica,value=6, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
-        box_pygal = Radiobutton(ventana, text="Grafica tipo caja en Html", variable=grafica,value=7, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
+        scatter_plotly = Radiobutton(ventana, text="Grafica tipo dispersion (scatter) en navegador", variable=grafica,value=6, command = lambda: getSeleccionados( dataS ))
+        box_pygal = Radiobutton(ventana, text="Grafica tipo caja en Html", variable=grafica,value=7, command = lambda: getSeleccionados( dataS ))
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
         tipoGrafica= ttk.Combobox(state = "readonly")
-        tipoGrafica.bind("<<ComboboxSelected>>",lambda event: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS[0] ))
+        #tipoGrafica.bind("<<ComboboxSelected>>",lambda event: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
+        tipoGrafica.bind("<<ComboboxSelected>>",getSeleccionados)
 
         #print("------------------------------------------------------------------")
 
         # Elementos de getBotonShow
-        botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: show( grafica.get(),elegidos,seleccionEjeX,seleccionEjeY,dataS)) # El boton de graficas
+        botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: show( EleccionGrafica(),elegidos,seleccionEjeX,seleccionEjeY,dataS)) # El boton de graficas
 
         # ---------------------- Añadimos los elementos principales a la ventana -----------------------------
         #label1.pack()

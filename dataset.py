@@ -97,12 +97,39 @@ class Dataset:
     def getEje(self, eje, elemento):
         matriz = self.matrizEje[self.indexEje(eje)]
         #print(matriz)
-        if ( type(matriz) != list):
+        # Esta condicion tengo que cambiarlo por ver su tamaño
+        #print(type(matriz[0]))
+        #if ( type(matriz) != list):
+        #Si es un array lo devuelvo tal cual
+        if (self.ifArray(matriz) ): # Si no es una matriz devulvo tal cual la matriz porque es un array
             return matriz
         # Devolveremos la fila del elemento indicado, para saber el index miramos el indice que tiene en el array de opciones ya que TODAS las matrices estan ordenadas siguiendo el array de opciones
         #print(self.matrizEje[self.opciones.index(elemento)])
-        index = np.where(self.opciones == elemento) # esto podria meterlo en una funcion ya que lo uso en dos partes
-        return matriz[index[0][0]]
+        #index = np.where(self.opciones == elemento) # esto podria meterlo en una funcion ya que lo uso en dos partes
+        #print(elemento)
+        index = self.opciones.index(elemento)
+        #print(index)
+        return matriz[index]
+
+    #Metodo para comprobar si el elemento existe | para mapas basicamente
+    def existeElemento(self, elemento):
+        esta = False
+        for i in self.opciones:
+            if (i == elemento):
+                esta = True
+        return esta
+
+    # Metodo para saber si es un array la matriz (dabe de haber forma mas optimas, como ver sus dimensiones pero por ahora asi se queda)
+    # TO DO: revisar otra forma de hacerlo
+    def ifArray(self,matriz):
+        # Si es un numpy array
+        print(type(matriz[0]))
+        if(type(matriz[0]) == str ):
+            return True
+        if(type(matriz[0]) == int ):
+            return True
+        return False
+
 
     # Le pasamos un eje y nos dice en que posicion se encuenta en la matriz de eje | innecesario ?¿
     def indexEje(self, eje):

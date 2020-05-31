@@ -44,6 +44,8 @@ class Linea_mat(Grafica):
 
             ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),seleccionados[i]), data.getSeleccionEjeX())
             ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),seleccionados[i]), data.getSeleccionEjeY())
+            #print(ejeX)
+            #print(ejeY)
 
             plt.plot(ejeX,ejeY, marker = Linea_mat.marker(i), linestyle = Linea_mat.line(i), markeredgecolor = Linea_mat.color(i) , label = seleccionados[i])
             # TO DO falta quitar lo de ejeY y poner solo getEje

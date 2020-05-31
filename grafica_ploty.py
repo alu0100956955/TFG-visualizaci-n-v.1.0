@@ -101,6 +101,9 @@ class Mapa_plotly(Grafica):
         #for pais in data.getOpciones():
         for pais in countries['features']:
             nombre = pais['properties']['SOVEREIGNT'] # Este es el nombre del pais
+            if(data.existeElemento(nombre) == False):
+                continue
+                
             nombrePais.append(nombre)
             # Hay que controlar si el nombre es correcto
             x = data.getEje("Cantidad de contagios",nombre)

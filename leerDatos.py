@@ -62,7 +62,7 @@ class ParseCasosConfirmados(Parse):
         #data.setEjeY(self.ejeY())
         #data.setEjeY(self.getMatrizCasosConfirmados())
         data.setTodasLasOpciones(self.getPaises())  #Todas las opciones mantiene los duplicados por si hay mas de una linea con la misma opcion (pais)
-        data.setOpciones(self.getOpciones())
+        
 
         #Modificacion del parse
         data.addOpcionEje("Dias")
@@ -73,6 +73,14 @@ class ParseCasosConfirmados(Parse):
         data.addElementoEje(self.getMatrizCasosConfirmados())
         data.addElementoEje(self.porcentajesDeContagios())
 
+        paises = self.getOpciones()
+        #print(type(paises))
+        #Diccionario con los paises que debo cambiar el nombre
+        diccionario = {"US":"United States of America"}
+        # Para que coincida con los nombres del fichero Json para los mapas le aplico el diccionario sobre el conjunto original
+        paisesFinales = [diccionario.get(n,n) for n in paises]
+        #print(type(paisesFinales))
+        data.setOpciones(paisesFinales)
         return data
 
 
@@ -160,7 +168,7 @@ class ParseCasosConfirmados(Parse):
         # devolver el array con las fechas sobreescritas
         return dias
 
-#----------------------------------------------------------------------------------------
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 class ParseAccidentesTrafico:
@@ -178,29 +186,39 @@ class ParseAccidentesTrafico:
             #print(array[2])
             array[2] = array[2].replace('\n','')# para eliminar el salto de linea que tiene cada linea
             array[2] = array[2].replace('\xad','') # para limpiar la cabecera
-            for i in array: # para quitar las comillas que se generan al leer el fichero
-                i = i.replace('"','')
+            for i in range(len(array)): # para quitar las comillas que se generan al leer el fichero
+                array[i] = array[i].replace('"','')
+
+            #print(array)
             array[2] = int(array[2])
+            
             self.matriz.append(array)
 
     def getDataset(self):
 
         data = Dataset("Accidentes traficos")
-        data.setEjeX(self.ejeX())
-        data.setEjeY(self.ejeY())
-        data.setTodasLasOpciones(self.getOpciones())    # Como se que no va a haber duplicados en las filas uso el metodo de getOpciones
+        #data.setEjeX(self.ejeX())
+        #data.setEjeY(self.ejeY())
+        #data.setTodasLasOpciones(self.getOpciones())    # Como se que no va a haber duplicados en las filas uso el metodo de getOpciones
         data.setOpciones(self.getOpciones())
+
+        data.addOpcionEje("Meses")
+        data.addOpcionEje("Cantidad de Accidentes")
+        #data.addOpcionEje("% de contagios")
+        data.addElementoEje(self.meses())
+        data.addElementoEje(self.victimas())
 
         return data
 
      # Meses
-    def ejeX(self):
+    def meses(self):
         meses = []
         maximo = 0 # Se que solo son doce anios asique para que no se mire todo el df innecesariamente, si ha guardado 12 elementos que salte
         #for index, row in df.iterrows():
+        # REVISAR
         for linea in self.matriz:
-            print(linea[0])
-            if(linea[0] == '"2011"'):  # si coincide el anio con el de la fila guardo el elemento | Tengo que cambiar la conficion
+            #print(linea[0])
+            if(linea[0] == '2010'):  # si coincide el anio con el de la fila guardo el elemento | Tengo que cambiar la conficion
                 meses.append(linea[1]) # El elemento que se guardara es la cantidad de accidentes que corresponde a la tercera fila
                 maximo += 1
                 if (maximo == 12):
@@ -211,7 +229,7 @@ class ParseAccidentesTrafico:
 
 
     # Matriz que cada fila representa victimas, PASARLO A NUMEROS
-    def ejeY(self):
+    def victimas(self):
         matriz = []
         opciones = self.getOpciones()   # Las opciones son los distintos años y cada fila son los datos de cada anio
         for anio in opciones:
