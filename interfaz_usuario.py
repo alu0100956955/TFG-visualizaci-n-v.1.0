@@ -22,12 +22,6 @@ class Usuario:
 
     # Le paso el mediador y aqui sera el loop principal, desde el mediador se haran los otros pasos
     def ventanaUsuario():
-        #Pedir fuente de Datos
-        #Comprobar si es valida
-        #Pedir tipo de grafica ( radiobutton), si es mapa se puede mostrar directamente en las otras una funcion que le quite el hidden a los otros elementos que les haga el pack
-        #Pedir seleccionados si es necesario
-        # Botton (Button) para que muestre la grafica, esta la opcion de que se muestre cada vez que escoga un radiobutton pero esa me parece mas peligrosa porque hay que seleccionar los elementos salvo en mapa
-
 
 
         # --------------------------Funciones para las distintas opciones ---------------------------------------
@@ -58,8 +52,7 @@ class Usuario:
             ejes = dataS.getOpcionesEje()
 
             seleccionado.set(opciones[0])   # le asigno el primero como default
-            #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
-            #dropDownSeleccion = ttk.Combobox( opciones.all())
+            
             nonlocal dropDownSeleccion
             dropDownSeleccion["values"] = [*opciones_];
             dropDownSeleccion.bind("<<ComboboxSelected>>", addSeleccion)
@@ -78,30 +71,6 @@ class Usuario:
                 opcionesEjesY.grid(column = 2, row = 17) # esto es para elegir que representara el eje
                 #opcionesPack = True;
 
-            #Para mostrar los seleccionados
-            #lSeleccionados.pack(side=tk.LEFT)
-            #lContSeleccionados.pack(side=tk.RIGHT)
-
-
-        # Añade a la ventana los radiobutton para escoger el tipo de grafica
-        def graficasAntiguo():
-            #Saco el dataset donde estaran los datos
-            nonlocal dataS
-            parse = Mediador.getParse(fuenteDatos.get())    # le pasamos la eleccion del usuario sobre la fuente de datos
-            dataS = parse().getDataset()
-            #global dataS
-            #dataS = parse().getDataset()
-
-
-            labelEspacio.grid(column = 2, row = 3 )
-            label2.grid(column = 2, row = 4)
-            linea_mat.grid(column = 2, row = 6)
-            linea_pygal.grid(column = 2, row = 7)
-            linea_plotly.grid(column = 2, row = 8)
-            barras_plotly.grid(column = 2, row = 9)
-            mapa_plotly.grid(column = 2, row = 10)
-            scatter_plotly.grid(column = 2, row = 11)
-            box_pygal.grid(column = 2, row = 12)
 
         def graficasNuevo():
             nonlocal dataS
@@ -118,8 +87,6 @@ class Usuario:
 
         # Metodo para añadir el elemento seleccionado por el usuario
         def addSeleccion(event):
-            #print(event)
-            #seleccion = event
             elegidos.append(dropDownSeleccion.get())
             elementosSeleccionados.configure(state="normal")    # Lo habilito de nuevo para edicion por que sino no me deja añadir el texto
             elementosSeleccionados.insert(tk.INSERT, dropDownSeleccion.get())
@@ -145,7 +112,7 @@ class Usuario:
                     elementosSeleccionados.insert(tk.INSERT, '\n')
                 elementosSeleccionados.configure(state="disabled")
 
-        #Para poder escoger las opciones de cada eje
+        #Para poder escoger las opciones del eje Y
         def elegirEjeY(event):
             #eleccionEje = opcionesEjes.get()
             #if (len(seleccionEjeY) > 0):    # Si ya tiene un eje guardado lo saco para poder guardar la nueva eleccion
@@ -158,7 +125,7 @@ class Usuario:
             nonlocal seleccionEjeY
             seleccionEjeY = opcionesEjesY.get()
 
-
+        #Para poder escoger las opciones del eje X
         def elegirEjeX(event):
            #if (len(seleccionEjeX) > 0):
             #    while( len(seleccionEjeY) > 0):
@@ -213,39 +180,27 @@ class Usuario:
 
 
         # ------------ Elementos de getGrafica --------------
-        # Declaro los radiobutton para el tipo de grafica y la etiqueta
-        linea_mat = Radiobutton(ventana, text="Grafica tipo linea por terminal", variable=grafica,value=1, command = lambda: getSeleccionados( ))
-        linea_pygal = Radiobutton(ventana, text="Grafica tipo linea en Html", variable=grafica,value=2, command = lambda: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
-        linea_plotly = Radiobutton(ventana, text="Grafica tipo linea en navegador", variable=grafica,value=3, command = lambda: getSeleccionados( dataS ))
-        barras_plotly = Radiobutton(ventana, text="Grafica tipo barras en navegador", variable=grafica,value=4, command = lambda: getSeleccionados( dataS ))
-        mapa_plotly = Radiobutton(ventana, text="Grafica tipo Mapa en navegador", variable=grafica,value=5, command = getBotonShow) # Como no hay que seleccionar pais ni el eje le pongo el boton de representar directamente
-        scatter_plotly = Radiobutton(ventana, text="Grafica tipo dispersion (scatter) en navegador", variable=grafica,value=6, command = lambda: getSeleccionados( dataS ))
-        box_pygal = Radiobutton(ventana, text="Grafica tipo caja en Html", variable=grafica,value=7, command = lambda: getSeleccionados( dataS ))
+        
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
         tipoGrafica= ttk.Combobox(state = "readonly")
         #tipoGrafica.bind("<<ComboboxSelected>>",lambda event: getSeleccionados(dropDownSeleccion.winfo_ismapped(), dataS ))
         tipoGrafica.bind("<<ComboboxSelected>>",getSeleccionados)
 
-        #print("------------------------------------------------------------------")
 
         # Elementos de getBotonShow
         botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: show( EleccionGrafica(),elegidos,seleccionEjeX,seleccionEjeY,dataS)) # El boton de graficas
 
         # ---------------------- Añadimos los elementos principales a la ventana -----------------------------
-        #label1.pack()
-        #rbCasosConfirmados.pack()
-        #rbSegunda.pack()
+
 
         label1.grid(column = 2, row = 0)
         rbCasosConfirmados.grid(column = 2, row = 1)
         rbSegunda.grid(column = 2, row = 2)
 
-        # Por ahora lo dejo cableado pero esto dependera de lo que escoga el usuario
-        #elegidos = ['Spain','Italy','China','Portugal']
+
         elegidos = [] # se añadira un elemento por cada vez que el usuario lo indique ( habra que controlar los duplicados)
 
         # El dropdownList para elegir que seleccionar
-        #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones)
         lSeleccionados = tk.Label(ventana, text="Cantidad de seleccionados")
         lContSeleccionados = tk.Label(ventana)
         label4 = tk.Label(ventana, text="funciona la funcion")
