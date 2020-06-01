@@ -4,7 +4,8 @@ from leerDatos import ParseCasosConfirmados
 import pygal
 from clases_base import Grafica
 import numpy as np
-
+# IMPORTANTE PARA EL RENDER EN BROWSER SE NECESITA INTALAR LA LIBRERIA lxml AUNQUE NO SALGA AQUI
+#import lxml
 
 
 class Linea_pygal(Grafica):
@@ -40,8 +41,8 @@ class Linea_pygal(Grafica):
         
 
         #chart.x_labels = l.labelsX(l.ejeX()) # no los reconoce como valores asique los apila igual pero como son menos pos quedan todos apretados al principio
-        chart.render_to_file('output/lineas_pygal.html')
-        #chart.render_in_browser()
+        #chart.render_to_file('output/lineas_pygal.html')
+        chart.render_in_browser()  # Si falla el render es porque faltara la libreria lxml
         #chart.render()
 
     # metodo para saber la orientación de la gráfica con respecto a los datos no numericos, es decir si sera basica o en horizontal
@@ -62,7 +63,7 @@ class Box_pygal(Grafica):
         chart = pygal.Box()
 
         chart.title = data.getTitle()
-        chart.x_labels = data.getEje(data.getSeleccionEjeX(), 0)
+        #chart.x_labels = data.getEje(data.getSeleccionEjeX(), 0)
 
         for selec in seleccionados:
             chart.add(selec, data.getEje(data.getSeleccionEjeY(), selec))

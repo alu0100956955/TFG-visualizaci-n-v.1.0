@@ -123,7 +123,7 @@ class Dataset:
     # TO DO: revisar otra forma de hacerlo
     def ifArray(self,matriz):
         # Si es un numpy array
-        print(type(matriz[0]))
+        #print(type(matriz[0]))
         if(type(matriz[0]) == str ):
             return True
         if(type(matriz[0]) == int ):

@@ -49,15 +49,14 @@ class Usuario:
             #opciones = dataS.getOpciones()
             #ejes = dataS.getOpcionesEje()
             opciones_ = dataS.getOpciones()
-            ejes = dataS.getOpcionesEje()
+            
 
             seleccionado.set(opciones[0])   # le asigno el primero como default
             
             nonlocal dropDownSeleccion
             dropDownSeleccion["values"] = [*opciones_];
             dropDownSeleccion.bind("<<ComboboxSelected>>", addSeleccion)
-            opcionesEjesY["values"] = [*ejes]
-            opcionesEjesX["values"] = [*ejes]
+            
             #opcionesEjes.bind("<<comboboxselected>>", elegirEje)
 
             labelEspacio.grid(column = 2, row = 13 )
@@ -79,6 +78,10 @@ class Usuario:
             tipoGrafica.grid(column = 2, row = 3 )
             tipos = ["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador", "6: dispersion navegador", "7: box html"]
             tipoGrafica["values"] = [*tipos]
+            # Para actualizar o implementar valores a las opciones de los ejes
+            ejes = dataS.getOpcionesEje()
+            opcionesEjesY["values"] = [*ejes]
+            opcionesEjesX["values"] = [*ejes]
 
             # Tengo que pasarle la string que se escoja 
         def EleccionGrafica():
