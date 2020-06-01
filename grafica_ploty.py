@@ -98,6 +98,7 @@ class Mapa_plotly(Grafica):
         id = [] # Los id de cada pais correspondientes a los del json para que se represente correctamente cada dato
         valores = []
         nombrePais = [] # El nombre del pais segun el fichero json ( para ver que nombre le asigna ya que hay paises que no me los encuentra)
+        maximo = 0 #El valor maximo para el rango 
         #for pais in data.getOpciones():
         for pais in countries['features']:
             nombre = pais['properties']['SOVEREIGNT'] # Este es el nombre del pais
@@ -109,6 +110,8 @@ class Mapa_plotly(Grafica):
             x = data.getEje("Cantidad de contagios",nombre)
             id.append(pais['id'])
             valores.append(x[-1]) # EL -1 es para sacar el ultimo elemento de la lista que es el del ultimo dia
+            if(x[-1] > maximo):
+                maximo = x[-1]
 
         df = pd.DataFrame({"id":id,"Casos Confirmados":valores,"Pais":nombrePais}) # El nombre para cada uno determinara lo que se vera al pasar el raton por cada pais
 
@@ -116,7 +119,7 @@ class Mapa_plotly(Grafica):
 
         fig = px.choropleth(df, geojson=countries, locations='id', color='Casos Confirmados',
                                    color_continuous_scale="Viridis",
-                                   range_color=(0, 30),
+                                   range_color=(0, maximo),
                                    labels={'Casos':'Casos confirmados covid'}
                                   )
 
@@ -136,6 +139,8 @@ class Mapa_plotly(Grafica):
         if (nombre == ""):
             return "US1"
         return nombre
+
+    
 
 
 

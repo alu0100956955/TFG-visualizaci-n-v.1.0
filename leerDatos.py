@@ -170,7 +170,7 @@ class ParseCasosConfirmados(Parse):
 
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+# Parse para los accidentes de trafico
 class ParseAccidentesTrafico:
 
     def __init__(self): # Creo que compensa mas tener la ruta aqui dentro
@@ -263,6 +263,41 @@ class ParseAccidentesTrafico:
 
         return sorted(opciones) # Esto es para que las opciones salgan ordenadas
 
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class ParseParoEspaña:
+
+    def __init__(self):
+        # Abrir la fuente de datos
+        # guardarlo en la variables para poder tabajar mas adelante
+        print("Sin terminar")
+
+    def getDataset():
+        print("Sin terminar")
+
+    # metodo que devuelve en una lista todos los anios
+    def getAnios():
+        anios = 0
+        # Cuidado que cada anio esta dividido en dos temporadas
+        return anios
+
+    # Para obtener las distintas comunidades, que seran las opciones a representar
+    def getComunidades():
+        comunidades = []
+
+        return comunidades
+
+    # Devolvera una matriz que contendra el paro de cada comunidad, siendo cada fila una comunidad
+    def CantidadParo():
+        paro = []
+
+        return paro
+
+    # Devolvera una matriz con el procentaje que representa los accidentes en ese anio (columna) para cada pais (fila)
+    def porcentajeParo():
+        porcentaje = []
+
+        return porcentaje
 
 
 #adfasf
