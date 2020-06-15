@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from clases_base import Parse
 from dataset import Dataset
+import datetime
 
 #TO DO: cambiar el nombre de esta clase para poder hacer escalable el ecosistema sin problemas con los nombres
 # Esta clase se la encargada de leer los datos de casos confirmados globales
@@ -270,16 +271,40 @@ class ParseParoEspaña:
     def __init__(self):
         # Abrir la fuente de datos
         # guardarlo en la variables para poder tabajar mas adelante
-        print("Sin terminar")
+        self.df = pd.read_csv('https://raw.githubusercontent.com/LuisSevillano/historical-evolution-of-the-unemployment-rate-in-spain/master/docs/data/historico.csv')
+        
 
-    def getDataset():
-        print("Sin terminar")
+    def getDataset(self):
+        data = Dataset("Paro en españa")
+        #data.setEjeX(self.ejeX())
+        #data.setEjeY(self.ejeY())
+        #data.setTodasLasOpciones(self.getOpciones())    # Como se que no va a haber duplicados en las filas uso el metodo de getOpciones
+        data.setOpciones(self.getOpciones())
+
+        data.addOpcionEje("Años")
+        data.addOpcionEje("Cantidad de Accidentes")
+        data.addOpcionEje("% de Paro")
+        data.addElementoEje(self.getAnios())
+        data.addElementoEje(self.cantidadParo())
+        data.addElementoEje(self.porcentajeParo())
+        return data
+
+    # Los paises seran las opciones basicas de representación
+    def getOpciones(self):
+        return np.unique(self.df.loc[:,'state'].to_numpy()).tolist()
 
     # metodo que devuelve en una lista todos los anios
-    def getAnios():
-        anios = 0
-        # Cuidado que cada anio esta dividido en dos temporadas
+    def getAnios(self):
+        # Cuidado que cada anio esta dividido en dos temporadas y 
+        cabeceras = self.df.columns.values
+        # es desde la 2 porque las primeras son datos que no necesitamos 
+        anios = []
+        # Dabo que son string los paso a tipo datetime segun la temporada que sea
+        for i in cabeceras[2:cabeceras.size]:
+            anios.append(self.creacionFecha(i))
+        #print(anios)
         return anios
+
 
     # Para obtener las distintas comunidades, que seran las opciones a representar
     def getComunidades():
@@ -288,16 +313,36 @@ class ParseParoEspaña:
         return comunidades
 
     # Devolvera una matriz que contendra el paro de cada comunidad, siendo cada fila una comunidad
-    def CantidadParo():
+    def cantidadParo(self):
         paro = []
-
+        columnas = self.df.columns
+        for index, row in self.df.iterrows():
+            paro.append(self.df.loc[index , columnas[2]:columnas[len(columnas)-1]].to_numpy())
         return paro
 
     # Devolvera una matriz con el procentaje que representa los accidentes en ese anio (columna) para cada pais (fila)
-    def porcentajeParo():
+    def porcentajeParo(self):
         porcentaje = []
 
         return porcentaje
+
+    def getRow(self, index):
+        columnas = self.df.columns
+        return self.df.loc[index , columnas[2]:columnas[len(columnas)-1]].to_numpy()
+
+    # Le paso el string de la columna para convertirlo en tipo datetime | Para que trabaje mejor las graficas a la hora de de hacer los ticks
+    def creacionFecha(self, fecha):
+        anio = int(fecha[0]+fecha[1]+fecha[2]+fecha[3])
+        if(len(fecha)== 6):
+            return datetime.datetime(anio,3,1)
+        if(len(fecha) == 8):
+            return datetime.datetime(anio,9,1)
+        #Llegados a este punto solo quedan las temporadas TII & TIV, asi que miro la posicion 6 de los array de tamaño 7
+        if(fecha[6] == "I"):
+            return datetime.datetime(anio,6,1)
+        else:
+            return datetime.datetime(anio,12,1)
+
 
 
 #adfasf

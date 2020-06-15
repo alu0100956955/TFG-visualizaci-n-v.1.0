@@ -90,6 +90,8 @@ class Scatter_plotly(Grafica):
 # Esta hecho exclusivamente para data que contenga todos los paises si no fallara
 class Mapa_plotly(Grafica):
 
+    # scope (enumerated: "world" | "usa" | "europe" | "asia" | "africa" | "north america" | "south america" ) default: "world"
+
     def show(data):
         # El Json que contiene los paises
         with open('data/countries.json') as file:

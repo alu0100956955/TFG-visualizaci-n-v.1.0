@@ -49,7 +49,8 @@ class Usuario:
             #opciones = dataS.getOpciones()
             #ejes = dataS.getOpcionesEje()
             opciones_ = dataS.getOpciones()
-            
+            # AQUI HAY QUE CONTROLAR QUE EJES SE REPRESENTARAN, de forma que si es una de tipo distibucion hay que ocultar el ejeX y cambiarlo por la opcionesde distribucion
+            # En las opciones de distribucion ocurre como seleccionado que seran varios
 
             seleccionado.set(opciones[0])   # le asigno el primero como default
             
@@ -63,17 +64,34 @@ class Usuario:
             labelEjeX.grid(column = 2, row = 14)
             labelEjeY.grid(column = 2, row = 16)
             #if (dropDownSeleccion.winfo_ismapped() == False): #Esto no funciona ya que declaro arriba el dropdown asique cuenta como nuevo
-            if ( dropDownSeleccion.winfo_ismapped() == False):
+            #if ( dropDownSeleccion.winfo_ismapped() == False):
                 #dropDownSeleccion.pack()
-                dropDownSeleccion.grid(column = 2, row = 19 )
-                opcionesEjesX.grid(column = 2, row = 15)
-                opcionesEjesY.grid(column = 2, row = 17) # esto es para elegir que representara el eje
+            dropDownSeleccion.grid(column = 2, row = 19 )
+            opcionesEjesX.grid(column = 2, row = 15)
+            opcionesEjesY.grid(column = 2, row = 17) # esto es para elegir que representara el eje
                 #opcionesPack = True;
+            # Si ha seleccionado la grafica tipo box quito el eje X y añado otras opciones de representacion
+            if(opcionesEjesX.winfo_ismapped() & (eleccionDropdown(tipoGrafica.get()) == 7)):
+                opcionesEjesX.grid_remove()
+                labelEjeX.grid_remove()
 
 
-        def graficasNuevo():
+        # Metodo para añadir el poder escoger los elementos para las distribuciones
+        def distribuciones():
+            print("Sin terminar")
+            labelOpcionesDistribuciones.grid(column = 2, row = 14)
+            if(opcionesDistribucion.winfo_ismapped() == False):# Para no añadir duplicados en la interfaz
+                opcionesDistribucion.grid(column = 2, row = 15) # sustituira la posición de elección del eje X
+
+
+        # Metodo para añadir un elemento para representar 
+        def addDistribucion():
+            print("Sin terminar | sera como el addSeleccion")
+
+
+        def graficasNuevo(event):
             nonlocal dataS
-            parse = Mediador.getParse(fuenteDatos.get())    # le pasamos la eleccion del usuario sobre la fuente de datos
+            parse = Mediador.getParse(eleccionDropdown(dropdownFuenteDatos.get()))    # le pasamos la eleccion del usuario sobre la fuente de datos
             dataS = parse().getDataset()
             tipoGrafica.grid(column = 2, row = 3 )
             tipos = ["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador", "6: dispersion navegador", "7: box html"]
@@ -82,11 +100,11 @@ class Usuario:
             ejes = dataS.getOpcionesEje()
             opcionesEjesY["values"] = [*ejes]
             opcionesEjesX["values"] = [*ejes]
+            limpiarSeleccionado()
 
-            # Tengo que pasarle la string que se escoja 
-        def EleccionGrafica():
-            s = tipoGrafica.get()
-            return int(s[0])
+        #Para saber de las elecciones de los dropdown list cual es la que escogio el usuario
+        def eleccionDropdown(eleccion):
+            return int(eleccion[0])
 
         # Metodo para añadir el elemento seleccionado por el usuario
         def addSeleccion(event):
@@ -114,6 +132,14 @@ class Usuario:
                     elementosSeleccionados.insert(tk.INSERT, i)
                     elementosSeleccionados.insert(tk.INSERT, '\n')
                 elementosSeleccionados.configure(state="disabled")
+
+        # Metodo para limpiar los seleccionados por si se cambia de fuente de datos
+        def limpiarSeleccionado():
+            while (len(elegidos) > 0 ):
+                elegidos.pop()
+            elementosSeleccionados.configure(state="normal")    # Lo habilito de nuevo para edicion por que sino no me deja añadir el texto
+            elementosSeleccionados.delete('1.0', END)
+            elementosSeleccionados.configure(state="disabled")
 
         #Para poder escoger las opciones del eje Y
         def elegirEjeY(event):
@@ -152,7 +178,11 @@ class Usuario:
         # Los radiobutton para el tipo de fuente
         rbCasosConfirmados = Radiobutton(ventana, text="Casos confirmados", variable=fuenteDatos,value= 1, command=graficasNuevo)
         rbSegunda = Radiobutton(ventana, text="Accidentes trafico", variable=fuenteDatos,value=2, command=graficasNuevo)
+        rbParo= Radiobutton(ventana, text="Paro España", variable=fuenteDatos,value=3, command=graficasNuevo)
         #rbSegunda.configure(state="disabled")   #Lo desactivo mientras mejoro el sistema, despues me pongo arreglar el parse
+
+        dropdownFuenteDatos= ttk.Combobox(state = "readonly")
+        dropdownFuenteDatos.bind("<<ComboboxSelected>>",graficasNuevo)
 
 
         # --------------- Elementos de getSeleccionados ---------------
@@ -191,15 +221,19 @@ class Usuario:
 
 
         # Elementos de getBotonShow
-        botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: show( EleccionGrafica(),elegidos,seleccionEjeX,seleccionEjeY,dataS)) # El boton de graficas
+        botonGrafica = Button(ventana, text ="Hacer grafica" , pady= 5, command = lambda: show( eleccionDropdown(tipoGrafica.get()),elegidos,seleccionEjeX,seleccionEjeY,dataS)) # El boton de graficas
 
-        # ---------------------- Añadimos los elementos principales a la ventana -----------------------------
-
+        #/////////////////////////////////////////////////   ELEMENTOS INICIALES DE LA VENTANA   //////////////////////////////////////////////////
 
         label1.grid(column = 2, row = 0)
-        rbCasosConfirmados.grid(column = 2, row = 1)
-        rbSegunda.grid(column = 2, row = 2)
-
+        # Los radio buttons
+        #rbCasosConfirmados.grid(column = 3, row = 1)
+        #rbSegunda.grid(column = 3, row = 2)
+        #rbParo.grid(column = 4, row = 1)
+        tipos = ["1:  Casos de covid confirmados", "2: Accidentes de trafico", "3: Paro en españa"]
+        dropdownFuenteDatos["values"] = [*tipos]
+        dropdownFuenteDatos.grid(column = 2, row = 1)
+        labelEspacio.grid(column = 2, row = 2 )
 
         elegidos = [] # se añadira un elemento por cada vez que el usuario lo indique ( habra que controlar los duplicados)
 

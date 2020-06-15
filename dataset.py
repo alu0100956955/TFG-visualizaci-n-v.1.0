@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import numpy as np
+import datetime
 
 # Clase que contendra los datos del parse
 class Dataset:
@@ -128,6 +129,8 @@ class Dataset:
             return True
         if(type(matriz[0]) == int ):
             return True
+        if(type(matriz[0]) == datetime.datetime):
+            return True
         return False
 
 
@@ -147,5 +150,12 @@ class Dataset:
 
     def getSeleccionEjeY(self):
         return self.ejeY
+
+    # Las opciones para escoger por el usuario para las graficas de distribución
+    def setOpcionDistribucion(self, opciones):
+        self.distribuciones = opciones
+
+    def getOpcionDistribuciones(self):
+        return distribuciones
 
 #asdfasf
