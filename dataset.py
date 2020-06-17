@@ -158,4 +158,10 @@ class Dataset:
     def getOpcionDistribuciones(self):
         return distribuciones
 
+    def setTiposGraficas(self, array):
+        self.tiposGraficas = array
+
+    def getTiposGraficas(self):
+        return self.tiposGraficas
+
 #asdfasf

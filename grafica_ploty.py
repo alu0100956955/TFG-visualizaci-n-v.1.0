@@ -29,8 +29,11 @@ class Barras_plotly(Grafica):
         seleccionados =  data.getSeleccionados()
         fig = go.Figure()
         for selec in seleccionados:
-            ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),selec), data.getSeleccionEjeX())
-            ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            #ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),selec), data.getSeleccionEjeX())
+            #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            ejeX = data.getEje(data.getSeleccionEjeX(),selec)
+            ejeY = data.getEje(data.getSeleccionEjeY(),selec)
+
             fig.add_trace(go.Bar(y = data.getEje(data.getSeleccionEjeY(),selec), name = selec))
         #fig.update_layout(title = 'Casos confirmados', xaxis_title="fecha",yaxis_title="Numero de casos")
         fig.update_layout(title = data.getTitle())
@@ -53,8 +56,10 @@ class Lineas_plotly(Grafica):
         fig = go.Figure()
 
         for selec in seleccionados:
-            ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),selec), data.getSeleccionEjeX())
-            ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            #ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),selec), data.getSeleccionEjeX())
+            #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            ejeX = data.getEje(data.getSeleccionEjeX(),selec)
+            ejeY = data.getEje(data.getSeleccionEjeY(),selec)
             fig.add_trace(go.Scatter(x = ejeX, y = ejeY, name = selec))
         #fig.update_layout(title = 'Casos confirmados', xaxis_title="fecha",yaxis_title="Numero de casos")
         #fig.update_layout(xaxis_title=l.ejeX())
@@ -143,6 +148,19 @@ class Mapa_plotly(Grafica):
         return nombre
 
     
+class Box_plotly(Grafica):
+
+    def show(data):
+        seleccionados = data.getSeleccionados()
+        ejeY = []
+        for selec in seleccionados:
+            #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            ejeY.append( data.getEje(data.getSeleccionEjeY(),selec))
+
+
+        dataframe = pd.DataFrame({ "Seleccionado":seleccionados , data.getSeleccionEjeY():ejeY })
+        fig = px.box(dataframe,y=data.getSeleccionEjeY(),x=seleccionados)   
+        fig.show()
 
 
 

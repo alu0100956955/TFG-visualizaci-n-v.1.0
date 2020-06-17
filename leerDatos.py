@@ -59,7 +59,7 @@ class ParseCasosConfirmados(Parse):
     def getDataset(self):
         # Dentro de cada parse se configurara el titulo
         data = Dataset("Casos Confirmados")
-        data.setEjeX(self.ejeX())
+        #data.setEjeX(self.ejeX())
         #data.setEjeY(self.ejeY())
         #data.setEjeY(self.getMatrizCasosConfirmados())
         data.setTodasLasOpciones(self.getPaises())  #Todas las opciones mantiene los duplicados por si hay mas de una linea con la misma opcion (pais)
@@ -82,6 +82,7 @@ class ParseCasosConfirmados(Parse):
         paisesFinales = [diccionario.get(n,n) for n in paises]
         #print(type(paisesFinales))
         data.setOpciones(paisesFinales)
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador", "6: dispersion navegador", "7: box html","8: Box navegador"])
         return data
 
 
@@ -169,6 +170,16 @@ class ParseCasosConfirmados(Parse):
         # devolver el array con las fechas sobreescritas
         return dias
 
+    def getDias(self):
+        cabeceras = self.df.columns.values
+        # es desde la 4 porque las primeras son datos que no necesitamos y en la columna 4 empiezan las fechas
+        dias = cabeceras[4:cabeceras.size]
+        diasFormateado = []
+        for i in dias:
+            diasFormateado.append(datetime.strptime(i,'%m/%d/%y'))
+        return diasFormateado
+        
+
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 # Parse para los accidentes de trafico
@@ -208,7 +219,7 @@ class ParseAccidentesTrafico:
         #data.addOpcionEje("% de contagios")
         data.addElementoEje(self.meses())
         data.addElementoEje(self.victimas())
-
+        data.setTiposGraficas(["1:  Linea Terminal", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box html","8: Box navegador"])
         return data
 
      # Meses
@@ -287,6 +298,8 @@ class ParseParoEspaña:
         data.addElementoEje(self.getAnios())
         data.addElementoEje(self.cantidadParo())
         data.addElementoEje(self.porcentajeParo())
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box html","8: Box navegador"])
+
         return data
 
     # Los paises seran las opciones basicas de representación

@@ -94,7 +94,7 @@ class Usuario:
             parse = Mediador.getParse(eleccionDropdown(dropdownFuenteDatos.get()))    # le pasamos la eleccion del usuario sobre la fuente de datos
             dataS = parse().getDataset()
             tipoGrafica.grid(column = 2, row = 3 )
-            tipos = ["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador", "6: dispersion navegador", "7: box html"]
+            tipos = dataS.getTiposGraficas()
             tipoGrafica["values"] = [*tipos]
             # Para actualizar o implementar valores a las opciones de los ejes
             ejes = dataS.getOpcionesEje()
@@ -135,11 +135,15 @@ class Usuario:
 
         # Metodo para limpiar los seleccionados por si se cambia de fuente de datos
         def limpiarSeleccionado():
+            nonlocal opcionesEjesX, opcionesEjesY , tipoGrafica
             while (len(elegidos) > 0 ):
                 elegidos.pop()
             elementosSeleccionados.configure(state="normal")    # Lo habilito de nuevo para edicion por que sino no me deja añadir el texto
             elementosSeleccionados.delete('1.0', END)
             elementosSeleccionados.configure(state="disabled")
+            opcionesEjesX.set('')
+            opcionesEjesY.set('')
+            tipoGrafica.set('')
 
         #Para poder escoger las opciones del eje Y
         def elegirEjeY(event):

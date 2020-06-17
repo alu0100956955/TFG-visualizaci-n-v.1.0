@@ -7,6 +7,9 @@ import numpy as np
 from clases_base import Grafica
 from datetime import datetime
 
+#import geopandas as gpd 
+#TAmbien hay que instalar descartes
+
 #l = Lector('data/casos_2019.csv')
 class auxiliar():
     def comprobarDias(data, eleccion):
@@ -93,4 +96,9 @@ class Linea_mat(Grafica):
         a = l.ejeX(12)
         print(a)
 
+
+# Aun que no sea matplot lib al ser por terminal dejo la representacion de mapas de geopandas dentro de este fichero
+class mapa_Geopandas():
+    def show():
+        print("sin terminar")
 #adfasfd
