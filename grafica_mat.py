@@ -97,8 +97,86 @@ class Linea_mat(Grafica):
         print(a)
 
 
+class Box_matplotlib(Grafica):
+
+    def show(data):
+
+        seleccionados = data.getSeleccionados()
+        ejeY = []
+        for selec in seleccionados:
+            #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            ejeY.append( data.getEje(data.getSeleccionEjeY(),selec))
+        plt.boxplot(ejeY,labels=seleccionados)
+        plt.title(data.getTitle())
+        plt.show()
+
+
+class Histograma_matplotlib(Grafica):
+
+    def show(data):
+        # TO DO: revisar los ejes que se usan
+        seleccionados = data.getSeleccionados()
+        matriz = []
+        for selec in seleccionados:# TO DO, por ahora solo cojo el ejeY pero tengo que controlar si me lo pone en el eje X
+            matriz.append(data.getEje(data.getSeleccionEjeY(),selec))   #TO DO: como se guarda este dato | empleare los metodos de mas abajo
+        # TODO arreglar el eje X
+
+        #TO DO dependiendo de la eleccion del usuario que se haga la operacion correcta a los datos
+        ejeY = Histograma_matplotlib.media(matriz)
+        plt.hist(ejeY, density=False)
+        plt.ylabel(data.getSeleccionEjeY())
+        plt.xlabel(data.getSeleccionEjeX())
+
+        plt.show()
+
+    # Metodos para llevar a cabo las operaciones sobre los datos del histograma
+    # Para cada metodo se pasara la matriz con los datos numericos
+
+    def media(matriz):
+        aux = []
+        media = []
+        x = len(matriz[0])
+        for i in range(x):
+            aux = 0
+            for row in matriz:
+                aux += row[i]
+            media.append(aux/x)
+        return media
+
+    def varianza():
+        aux = []
+
+    # Para calcular el maximo de cada columna
+    def maximo():
+        aux = []
+        maximo = []
+        x = len(matriz[1])
+        for i in range(x):
+            for row in matriz:
+                if(aux < row[i]):
+                    aux = row[i]
+            maximo.append(aux)
+        return maximo
+
+    # Para calcular el minimo de cada columna
+    def minimo():
+        aux = []
+        minimo = []
+        x = len(matriz[1])
+        for i in range(x):
+            for row in matriz:
+                if(aux > row[i]):
+                    aux = row[i]
+            minimo.append(aux)
+        return minimo
+
+    def desviacionMedia():
+        aux = []
+
 # Aun que no sea matplot lib al ser por terminal dejo la representacion de mapas de geopandas dentro de este fichero
 class mapa_Geopandas():
     def show():
         print("sin terminar")
 #adfasfd
+
+

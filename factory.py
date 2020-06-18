@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico, ParseParoEspaña
-from grafica_mat import Linea_mat
+from grafica_mat import Linea_mat, Box_matplotlib , Histograma_matplotlib
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
 from grafica_ploty import Lineas_plotly, Barras_plotly, Mapa_plotly, Scatter_plotly, Box_plotly
@@ -31,8 +31,9 @@ class Factory:
             4: Barras_plotly,
             5: Mapa_plotly,
             6: Scatter_plotly,
-            7: Box_pygal,
-            8: Box_plotly
+            7: Box_matplotlib,
+            8: Box_plotly,
+            9: Histograma_matplotlib
         }
 
         elec = switcher.get(int(eleccion))

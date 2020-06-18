@@ -71,11 +71,16 @@ class Usuario:
             opcionesEjesY.grid(column = 2, row = 17) # esto es para elegir que representara el eje
                 #opcionesPack = True;
             # Si ha seleccionado la grafica tipo box quito el eje X y añado otras opciones de representacion
+            # TO DO, mejorar la forma en la que oculto los elementos
             if(opcionesEjesX.winfo_ismapped() & (eleccionDropdown(tipoGrafica.get()) == 7)):
+                opcionesEjesX.grid_remove()
+                labelEjeX.grid_remove()
+            if(opcionesEjesX.winfo_ismapped() & (eleccionDropdown(tipoGrafica.get()) == 8)):
                 opcionesEjesX.grid_remove()
                 labelEjeX.grid_remove()
 
 
+        # CAmbiar para los histogramas
         # Metodo para añadir el poder escoger los elementos para las distribuciones
         def distribuciones():
             print("Sin terminar")
@@ -84,8 +89,8 @@ class Usuario:
                 opcionesDistribucion.grid(column = 2, row = 15) # sustituira la posición de elección del eje X
 
 
-        # Metodo para añadir un elemento para representar 
-        def addDistribucion():
+        # Metodo para añadir los combobox para escoger la operacion en el histograma 
+        def tipoHistograma():
             print("Sin terminar | sera como el addSeleccion")
 
 
@@ -93,7 +98,8 @@ class Usuario:
             nonlocal dataS
             parse = Mediador.getParse(eleccionDropdown(dropdownFuenteDatos.get()))    # le pasamos la eleccion del usuario sobre la fuente de datos
             dataS = parse().getDataset()
-            tipoGrafica.grid(column = 2, row = 3 )
+            label2.grid(column = 2, row = 4)
+            tipoGrafica.grid(column = 2, row = 5 )
             tipos = dataS.getTiposGraficas()
             tipoGrafica["values"] = [*tipos]
             # Para actualizar o implementar valores a las opciones de los ejes
@@ -168,6 +174,7 @@ class Usuario:
             seleccionEjeX = opcionesEjesX.get()
 
 
+        # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #--------------------- Declaracion de los elementos para la ventana ---------------------------
         urlConfirmados = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
         ventana = tk.Tk()
@@ -244,7 +251,7 @@ class Usuario:
         # El dropdownList para elegir que seleccionar
         lSeleccionados = tk.Label(ventana, text="Cantidad de seleccionados")
         lContSeleccionados = tk.Label(ventana)
-        label4 = tk.Label(ventana, text="funciona la funcion")
+        #label4 = tk.Label(ventana, text="funciona la funcion")
 
         rbCasosConfirmados.deselect()
         rbSegunda.deselect()

@@ -82,7 +82,7 @@ class ParseCasosConfirmados(Parse):
         paisesFinales = [diccionario.get(n,n) for n in paises]
         #print(type(paisesFinales))
         data.setOpciones(paisesFinales)
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador", "6: dispersion navegador", "7: box html","8: Box navegador"])
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador", "6: dispersion navegador", "7: box navegador","8: Box navegador" , "9: Histograma terminal"])
         return data
 
 
@@ -219,7 +219,7 @@ class ParseAccidentesTrafico:
         #data.addOpcionEje("% de contagios")
         data.addElementoEje(self.meses())
         data.addElementoEje(self.victimas())
-        data.setTiposGraficas(["1:  Linea Terminal", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box html","8: Box navegador"])
+        data.setTiposGraficas(["1:  Linea Terminal", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box terminal","8: Box navegador"])
         return data
 
      # Meses
@@ -298,7 +298,7 @@ class ParseParoEspaña:
         data.addElementoEje(self.getAnios())
         data.addElementoEje(self.cantidadParo())
         data.addElementoEje(self.porcentajeParo())
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box html","8: Box navegador"])
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box terminal","8: Box navegador", "9: Histograma Terminal"])
 
         return data
 

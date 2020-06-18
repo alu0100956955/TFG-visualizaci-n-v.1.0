@@ -163,5 +163,9 @@ class Box_plotly(Grafica):
         fig.show()
 
 
+class Histograma_plolty(Grafica):
+
+    def show(data):
+        print("Sin terminar")
 
 #asdfasdfasd
