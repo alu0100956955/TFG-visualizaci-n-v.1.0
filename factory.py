@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico, ParseParoEspaña
-from grafica_mat import Linea_mat, Box_matplotlib , Histograma_matplotlib
+from grafica_mat import Linea_mat, Box_matplotlib , Barras_matplotlib, Histograma_matplotlib
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
-from grafica_ploty import Lineas_plotly, Barras_plotly, Mapa_plotly, Scatter_plotly, Box_plotly
+from grafica_ploty import Lineas_plotly, Barras_plotly, Mapa_plotly, Scatter_plotly, Box_plotly, Histograma_plotly
 
 # NO ES UN PATRON FACTORY, tengo que cambiarle el nombre y actualizar las referencias
 class Factory:
@@ -23,6 +23,7 @@ class Factory:
         #return ParseCasosConfirmados(ruta)
         #return ParseAccidentesTrafico(ruta)
 
+        # TODO: limpiar las opciones del switch
     def grafica(eleccion, contexto):
         switcher = {
             1: Linea_mat,
@@ -33,7 +34,9 @@ class Factory:
             6: Scatter_plotly,
             7: Box_matplotlib,
             8: Box_plotly,
-            9: Histograma_matplotlib
+            9: Histograma_matplotlib,
+            10: Histograma_plotly,
+            0: Barras_matplotlib
         }
 
         elec = switcher.get(int(eleccion))

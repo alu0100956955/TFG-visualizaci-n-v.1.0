@@ -97,40 +97,26 @@ class Linea_mat(Grafica):
         print(a)
 
 
-class Box_matplotlib(Grafica):
+
+class Barras_matplotlib(Grafica):
+
+    # https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.bar.html
 
     def show(data):
-
         seleccionados = data.getSeleccionados()
-        ejeY = []
-        for selec in seleccionados:
-            #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
-            ejeY.append( data.getEje(data.getSeleccionEjeY(),selec))
-        plt.boxplot(ejeY,labels=seleccionados)
-        plt.title(data.getTitle())
-        plt.show()
+        fig, ax = plt.subplots()
 
+        for i in range(len(seleccionados)): 
 
-class Histograma_matplotlib(Grafica):
+            ejeX = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
+            ejeY = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+            ax.bar(ejeY,label=seleccionados[i])
 
-    def show(data):
-        # TO DO: revisar los ejes que se usan
-        seleccionados = data.getSeleccionados()
-        matriz = []
-        for selec in seleccionados:# TO DO, por ahora solo cojo el ejeY pero tengo que controlar si me lo pone en el eje X
-            matriz.append(data.getEje(data.getSeleccionEjeY(),selec))   #TO DO: como se guarda este dato | empleare los metodos de mas abajo
-        # TODO arreglar el eje X
+            #plt.bar(ejeX,ejeY , label = seleccionados[i])
 
-        #TO DO dependiendo de la eleccion del usuario que se haga la operacion correcta a los datos
-        ejeY = Histograma_matplotlib.media(matriz)
-        plt.hist(ejeY, density=False)
-        plt.ylabel(data.getSeleccionEjeY())
         plt.xlabel(data.getSeleccionEjeX())
-
+        plt.ylabel(data.getSeleccionEjeY())
         plt.show()
-
-    # Metodos para llevar a cabo las operaciones sobre los datos del histograma
-    # Para cada metodo se pasara la matriz con los datos numericos
 
     def media(matriz):
         aux = []
@@ -172,6 +158,83 @@ class Histograma_matplotlib(Grafica):
 
     def desviacionMedia():
         aux = []
+
+
+class Box_matplotlib(Grafica):
+
+    def show(data):
+
+        seleccionados = data.getSeleccionados()
+        ejeY = []
+        for selec in seleccionados:
+            #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            ejeY.append( data.getEje(data.getSeleccionEjeY(),selec))
+        plt.boxplot(ejeY,labels=seleccionados)
+        plt.title(data.getTitle())
+        plt.show()
+
+
+class Histograma_matplotlib(Grafica):
+
+    def show(data):
+        # TO DO: revisar los ejes que se usan
+        
+        #for selec in seleccionados:# TO DO, por ahora solo cojo el ejeY pero tengo que controlar si me lo pone en el eje X
+        #    matriz.append(data.getEje(data.getSeleccionEjeY(),selec))   #TO DO: como se guarda este dato | empleare los metodos de mas abajo
+        #TO DO dependiendo de la eleccion del usuario que se haga la operacion correcta a los datos
+        #ejeY = Histograma_matplotlib.media(matriz)
+        funcion = Histograma_matplotlib.switch(data.getIntFuente())   #ESTA CABLEADO POR AHORA
+        ejeY = funcion(data)
+        plt.hist(ejeY, density=False, bins = 20)    # bins es la cantidad de columnas
+        plt.xlabel(data.getSeleccionEjeY()) # Pese a que 
+        #plt.xlabel(data.getSeleccionEjeX())
+
+        plt.show()
+
+    # Metodos para llevar a cabo las operaciones sobre los datos del histograma
+    # Para cada metodo se pasara la matriz con los datos numericos
+
+    
+
+    def switch(eleccion):
+        switcher = {
+            1: Histograma_matplotlib.diario,
+            2: Histograma_matplotlib.sinTratar,
+            3: Histograma_matplotlib.sinTratar
+            }
+        return switcher.get(eleccion)
+
+    # Metodo para calcular la cantidad de contagios diarios debido a que se acumulan la cantidad diaria
+    def diario(data):
+        seleccionados = data.getSeleccionados()
+        matriz = []
+        for i in range(len(seleccionados)):
+            if(i == 0):
+                matriz = Histograma_matplotlib.diarioArray(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+                continue
+            matriz += Histograma_matplotlib.diarioArray(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+        return matriz
+
+
+    # Metodo auxiliar que le paso un array y medice cuanto es diario dependiendo del valor actual y del dia anterior
+    def diarioArray(array):
+        aux = []
+        aux.append(array[0])    # Guardo el primer elemento
+        for i in range(len(array)-1):# Lo hago hasta una antes por como guardo el valor
+            aux.append(array[i+1]-array[i]) #Al dia siguiente le resto el dia anterior para tener los contagios de ese dia
+
+        return aux
+
+    # Para las fuentes de datos que no necesitan ser tratadas para el histograma
+    def sinTratar(data):
+        seleccionados = data.getSeleccionados()
+        matriz = []
+        for i in range(len(seleccionados)):
+            if(i == 0):
+                matriz = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+                continue
+            matriz += data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+        return matriz
 
 # Aun que no sea matplot lib al ser por terminal dejo la representacion de mapas de geopandas dentro de este fichero
 class mapa_Geopandas():

@@ -152,20 +152,46 @@ class Box_plotly(Grafica):
 
     def show(data):
         seleccionados = data.getSeleccionados()
+        #dataframe = pd.DataFrame({})
+        dataframe = pd.DataFrame(columns= ['Seleccionados', data.getSeleccionEjeY()])
         ejeY = []
         for selec in seleccionados:
             #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
-            ejeY.append( data.getEje(data.getSeleccionEjeY(),selec))
+            ejeY.append( data.getEje(data.getSeleccionEjeY(),selec).tolist())
+            #fig = px.box(data.getEje(data.getSeleccionEjeY(),selec),y=data.getSeleccionEjeY()) 
+            #dataframe[selec] = data.getEje(data.getSeleccionEjeY(),selec)
+            
+            #ejeY = data.getEje(data.getSeleccionEjeY(),selec)
+            #for i in range (len(ejeY)):
+            #    dataframe.loc[i] = selec, ejeY[i]
 
+        for i in range(len(seleccionados)):
 
-        dataframe = pd.DataFrame({ "Seleccionado":seleccionados , data.getSeleccionEjeY():ejeY })
-        fig = px.box(dataframe,y=data.getSeleccionEjeY(),x=seleccionados)   
+            dataframe.insert(i,seleccionados[i], data.getEje(data.getSeleccionEjeY(),seleccionados[i]),True )
+
+        #dataframe.insert(indiceColumna,nombreColumna,datos,True)  # Para insertar una columna
+
+        #dataframe = pd.DataFrame({ "Seleccionado":seleccionados , data.getSeleccionEjeY():ejeY })
+        print(dataframe)
+        fig = px.box(dataframe, x=seleccionados, y=data.getSeleccionEjeY())   
         fig.show()
 
 
-class Histograma_plolty(Grafica):
+class Histograma_plotly(Grafica):
 
     def show(data):
-        print("Sin terminar")
+        seleccionados = data.getSeleccionados()
+        dataframe = pd.DataFrame({})
+        ejeY = []
+        for selec in seleccionados:
+            #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            #ejeY.append( data.getEje(data.getSeleccionEjeY(),selec))
+            #fig = px.box(data.getEje(data.getSeleccionEjeY(),selec),y=data.getSeleccionEjeY()) 
+            dataframe[selec] = data.getEje(data.getSeleccionEjeY(),selec)
+
+        #dataframe = pd.DataFrame({ "Seleccionado":seleccionados , data.getSeleccionEjeY():ejeY })
+
+        fig = px.histogram(dataframe,x=seleccionados[0])   
+        fig.show()
 
 #asdfasdfasd

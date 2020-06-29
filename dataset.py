@@ -89,6 +89,12 @@ class Dataset:
     def getOpcionesEje(self):
         return self.OpcionesEje
 
+    def setIntFuente(self,tipo):
+        self.intFuente = tipo
+
+    def getIntFuente(self):
+        return self.intFuente
+
     # Parametros:
     # eje: (string) indica que eje se representa
     # elemento: (string) nos indica que elemento se quiere representar con respecto a las distintas opciones_
@@ -156,7 +162,7 @@ class Dataset:
         self.distribuciones = opciones
 
     def getOpcionDistribuciones(self):
-        return distribuciones
+        return self.distribuciones
 
     def setTiposGraficas(self, array):
         self.tiposGraficas = array

@@ -53,7 +53,7 @@ class Usuario:
             # En las opciones de distribucion ocurre como seleccionado que seran varios
 
             seleccionado.set(opciones[0])   # le asigno el primero como default
-            
+            eleccionUsuario = eleccionDropdown(tipoGrafica.get())
             nonlocal dropDownSeleccion
             dropDownSeleccion["values"] = [*opciones_];
             dropDownSeleccion.bind("<<ComboboxSelected>>", addSeleccion)
@@ -61,43 +61,46 @@ class Usuario:
             #opcionesEjes.bind("<<comboboxselected>>", elegirEje)
 
             labelEspacio.grid(column = 2, row = 13 )
-            labelEjeX.grid(column = 2, row = 14)
+            if(eleccionUsuario < 7):
+                labelEjeX.grid(column = 2, row = 14)
+                opcionesEjesX.grid(column = 2, row = 15)
+            
+            
             labelEjeY.grid(column = 2, row = 16)
-            #if (dropDownSeleccion.winfo_ismapped() == False): #Esto no funciona ya que declaro arriba el dropdown asique cuenta como nuevo
-            #if ( dropDownSeleccion.winfo_ismapped() == False):
-                #dropDownSeleccion.pack()
-            dropDownSeleccion.grid(column = 2, row = 19 )
-            opcionesEjesX.grid(column = 2, row = 15)
             opcionesEjesY.grid(column = 2, row = 17) # esto es para elegir que representara el eje
+
+            dropDownSeleccion.grid(column = 2, row = 19 )
                 #opcionesPack = True;
             # Si ha seleccionado la grafica tipo box quito el eje X y añado otras opciones de representacion
             # TO DO, mejorar la forma en la que oculto los elementos
-            if(opcionesEjesX.winfo_ismapped() & (eleccionDropdown(tipoGrafica.get()) == 7)):
+            
+            if(opcionesEjesX.winfo_ismapped() & ((eleccionUsuario == 7) or (eleccionUsuario == 8) or (eleccionUsuario == 9)) ):
                 opcionesEjesX.grid_remove()
                 labelEjeX.grid_remove()
-            if(opcionesEjesX.winfo_ismapped() & (eleccionDropdown(tipoGrafica.get()) == 8)):
-                opcionesEjesX.grid_remove()
-                labelEjeX.grid_remove()
+
 
 
         # CAmbiar para los histogramas
         # Metodo para añadir el poder escoger los elementos para las distribuciones
         def distribuciones():
             print("Sin terminar")
-            labelOpcionesDistribuciones.grid(column = 2, row = 14)
-            if(opcionesDistribucion.winfo_ismapped() == False):# Para no añadir duplicados en la interfaz
-                opcionesDistribucion.grid(column = 2, row = 15) # sustituira la posición de elección del eje X
+            #labelOpcionesDistribuciones.grid(column = 2, row = 14)
+            #if(opcionesDistribucion.winfo_ismapped() == False):# Para no añadir duplicados en la interfaz
+            #    opcionesDistribucion.grid(column = 2, row = 15) # sustituira la posición de elección del eje X
 
 
-        # Metodo para añadir los combobox para escoger la operacion en el histograma 
-        def tipoHistograma():
+        # Metodo para guardar la eleccion del tipo de histograma 
+        def tipoHistograma(event):
             print("Sin terminar | sera como el addSeleccion")
+            nonlocal dataS
+            #dataS.setOpcionDistribucion(opcionesDistribucion.get())
 
-
+        # Metodo para cuando se escoja la fuente de datos
         def graficasNuevo(event):
             nonlocal dataS
             parse = Mediador.getParse(eleccionDropdown(dropdownFuenteDatos.get()))    # le pasamos la eleccion del usuario sobre la fuente de datos
             dataS = parse().getDataset()
+            #dataS.setNumeroFuenteDatos()
             label2.grid(column = 2, row = 4)
             tipoGrafica.grid(column = 2, row = 5 )
             tipos = dataS.getTiposGraficas()
@@ -106,6 +109,7 @@ class Usuario:
             ejes = dataS.getOpcionesEje()
             opcionesEjesY["values"] = [*ejes]
             opcionesEjesX["values"] = [*ejes]
+            #opcionesDistribucion["values"] = ["1: Combinado","2: Sumado"]
             limpiarSeleccionado()
 
         #Para saber de las elecciones de los dropdown list cual es la que escogio el usuario
@@ -195,6 +199,9 @@ class Usuario:
         dropdownFuenteDatos= ttk.Combobox(state = "readonly")
         dropdownFuenteDatos.bind("<<ComboboxSelected>>",graficasNuevo)
 
+        # --------------- Elementos para los histogramas -----------------
+        labelOpcionesDistribuciones = ttk.Label(ventana, text = "Agrupación datos histograma")
+        #opcionesDistribucion = ttk.Combobox("<<ComboboxSelected>>", tipoHistograma)
 
         # --------------- Elementos de getSeleccionados ---------------
         opciones = [''] # La dejo vacia al princio para que no salte error al declarar el OptionMenu

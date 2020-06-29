@@ -63,7 +63,7 @@ class ParseCasosConfirmados(Parse):
         #data.setEjeY(self.ejeY())
         #data.setEjeY(self.getMatrizCasosConfirmados())
         data.setTodasLasOpciones(self.getPaises())  #Todas las opciones mantiene los duplicados por si hay mas de una linea con la misma opcion (pais)
-        
+        data.setIntFuente(1)
 
         #Modificacion del parse
         data.addOpcionEje("Dias")
@@ -82,7 +82,7 @@ class ParseCasosConfirmados(Parse):
         paisesFinales = [diccionario.get(n,n) for n in paises]
         #print(type(paisesFinales))
         data.setOpciones(paisesFinales)
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador", "6: dispersion navegador", "7: box navegador","8: Box navegador" , "9: Histograma terminal"])
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador", "6: dispersion navegador", "7: box terminal", "9: Histograma terminal","0: pruebas"])
         return data
 
 
@@ -213,13 +213,14 @@ class ParseAccidentesTrafico:
         #data.setEjeY(self.ejeY())
         #data.setTodasLasOpciones(self.getOpciones())    # Como se que no va a haber duplicados en las filas uso el metodo de getOpciones
         data.setOpciones(self.getOpciones())
+        data.setIntFuente(2)
 
         data.addOpcionEje("Meses")
         data.addOpcionEje("Cantidad de Accidentes")
         #data.addOpcionEje("% de contagios")
         data.addElementoEje(self.meses())
         data.addElementoEje(self.victimas())
-        data.setTiposGraficas(["1:  Linea Terminal", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box terminal","8: Box navegador"])
+        data.setTiposGraficas(["1:  Linea Terminal", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # ,"8: Box navegador"
         return data
 
      # Meses
@@ -291,14 +292,15 @@ class ParseParoEspaña:
         #data.setEjeY(self.ejeY())
         #data.setTodasLasOpciones(self.getOpciones())    # Como se que no va a haber duplicados en las filas uso el metodo de getOpciones
         data.setOpciones(self.getOpciones())
+        data.setIntFuente(3)    # Para que dentro del dataset este el numero de la fuente de datos
 
         data.addOpcionEje("Años")
         data.addOpcionEje("Cantidad de Accidentes")
-        data.addOpcionEje("% de Paro")
+        #data.addOpcionEje("% de Paro") #Lo tengo comentado porque aun no esta implementado
         data.addElementoEje(self.getAnios())
         data.addElementoEje(self.cantidadParo())
         data.addElementoEje(self.porcentajeParo())
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box terminal","8: Box navegador", "9: Histograma Terminal"])
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"])
 
         return data
 
