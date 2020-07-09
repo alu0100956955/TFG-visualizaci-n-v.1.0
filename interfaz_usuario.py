@@ -248,7 +248,7 @@ class Usuario:
         #rbCasosConfirmados.grid(column = 3, row = 1)
         #rbSegunda.grid(column = 3, row = 2)
         #rbParo.grid(column = 4, row = 1)
-        tipos = ["1:  Casos de covid confirmados", "2: Accidentes de trafico", "3: Paro en españa"]
+        tipos = ["1:  Casos de covid confirmados", "2: Accidentes de trafico", "3: Paro en españa", "4: Covid"]
         dropdownFuenteDatos["values"] = [*tipos]
         dropdownFuenteDatos.grid(column = 2, row = 1)
         labelEspacio.grid(column = 2, row = 2 )

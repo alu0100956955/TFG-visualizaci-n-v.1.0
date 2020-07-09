@@ -10,7 +10,7 @@ import datetime
 #TO DO: cambiar el nombre de esta clase para poder hacer escalable el ecosistema sin problemas con los nombres
 # Esta clase se la encargada de leer los datos de casos confirmados globales
 class ParseCasosConfirmados(Parse):
-    # El constructor por defecto se le pasa la ruta del archivo y carga todos los datos
+    # Mantener esta o cambiarlo por lo otro
     def __init__(self):
         self.df = pd.read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv')
         self.ar = self.df.to_numpy()
@@ -359,5 +359,54 @@ class ParseParoEspaña:
             return datetime.datetime(anio,12,1)
 
 
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class ParseCovid:
+    
+    def __init__(self):
+        #print("En proceso")
+        #ruta = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
+        self.df = pd.read_csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv")
+
+    # total_cases, new_cases, new_deaths, total_test, new_test
+    def getDataset(self):
+        data = Dataset("Covid")
+        paises = self.getPaises()
+        data.setOpciones(paises)    #las opciones son los paises
+        data.setIntFuente(4)
+
+        data.addOpcionEje("Dias")
+        data.addOpcionEje("Cantidad total de contagios")
+        data.addOpcionEje("Cantidad diaria de contagios")
+        data.addOpcionEje("Cantidad diaria de fallecidos")
+        #data.addOpcionEje("% de Paro") #Lo tengo comentado porque aun no esta implementado
+        data.addElementoEje(self.getDias())
+        data.addElementoEje(self.getMatriz(paises,'total_cases'))
+        data.addElementoEje(self.getMatriz(paises,'new_cases'))
+        data.addElementoEje(self.getMatriz(paises,'new_deaths'))
+
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"])
+
+        return data
+
+
+    def getPaises(self):
+        return np.unique(self.df.loc[:,'location'].to_numpy()).tolist()
+
+    def getDias(self):
+        return np.unique(self.df.loc[:,'date'])
+
+    def getMatriz(self, paises,parametro):
+        fila = []
+        matriz = []
+        i = 0
+        for index, row in self.df.iterrows():
+            if(i == 212): break
+            if(paises[i] != row['location']):
+                i += 1
+                matriz.append(fila)#guardo la fila porque hemos pasado aun nuevo pais
+                fila = []# limpio el contenido de la fila
+            fila.append(row[parametro])
+        return matriz
 
 #adfasf

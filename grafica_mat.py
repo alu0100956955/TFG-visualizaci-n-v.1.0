@@ -200,7 +200,8 @@ class Histograma_matplotlib(Grafica):
         switcher = {
             1: Histograma_matplotlib.diario,
             2: Histograma_matplotlib.sinTratar,
-            3: Histograma_matplotlib.sinTratar
+            3: Histograma_matplotlib.sinTratar,
+            4: Histograma_matplotlib.sinTratar
             }
         return switcher.get(eleccion)
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico, ParseParoEspaña
+from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico, ParseParoEspaña, ParseCovid
 from grafica_mat import Linea_mat, Box_matplotlib , Barras_matplotlib, Histograma_matplotlib
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
@@ -16,7 +16,8 @@ class Factory:
         switcher = {
             1: ParseCasosConfirmados,
             2: ParseAccidentesTrafico,
-            3: ParseParoEspaña
+            3: ParseParoEspaña,
+            4: ParseCovid
         }
 
         return switcher.get(int(ruta))
