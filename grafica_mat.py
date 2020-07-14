@@ -45,8 +45,10 @@ class Linea_mat(Grafica):
             #TO DO: pasar de forma parametrizada el eje que se quiere representar
             # SE BUGEA PORQUE AL PASARLE LOS DIAS YA ESPACIADOS NO RECONOCE ESE DATO Y LO PONE MAL
 
-            ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),seleccionados[i]), data.getSeleccionEjeX())
-            ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),seleccionados[i]), data.getSeleccionEjeY())
+            #ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),seleccionados[i]), data.getSeleccionEjeX())
+            #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),seleccionados[i]), data.getSeleccionEjeY())
+            ejeX = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
+            ejeY = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
             #print(ejeX)
             #print(ejeY)
 
@@ -185,16 +187,24 @@ class Histograma_matplotlib(Grafica):
         #ejeY = Histograma_matplotlib.media(matriz)
         funcion = Histograma_matplotlib.switch(data.getIntFuente())   #ESTA CABLEADO POR AHORA
         ejeY = funcion(data)
-        plt.hist(ejeY, density=False, bins = 20)    # bins es la cantidad de columnas
+        plt.hist(ejeY, density=False, bins = 30)    # bins es la cantidad de columnas
         plt.xlabel(data.getSeleccionEjeY()) # Pese a que 
         #plt.xlabel(data.getSeleccionEjeX())
-
+        plt.xticks(Histograma_matplotlib.getTicks(ejeY,10))
         plt.show()
+
+    
+    # Metodo para obtener un array de donde deben estar situados los ticks del eje
+    def getTicks(valores,cantidadTicks):
+        diferencia = max(valores) /  cantidadTicks # La diferencia entre ticks es el maximo dividido entre la cantidad de ticks que quiero
+        ticks = [0]  # Array con los ticks para el eje
+        for i in range(cantidadTicks): #El bucle para añadir la diferencia por cada ticks
+            ticks.append(ticks[i]+diferencia)
+
+        return ticks
 
     # Metodos para llevar a cabo las operaciones sobre los datos del histograma
     # Para cada metodo se pasara la matriz con los datos numericos
-
-    
 
     def switch(eleccion):
         switcher = {

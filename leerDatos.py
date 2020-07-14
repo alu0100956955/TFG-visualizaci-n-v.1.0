@@ -6,6 +6,7 @@ import numpy as np
 from clases_base import Parse
 from dataset import Dataset
 import datetime
+from datetime import datetime
 
 #TO DO: cambiar el nombre de esta clase para poder hacer escalable el ecosistema sin problemas con los nombres
 # Esta clase se la encargada de leer los datos de casos confirmados globales
@@ -349,14 +350,14 @@ class ParseParoEspaña:
     def creacionFecha(self, fecha):
         anio = int(fecha[0]+fecha[1]+fecha[2]+fecha[3])
         if(len(fecha)== 6):
-            return datetime.datetime(anio,3,1)
+            return datetime(anio,3,1)
         if(len(fecha) == 8):
-            return datetime.datetime(anio,9,1)
+            return datetime(anio,9,1)
         #Llegados a este punto solo quedan las temporadas TII & TIV, asi que miro la posicion 6 de los array de tamaño 7
         if(fecha[6] == "I"):
-            return datetime.datetime(anio,6,1)
+            return datetime(anio,6,1)
         else:
-            return datetime.datetime(anio,12,1)
+            return datetime(anio,12,1)
 
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -394,19 +395,32 @@ class ParseCovid:
         return np.unique(self.df.loc[:,'location'].to_numpy()).tolist()
 
     def getDias(self):
-        return np.unique(self.df.loc[:,'date'])
+        dias = np.unique(self.df.loc[:,'date'])
+        diasFormateado = []
+        for i in dias:
+            diasFormateado.append(datetime.strptime(i,'%Y-%m-%d'))
+            #diasMat = matplotlib.dates.date2num(diasFormateado)
+            
+
+        return diasFormateado
 
     def getMatriz(self, paises,parametro):
         fila = []
         matriz = []
         i = 0
         for index, row in self.df.iterrows():
-            if(i == 212): break
+            if(i == 212): break # Para evitar salirme de rango
             if(paises[i] != row['location']):
                 i += 1
                 matriz.append(fila)#guardo la fila porque hemos pasado aun nuevo pais
                 fila = []# limpio el contenido de la fila
-            fila.append(row[parametro])
+            if(row[parametro] is None or row[parametro] < 0):
+                fila.append(0)  # meter un cero o dejarlo vacio ?
+            else:
+                fila.append(row[parametro])
         return matriz
+
+    def getMatrices(self, paises):
+        fila = []
 
 #adfasf

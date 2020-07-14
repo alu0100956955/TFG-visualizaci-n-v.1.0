@@ -83,8 +83,11 @@ class Scatter_plotly(Grafica):
         fig = go.Figure()
 
         for selec in seleccionados:
-            ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),selec), data.getSeleccionEjeX())
-            ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            #ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),selec), data.getSeleccionEjeX())
+            #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
+            ejeX = data.getEje(data.getSeleccionEjeX(),selec)
+            ejeY = data.getEje(data.getSeleccionEjeY(),selec)
+
 
             fig.add_trace(go.Scatter(x = ejeX, y = ejeY, mode='markers', name = selec))
         fig.update_layout(title = data.getTitle(), xaxis_title= data.getSeleccionEjeX(), yaxis_title= data.getSeleccionEjeY())
