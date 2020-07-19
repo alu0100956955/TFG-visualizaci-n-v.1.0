@@ -192,19 +192,36 @@ class Histograma_matplotlib(Grafica):
         #if(cantidad de seleccionados = par) mitad y mitad, ej: 6 = 3,3
         #else dividir mitad y mitad pero sumo uno a la primera, ej 7 = 4,3
 
-        funcion = Histograma_matplotlib.switch(data.getIntFuente())   #ESTA CABLEADO POR AHORA
-        ejeY = funcion(data)
-        plt.hist(ejeY, density=False, bins = 30)    # bins es la cantidad de columnas
-        plt.xlabel(data.getSeleccionEjeY()) # Pese a que 
-        plt.ylabel("Recuento de veces") # Label del eje Y
-        plt.set_title(data.getTitle())  # Le asigno el titulo a la gráfica
+        #funcion = Histograma_matplotlib.switch(data.getIntFuente())   #ESTA CABLEADO POR AHORA
+        #ejeY = funcion(data)
+        seleccionados = data.getSeleccionados()
+        x,y = Histograma_matplotlib.dimensiones(len(seleccionados))
+        #plt.title(data.getTitle())  # Le asigno el titulo a la gráfica
+        
+        for i in range(len(seleccionados)):
+            plt.subplot(x,y,i+1)
+            ejeY = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+            plt.hist(ejeY, density=False, bins = 10)
+            plt.xticks(np.linspace(min(ejeY),max(ejeY),10).astype(int)) # Para los ticks del ejeX
+            plt.ylabel("Recuento de veces") # Label del eje Y
+            plt.title(seleccionados[i])
+            plt.xlabel(data.getSeleccionEjeY())
+        
+        #plt.hist(ejeY, density=False, bins = 30)    # bins es la cantidad de columnas
+         # Pese a que 
+        plt.tight_layout(3.0)   # Para ajustar la separación entre gráficas
+        
         #plt.xlabel(data.getSeleccionEjeX())
         # TO DO: controlar si el usuario ha elegido algo que no es numerico
         #plt.xticks(Histograma_matplotlib.getTicks(ejeY,10))
-        plt.xticks(np.linspace(min(ejeY),max(ejeY),10)) # Para los ticks del ejeX
+        
         plt.show()
 
-    
+    # Metodo para saber cuantas graficas habra y poder ajustar las dimensiones de las columnas y filas
+    def dimensiones(cantidad):
+        if(cantidad%2 == 0): return cantidad/2, cantidad/2  # Si el numero es par hago deos columnas
+        else: return (cantidad/2)+1, cantidad/2
+        
     # Metodo para obtener un array de donde deben estar situados los ticks del eje | OBSOLETO
     def getTicks(valores,cantidadTicks):
         diferencia = max(valores) /  cantidadTicks # La diferencia entre ticks es el maximo dividido entre la cantidad de ticks que quiero
@@ -216,7 +233,7 @@ class Histograma_matplotlib(Grafica):
 
     # Metodos para llevar a cabo las operaciones sobre los datos del histograma
     # Para cada metodo se pasara la matriz con los datos numericos
-
+    # OBSOLETO
     def switch(eleccion):
         switcher = {
             1: Histograma_matplotlib.diario,
