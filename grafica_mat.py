@@ -6,6 +6,7 @@ from leerDatos import ParseCasosConfirmados
 import numpy as np
 from clases_base import Grafica
 from datetime import datetime
+#import scipy.stats as st    # Para la linea de densidad en los histogramas
 
 #import geopandas as gpd 
 #TAmbien hay que instalar descartes
@@ -172,6 +173,8 @@ class Box_matplotlib(Grafica):
             #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
             ejeY.append( data.getEje(data.getSeleccionEjeY(),selec))
         plt.boxplot(ejeY,labels=seleccionados)
+        plt.ylabel(data.getSeleccionEjeY()) # Label del eje Y
+        #plt.ylabel("Recuento de veces") # Label del eje Y
         plt.title(data.getTitle())
         plt.show()
 
@@ -185,16 +188,24 @@ class Histograma_matplotlib(Grafica):
         #    matriz.append(data.getEje(data.getSeleccionEjeY(),selec))   #TO DO: como se guarda este dato | empleare los metodos de mas abajo
         #TO DO dependiendo de la eleccion del usuario que se haga la operacion correcta a los datos
         #ejeY = Histograma_matplotlib.media(matriz)
+
+        #if(cantidad de seleccionados = par) mitad y mitad, ej: 6 = 3,3
+        #else dividir mitad y mitad pero sumo uno a la primera, ej 7 = 4,3
+
         funcion = Histograma_matplotlib.switch(data.getIntFuente())   #ESTA CABLEADO POR AHORA
         ejeY = funcion(data)
         plt.hist(ejeY, density=False, bins = 30)    # bins es la cantidad de columnas
         plt.xlabel(data.getSeleccionEjeY()) # Pese a que 
+        plt.ylabel("Recuento de veces") # Label del eje Y
+        plt.set_title(data.getTitle())  # Le asigno el titulo a la gráfica
         #plt.xlabel(data.getSeleccionEjeX())
-        plt.xticks(Histograma_matplotlib.getTicks(ejeY,10))
+        # TO DO: controlar si el usuario ha elegido algo que no es numerico
+        #plt.xticks(Histograma_matplotlib.getTicks(ejeY,10))
+        plt.xticks(np.linspace(min(ejeY),max(ejeY),10)) # Para los ticks del ejeX
         plt.show()
 
     
-    # Metodo para obtener un array de donde deben estar situados los ticks del eje
+    # Metodo para obtener un array de donde deben estar situados los ticks del eje | OBSOLETO
     def getTicks(valores,cantidadTicks):
         diferencia = max(valores) /  cantidadTicks # La diferencia entre ticks es el maximo dividido entre la cantidad de ticks que quiero
         ticks = [0]  # Array con los ticks para el eje

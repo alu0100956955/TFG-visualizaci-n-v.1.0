@@ -423,4 +423,48 @@ class ParseCovid:
     def getMatrices(self, paises):
         fila = []
 
+
+
+class ParseCpu:
+
+    def __init__(self):
+        #print("En proceso")
+        self.df = pd.read_csv("data/CPU.csv")
+
+    def getDataset(self):
+        data = Dataset("CPU")
+        data.setIntFuente(5)
+        data.setOpciones(self.getNombres()) 
+        #----------
+        data.addOpcionEje("Cores")
+        data.addOpcionEje("Cantidad de hilos")
+        data.addOpcionEje("Frecuencia(GHz)")
+        data.addOpcionEje("Cache(M)")
+        #----------
+        cores, hilos, frecuencia, cache = self.getDatos()
+        data.addElementoEje(cores)
+        data.addElementoEje(hilos)
+        data.addElementoEje(frecuencia)
+        data.addElementoEje(cache)
+
+
+        data.setTiposGraficas(["4: Barras navegador", "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"])
+        return data
+
+    def getNombres(self):
+        return np.unique(self.df.loc[:,'Name'].to_numpy()).tolist()
+
+    def getDatos(self):
+        core = []
+        hilos = []
+        frecuencia = []
+        cache = []
+        for index, row in self.df.iterrows(): 
+            core.append([row['Cores']])
+            hilos.append([row['Threads']])
+            frecuencia.append([row['Speed(GHz)']])
+            cache.append([row['Cache(M)']])
+
+        return core, hilos, frecuencia, cache
+
 #adfasf

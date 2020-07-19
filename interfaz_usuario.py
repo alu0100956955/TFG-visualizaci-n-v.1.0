@@ -26,20 +26,28 @@ class Usuario:
 
 
         # --------------------------Funciones para las distintas opciones ---------------------------------------
-        def show(grafica, elegidos, ejeX, ejeY, dataS):
-            dataS.setSeleccionados(elegidos)
-            dataS.setSeleccionEjeX(ejeX)
-            dataS.setSeleccionEjeY(ejeY)
-            Mediador.show(grafica, dataS)
+        
+        # El orden de como seran llamas estas funciones segun la interacion con el usuario esta indicada en el comentario encima del metodo
 
-        def getBotonShow(): # La funcion que Añade el boton para hacer la grafica | esta separado porque se puede pedir dentro de seleccionados o si es un mapa se pide solo
-            # En la funcion recibe la opcion de grafica (int), el array con los elementos elegidos para mostrar (array), y la url de la fuente de datos para obtener el dataset (string)
-            #botonGrafica.pack(pady=20)
-            #seleccionEjeX.append("vacio")   # Esto lo hago por los mapas ya que se muestra directamente el boton y si no añado (appned) un elemento peta 
-            #seleccionEjeY.append("vacio")
-            botonGrafica.grid(column = 2, row = 24)
+        # 1. PRIMERO Metodo para cuando se escoja la fuente de datos
+        def graficasNuevo(event):
+            nonlocal dataS
+            parse = Mediador.getParse(eleccionDropdown(dropdownFuenteDatos.get()))    # le pasamos la eleccion del usuario sobre la fuente de datos
+            dataS = parse().getDataset()
+            #dataS.setNumeroFuenteDatos()
+            label2.grid(column = 2, row = 4)
+            tipoGrafica.grid(column = 2, row = 5 )
+            tipos = dataS.getTiposGraficas()
+            tipoGrafica["values"] = [*tipos]
+            # Para actualizar o implementar valores a las opciones de los ejes
+            ejes = dataS.getOpcionesEje()
+            opcionesEjesY["values"] = [*ejes]
+            opcionesEjesX["values"] = [*ejes]
+            #opcionesDistribucion["values"] = ["1: Combinado","2: Sumado"]
+            limpiarSeleccionado()
 
-        # Metodo para añadir a la ventana el dropdownList para quel usuario escoja los elementos que quiere seleccionar
+
+        #2. SEGUNDO Metodo para añadir a la ventana el dropdownList para quel usuario escoja los elementos que quiere seleccionar
         def getSeleccionados(event):
             #opcionesPack = dropDownSeleccion.winfo_ismapped() # Asi pregunto si ya esta metido dentro de la ventana antes de volver a declararlo
             #dataS = Mediador.getParse(fuenteDatos.get()).getDataset()
@@ -70,7 +78,7 @@ class Usuario:
             
             labelEjeY.grid(column = 2, row = 16)
             opcionesEjesY.grid(column = 2, row = 17) # esto es para elegir que representara el eje
-
+            botonTodasOpciones.grid(column = 3, row = 19)
             dropDownSeleccion.grid(column = 2, row = 19 )
                 #opcionesPack = True;
             # Si ha seleccionado la grafica tipo box quito el eje X y añado otras opciones de representacion
@@ -80,7 +88,20 @@ class Usuario:
                 opcionesEjesX.grid_remove()
                 labelEjeX.grid_remove()
 
+        # 4. CUARTO metodo para poner en la ventana el boton para mostrar la grafica
+        def getBotonShow(): # La funcion que Añade el boton para hacer la grafica | esta separado porque se puede pedir dentro de seleccionados o si es un mapa se pide solo
+            # En la funcion recibe la opcion de grafica (int), el array con los elementos elegidos para mostrar (array), y la url de la fuente de datos para obtener el dataset (string)
+            #botonGrafica.pack(pady=20)
+            #seleccionEjeX.append("vacio")   # Esto lo hago por los mapas ya que se muestra directamente el boton y si no añado (appned) un elemento peta 
+            #seleccionEjeY.append("vacio")
+            botonGrafica.grid(column = 2, row = 24)
 
+        # 5. QUINTO Metodo para llamar al metodo show y mostrar la grafica
+        def show(grafica, elegidos, ejeX, ejeY, dataS):
+            dataS.setSeleccionados(elegidos)
+            dataS.setSeleccionEjeX(ejeX)
+            dataS.setSeleccionEjeY(ejeY)
+            Mediador.show(grafica, dataS)
 
         # CAmbiar para los histogramas
         # Metodo para añadir el poder escoger los elementos para las distribuciones
@@ -97,22 +118,7 @@ class Usuario:
             nonlocal dataS
             #dataS.setOpcionDistribucion(opcionesDistribucion.get())
 
-        # Metodo para cuando se escoja la fuente de datos
-        def graficasNuevo(event):
-            nonlocal dataS
-            parse = Mediador.getParse(eleccionDropdown(dropdownFuenteDatos.get()))    # le pasamos la eleccion del usuario sobre la fuente de datos
-            dataS = parse().getDataset()
-            #dataS.setNumeroFuenteDatos()
-            label2.grid(column = 2, row = 4)
-            tipoGrafica.grid(column = 2, row = 5 )
-            tipos = dataS.getTiposGraficas()
-            tipoGrafica["values"] = [*tipos]
-            # Para actualizar o implementar valores a las opciones de los ejes
-            ejes = dataS.getOpcionesEje()
-            opcionesEjesY["values"] = [*ejes]
-            opcionesEjesX["values"] = [*ejes]
-            #opcionesDistribucion["values"] = ["1: Combinado","2: Sumado"]
-            limpiarSeleccionado()
+        
 
         #Para saber de las elecciones de los dropdown list cual es la que escogio el usuario
         def eleccionDropdown(eleccion):
@@ -179,6 +185,36 @@ class Usuario:
             nonlocal seleccionEjeX
             seleccionEjeX = opcionesEjesX.get()
 
+        # Metodo para seleccionar todas las opciones
+        def todasLasOpciones():
+            nonlocal dataS
+            opciones = dataS.getOpciones()# Saco todas las opciones del dataset
+            lContSeleccionados.config(text=len(opciones))
+            elementosSeleccionados.configure(state="normal")
+            for i in opciones:  # Añado todas las opciones
+                elegidos.append(i)
+                elementosSeleccionados.insert(tk.INSERT, i)
+                elementosSeleccionados.insert(tk.INSERT, '\n')
+
+            lSeleccionados.grid(column = 2, row = 20 )
+            lContSeleccionados.grid(column = 3, row = 20 )
+            elementosSeleccionados.grid(column = 2, row = 22)
+            botonQuitarSeleccionado.grid(column = 3, row = 22)
+            botonQuitarTodos.grid(column = 3, row = 21)
+            elementosSeleccionados.configure(state="disabled")  # no quiero que el usuario escriba es para mostrar los elementos que han sido seleccionados
+            getBotonShow()
+
+
+        # Metodo para quitar todos los elementos seleccionados
+        def quitarTodasOpciones():
+            
+            if (len(elegidos) > 0 ):
+                print("Metodo para quitar todas las opciones")
+                elegidos.clear()    # Para vaciar al completo el array de elegidos
+                elementosSeleccionados.configure(state="normal")    # Lo habilito de nuevo para edicion por que sino no me deja añadir el texto
+                elementosSeleccionados.delete('1.0', END)   # Como lo limpia todo no hace falta que haga nada más
+                elementosSeleccionados.configure(state="disabled")
+                lContSeleccionados.config(text=0)
 
         # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #--------------------- Declaracion de los elementos para la ventana ---------------------------
@@ -210,7 +246,9 @@ class Usuario:
         seleccionado = StringVar(ventana)   # la variable encargado despues de almacenar lo que seleccione el usuario
         label3 = tk.Label(ventana, text="Selecciona los elementos a representar" )
         #dropDownSeleccion = OptionMenu(ventana, seleccionado, *opciones, command=addSeleccion)
-        dropDownSeleccion = ttk.Combobox(state = "readonly") 
+        dropDownSeleccion = ttk.Combobox(state = "readonly")    # Drop down list que contendra todas las opciones que puede seleccionar el usuario
+        botonTodasOpciones = Button(ventana, text ="Seleccionar todas las opciones" , pady= 5, command = todasLasOpciones)  # Boton para añadir todas las opciones disponibles
+        botonQuitarTodos = Button(ventana, text ="Quitar todas las opciones" , pady= 5, command = quitarTodasOpciones)
         #box_value = tk.StringVar() # Caja para el nuevo dropdownlist con busqueda
         #dropDownSeleccion = tkentrycomplete.AutocompleteCombobox(textvariable=box_value)   # intento de combobox con autocomplete
         #dropDownSeleccion = AutocompleteCombobox(ventana)   # segundo intento de combobox con autocomplete

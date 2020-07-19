@@ -78,6 +78,9 @@ class Lineas_plotly(Grafica):
 
 class Scatter_plotly(Grafica):
 
+    #Si el usuario escoge un eje que no es numerico el scatter sera como un histograma, asique tengo que hacer un metodo para que
+    # guarde la cantidad de casos distintos y cuantas veces por cada caso
+    #https://matplotlib.org/3.2.2/gallery/lines_bars_and_markers/scatter_with_legend.html#sphx-glr-gallery-lines-bars-and-markers-scatter-with-legend-py
     def show(data):
         seleccionados = data.getSeleccionados()
         fig = go.Figure()
