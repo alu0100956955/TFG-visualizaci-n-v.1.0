@@ -7,6 +7,7 @@ import numpy as np
 from clases_base import Grafica
 from datetime import datetime
 #import scipy.stats as st    # Para la linea de densidad en los histogramas
+import math
 
 #import geopandas as gpd 
 #TAmbien hay que instalar descartes
@@ -219,8 +220,9 @@ class Histograma_matplotlib(Grafica):
 
     # Metodo para saber cuantas graficas habra y poder ajustar las dimensiones de las columnas y filas
     def dimensiones(cantidad):
-        if(cantidad%2 == 0): return cantidad/2, cantidad/2  # Si el numero es par hago deos columnas
-        else: return (cantidad/2)+1, cantidad/2
+        raiz = math.sqrt(cantidad)  # Hago la raiz cuadrada
+        dimension = math.ceil(raiz) # Redondeo hacia arriba para que siempre este numero por si mismo sea mayor o igual que la cantidad de subplots
+        return dimension, dimension
         
     # Metodo para obtener un array de donde deben estar situados los ticks del eje | OBSOLETO
     def getTicks(valores,cantidadTicks):
