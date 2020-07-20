@@ -14,10 +14,11 @@ class Factory:
     # antes que analizar la ruta hacer lo mismo que con el tipo de grafica
     def getParse(ruta):
         switcher = {
-            1: ParseCasosConfirmados,
+            
             2: ParseAccidentesTrafico,
             3: ParseParoEspaña,
-            4: ParseCovid
+            4: ParseCovid,
+            5: ParseCpu
         }
 
         return switcher.get(int(ruta))

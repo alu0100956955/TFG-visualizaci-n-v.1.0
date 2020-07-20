@@ -452,7 +452,8 @@ class ParseCpu:
         return data
 
     def getNombres(self):
-        return np.unique(self.df.loc[:,'Name'].to_numpy()).tolist()
+        #return np.unique(self.df.loc[:,'Name'].to_numpy()).tolist()
+        return ["Intel"]    # Todos estos datos corresponden a los procesadores intel
 
     def getDatos(self):
         core = []
@@ -460,10 +461,10 @@ class ParseCpu:
         frecuencia = []
         cache = []
         for index, row in self.df.iterrows(): 
-            core.append([row['Cores']])
-            hilos.append([row['Threads']])
-            frecuencia.append([row['Speed(GHz)']])
-            cache.append([row['Cache(M)']])
+            core.append(row['Cores'])
+            hilos.append(row['Threads'])
+            frecuencia.append(row['Speed(GHz)'])
+            cache.append(row['Cache(M)'])
 
         return core, hilos, frecuencia, cache
 
