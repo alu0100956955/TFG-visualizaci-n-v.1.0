@@ -83,7 +83,8 @@ class ParseCasosConfirmados(Parse):
         paisesFinales = [diccionario.get(n,n) for n in paises]
         #print(type(paisesFinales))
         data.setOpciones(paisesFinales)
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador", "6: dispersion navegador", "7: box terminal", "9: Histograma terminal","0: pruebas"])
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador",
+                              "6: dispersion navegador", "7: box terminal", "9: Histograma terminal","0: pruebas"])
         return data
 
 
@@ -221,7 +222,8 @@ class ParseAccidentesTrafico:
         #data.addOpcionEje("% de contagios")
         data.addElementoEje(self.meses())
         data.addElementoEje(self.victimas())
-        data.setTiposGraficas(["1:  Linea Terminal", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # ,"8: Box navegador"
+        data.setTiposGraficas(["1:  Linea Terminal", "3: Linea navegador", "4: Barras navegador",
+                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # ,"8: Box navegador"  "5. Dispersion terminal"
         return data
 
      # Meses
@@ -301,7 +303,8 @@ class ParseParoEspaña:
         data.addElementoEje(self.getAnios())
         data.addElementoEje(self.cantidadParo())
         data.addElementoEje(self.porcentajeParo())
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"])
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", 
+                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
 
         return data
 
@@ -386,7 +389,8 @@ class ParseCovid:
         data.addElementoEje(self.getMatriz(paises,'new_cases'))
         data.addElementoEje(self.getMatriz(paises,'new_deaths'))
 
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"])
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", 
+                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
 
         return data
 
@@ -448,7 +452,8 @@ class ParseCpu:
         data.addElementoEje(cache)
 
 
-        data.setTiposGraficas(["4: Barras navegador", "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"])
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador","4: Barras navegador", 
+                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
         return data
 
     def getNombres(self):
@@ -461,11 +466,12 @@ class ParseCpu:
         frecuencia = []
         cache = []
         for index, row in self.df.iterrows(): 
+            if (row['Cores'] is None ) or (row['Threads'] is None ) or (row['Speed(GHz)'] is None) or (row['Cache(M)'] is None ):
+                continue    # Si alguno de los valores falta esa linea no me interesa
             core.append(row['Cores'])
             hilos.append(row['Threads'])
             frecuencia.append(row['Speed(GHz)'])
             cache.append(row['Cache(M)'])
-
         return core, hilos, frecuencia, cache
 
 #adfasf

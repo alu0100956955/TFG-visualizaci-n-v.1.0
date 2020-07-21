@@ -92,7 +92,7 @@ class Scatter_plotly(Grafica):
             ejeY = data.getEje(data.getSeleccionEjeY(),selec)
 
 
-            fig.add_trace(go.Scatter(x = ejeX, y = ejeY, mode='markers', name = selec))
+            fig.add_trace(go.Scatter(x = ejeX, y = ejeY, mode='markers', name = selec, marker= dict( size = 16, colorscale = 'Viridis')))
         fig.update_layout(title = data.getTitle(), xaxis_title= data.getSeleccionEjeX(), yaxis_title= data.getSeleccionEjeY())
 
         fig.show()

@@ -12,25 +12,6 @@ class Dataset:
         self.OpcionesEje = []
         self.matrizEje = []
 
-    def setEjeY(self,matriz):
-        self.ejey = matriz
-
-    def getEjeY(self,eleccion):
-        #return self.searchRow(self.searchIndex(eleccion))
-        #Para probar si la modificacion funciona igual
-        #print(self.ejey)
-        #index = self.opciones.index(eleccion)
-        #print(type(self.opciones))   # numpy.ndarray
-        index = np.where(self.opciones == eleccion)# El where devuelve una tupla, que cada elemento es un nunpy ndarray por eso tengo que
-        return self.ejey[index[0][0]]
-
-    def setEjeX(self,array):
-        self.ejex = array
-
-
-    def getEjeX(self):
-        return self.ejex
-
 
     def getTitle(self):
         return self.title
@@ -136,6 +117,8 @@ class Dataset:
         if(type(matriz[0]) == int ):
             return True
         if(type(matriz[0]) == datetime.datetime):
+            return True
+        if(type(matriz[0]) == float):
             return True
         return False
 

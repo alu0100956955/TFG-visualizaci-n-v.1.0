@@ -164,6 +164,21 @@ class Barras_matplotlib(Grafica):
         aux = []
 
 
+# Scatter : https://matplotlib.org/3.2.2/gallery/lines_bars_and_markers/scatter_with_legend.html#sphx-glr-gallery-lines-bars-and-markers-scatter-with-legend-py
+class Scatter_matplotlib(Grafica):
+
+    def show(data):
+        print("Scatter matplotlib")
+        fig, ax = plt.subplots()
+        seleccionados = data.getSeleccionados()
+        for selec in seleccionados:
+            ax.scatter(data.getEje(data.getSeleccionEjeX(),selec),data.getEje(data.getSeleccionEjeY(),selec),alpha=0.3)
+        
+        ax.legend()
+        ax.grid(True)
+
+        plt.show()
+
 class Box_matplotlib(Grafica):
 
     def show(data):
@@ -204,7 +219,7 @@ class Histograma_matplotlib(Grafica):
             ejeY = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
             plt.hist(ejeY, density=False, bins = 10)
             plt.xticks(np.linspace(min(ejeY),max(ejeY),10).astype(int)) # Para los ticks del ejeX
-            plt.ylabel("Recuento de veces") # Label del eje Y
+            plt.ylabel("Frecuencia valores") # Label del eje Y
             plt.title(seleccionados[i])
             plt.xlabel(data.getSeleccionEjeY())
         
