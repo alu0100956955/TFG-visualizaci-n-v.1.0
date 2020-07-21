@@ -166,7 +166,7 @@ class Barras_matplotlib(Grafica):
 
 # Scatter : https://matplotlib.org/3.2.2/gallery/lines_bars_and_markers/scatter_with_legend.html#sphx-glr-gallery-lines-bars-and-markers-scatter-with-legend-py
 class Scatter_matplotlib(Grafica):
-
+    # TODO: Leyendas para los ejes
     def show(data):
         print("Scatter matplotlib")
         fig, ax = plt.subplots()
