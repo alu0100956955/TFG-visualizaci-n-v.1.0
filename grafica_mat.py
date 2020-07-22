@@ -6,8 +6,9 @@ from leerDatos import ParseCasosConfirmados
 import numpy as np
 from clases_base import Grafica
 from datetime import datetime
-#import scipy.stats as st    # Para la linea de densidad en los histogramas
+import scipy.stats as st    # Para la linea de densidad en los histogramas
 import math
+#from scipy import scipy
 
 #import geopandas as gpd 
 #TAmbien hay que instalar descartes
@@ -218,10 +219,14 @@ class Histograma_matplotlib(Grafica):
             plt.subplot(x,y,i+1)
             ejeY = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
             plt.hist(ejeY, density=False, bins = 10)
-            plt.xticks(np.linspace(min(ejeY),max(ejeY),10).astype(int)) # Para los ticks del ejeX
+            ticks = np.linspace(min(ejeY),max(ejeY),10).astype(int)
+            plt.xticks(ticks) # Para los ticks del ejeX
             plt.ylabel("Frecuencia valores") # Label del eje Y
             plt.title(seleccionados[i])
             plt.xlabel(data.getSeleccionEjeY())
+            kde = st.gaussian_kde(ejeY)
+            plt.plot(ticks, kde.pdf(ticks), label="PDF")
+
         
         #plt.hist(ejeY, density=False, bins = 30)    # bins es la cantidad de columnas
          # Pese a que 

@@ -10,6 +10,7 @@ from urllib.request import urlopen
 from leerDatos import ParseCasosConfirmados
 from clases_base import Grafica
 from datetime import datetime
+from sklearn import model_selection, linear_model
 
 # El resultado de plotly es un html
 
@@ -84,18 +85,39 @@ class Scatter_plotly(Grafica):
     def show(data):
         seleccionados = data.getSeleccionados()
         fig = go.Figure()
-
+        valoresX = [] # contendra todos los valores de todos los elementos seleccionados del eje X
+        valoresY = [] # contendra todos los valores de todos los elementos seleccionados del eje Y
         for selec in seleccionados:
             #ejeX = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeX(),selec), data.getSeleccionEjeX())
             #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
             ejeX = data.getEje(data.getSeleccionEjeX(),selec)
             ejeY = data.getEje(data.getSeleccionEjeY(),selec)
-
+            valoresX.extend(ejeX)
+            valoresY.extend(ejeY)
 
             fig.add_trace(go.Scatter(x = ejeX, y = ejeY, mode='markers', name = selec, marker= dict( size = 16, colorscale = 'Viridis')))
+            # Falta añadir la linea de regresion
+        regresion_x,regresion_y = Scatter_plotly.regresionPoints(valoresX,valoresY)
+        fig.add_trace(go.Scatter(x = regresion_x , y = regresion_y))
+        #print(x)
+        #print(y)
         fig.update_layout(title = data.getTitle(), xaxis_title= data.getSeleccionEjeX(), yaxis_title= data.getSeleccionEjeY())
 
         fig.show()
+
+    #https://scikit-learn.org/stable/auto_examples/linear_model/plot_ols.html
+    # a contendra el array de valores de X
+    # b  contendra el array de valores de Y
+    def regresionPoints(x,y):
+        entrenamientoX, validacionX, entrenamientoY, validacionY = model_selection.train_test_split(x, y) #, test_size=0.25, train_size=0.75
+        model = linear_model.LinearRegression()
+        #entrenamientoY.reshape(-1,1)
+        entrenamientoX_np = np.array(entrenamientoX).reshape((-1,1))
+        model.fit(entrenamientoX_np,entrenamientoY)    # Entreno el modelo
+        validacionX_np = np.array(validacionX).reshape((-1,1))
+        prediccion = model.predict(validacionX_np)
+        #print(prediccion)
+        return validacionX, prediccion
 
 
 # Esta hecho exclusivamente para data que contenga todos los paises si no fallara

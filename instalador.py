@@ -9,7 +9,7 @@ class Instalador:
     def comprobarLibrerias():
         # Aqui escribire todas las librerias que son necesarias para el entorno y es lo único necesario alterar en este metodo
         # Si el nombre del paquete tiene "-" entonces sustituirlos por "."
-        librerias = ['pygal','seaborn','matplotlib','numpy','plotly','pandas','urllib3']
+        librerias = ['pygal','seaborn','matplotlib','numpy','plotly','pandas','urllib3','sklearn','scipy']
         for i in librerias:
             spec = importlib.util.find_spec(i)
             if spec is None:
