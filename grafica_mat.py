@@ -8,6 +8,7 @@ from clases_base import Grafica
 from datetime import datetime
 import scipy.stats as st    # Para la linea de densidad en los histogramas
 import math
+import seaborn as sns
 #from scipy import scipy
 
 #import geopandas as gpd 
@@ -224,8 +225,12 @@ class Histograma_matplotlib(Grafica):
             plt.ylabel("Frecuencia valores") # Label del eje Y
             plt.title(seleccionados[i])
             plt.xlabel(data.getSeleccionEjeY())
-            kde = st.gaussian_kde(ejeY)
-            plt.plot(ticks, kde.pdf(ticks), label="PDF")
+            #kde = st.gaussian_kde(ejeY)
+            #plt.plot(ticks, kde.pdf(ticks), label="PDF")
+            sns.distplot(ejeY, hist = False, kde = True, rug = True,
+             color = 'darkblue', 
+             kde_kws={'linewidth': 2},
+             rug_kws={'color': 'black'})
 
         
         #plt.hist(ejeY, density=False, bins = 30)    # bins es la cantidad de columnas

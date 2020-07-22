@@ -204,7 +204,8 @@ class Box_plotly(Grafica):
         fig = px.box(dataframe, x=seleccionados, y=data.getSeleccionEjeY())   
         fig.show()
 
-
+# https://www.tutorialspoint.com/plotly/plotly_distplots_density_and_error_bar_plot.htm
+# https://plotly.com/python/distplot/
 class Histograma_plotly(Grafica):
 
     def show(data):
