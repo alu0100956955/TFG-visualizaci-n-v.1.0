@@ -219,7 +219,7 @@ class Histograma_matplotlib(Grafica):
         for i in range(len(seleccionados)):
             plt.subplot(x,y,i+1)
             ejeY = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
-            plt.hist(ejeY, density=False, bins = 10)
+            plt.hist(ejeY, density=True, bins = 10)
             ticks = np.linspace(min(ejeY),max(ejeY),10).astype(int)
             plt.xticks(ticks) # Para los ticks del ejeX
             plt.ylabel("Frecuencia valores") # Label del eje Y
@@ -227,10 +227,12 @@ class Histograma_matplotlib(Grafica):
             plt.xlabel(data.getSeleccionEjeY())
             #kde = st.gaussian_kde(ejeY)
             #plt.plot(ticks, kde.pdf(ticks), label="PDF")
+            # https://towardsdatascience.com/histograms-and-density-plots-in-python-f6bda88f5ac0
             sns.distplot(ejeY, hist = False, kde = True, rug = True,
              color = 'darkblue', 
              kde_kws={'linewidth': 2},
-             rug_kws={'color': 'black'})
+             rug_kws={'color': 'black'},
+             norm_hist=False)   # norm_hist es lo que me permite controlar si sera densidad o cuenta
 
         
         #plt.hist(ejeY, density=False, bins = 30)    # bins es la cantidad de columnas

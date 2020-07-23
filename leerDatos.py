@@ -385,9 +385,13 @@ class ParseCovid:
         data.addOpcionEje("Cantidad diaria de fallecidos")
         #data.addOpcionEje("% de Paro") #Lo tengo comentado porque aun no esta implementado
         data.addElementoEje(self.getDias())
-        data.addElementoEje(self.getMatriz(paises,'total_cases'))
-        data.addElementoEje(self.getMatriz(paises,'new_cases'))
-        data.addElementoEje(self.getMatriz(paises,'new_deaths'))
+        #data.addElementoEje(self.getMatriz(paises,'total_cases'))
+        #data.addElementoEje(self.getMatriz(paises,'new_cases'))
+        #data.addElementoEje(self.getMatriz(paises,'new_deaths'))
+        total, nuevos_casos, nuevas_muertes = self.getMatrices(paises)
+        data.addElementoEje(total)
+        data.addElementoEje(nuevos_casos)
+        data.addElementoEje(nuevas_muertes)
 
         data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", 
                               "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
@@ -425,8 +429,47 @@ class ParseCovid:
         return matriz
 
     def getMatrices(self, paises):
-        fila = []
+        fila_totales = []
+        fila_casos_nuevos = []
+        fila_muertes_nuevas = []
+        casos_totales = []
+        nuevos_casos = []
+        nuevas_muertes = []
+        i = 0
+        for index, row in self.df.iterrows():
+            if(i == 212): break # Para evitar salirme de rango
+            if(paises[i] != row['location']):
+                i += 1
+                casos_totales.append(fila_totales)#guardo la fila porque hemos pasado aun nuevo pais
+                nuevos_casos.append(fila_casos_nuevos)
+                nuevas_muertes.append(fila_muertes_nuevas)
 
+
+                #Reseteo el contenido de las filas
+                fila_totales = []
+                fila_casos_nuevos = []
+                fila_muertes_nuevas = []
+
+            # Añadir datos de los casos totales de contagios
+            if(row['total_cases'] is None or row['total_cases'] < 0):
+                fila_totales.append(0)  # meter un cero o dejarlo vacio ?
+            else:
+                fila_totales.append(row['total_cases'])
+            
+            # Añadir datos de los casos nuevos diarios de contagios
+            if(row['new_cases'] is None or row['new_cases'] < 0):
+                fila_casos_nuevos.append(0)  # meter un cero o dejarlo vacio ?
+            else:
+                fila_casos_nuevos.append(row['new_cases'])
+
+            # Añadir datos de los casos nuevos de muerte
+            if(row['new_deaths'] is None or row['new_deaths'] < 0):
+                fila_muertes_nuevas.append(0)  # meter un cero o dejarlo vacio ?
+            else:
+                fila_muertes_nuevas.append(row['new_deaths'])
+
+
+        return  casos_totales, nuevos_casos, nuevas_muertes
         0
 
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
