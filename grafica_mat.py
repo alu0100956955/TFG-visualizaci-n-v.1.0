@@ -6,9 +6,10 @@ from leerDatos import ParseCasosConfirmados
 import numpy as np
 from clases_base import Grafica
 from datetime import datetime
-import scipy.stats as st    # Para la linea de densidad en los histogramas
+import scipy.stats as st    # Para la linea de densidad en los histogramas | Regresion lineal
 import math
 import seaborn as sns
+from sklearn.cluster import KMeans
 #from scipy import scipy
 
 #import geopandas as gpd 
@@ -304,10 +305,43 @@ class Histograma_matplotlib(Grafica):
             matriz += data.getEje(data.getSeleccionEjeY(),seleccionados[i])
         return matriz
 
+
+class Clustering_matplotlib(Grafica):
+    # primero guardar todos los putos X e Y cada uno en un respectivo array
+    # Segundo generar los conjuntos de entrenamiento y visualización / creo que no hace falta entrenar
+    # Tercero crear el Kmeans para hacer clusterin, osea el encargado de hacer el clustering sea cual sea su nombre
+    # Cuarto pasarle los puntos al Kmeans
+    # Quinto con el modelo hacer scatter (con diferente color para cada uno ) de los distintos nucleos (mirar como disferenciar entre nucleos)
+    def show(data):
+        seleccionados = data.getSeleccionados()
+        x = []
+        y = []
+        kmeans = KMeans(n_clusters = len(seleccionados)) # La cantidad de nucleos sera la cantidad de opciones seleccionados
+        for i in range(len(seleccionados)):
+            x += (data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+            y += (data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+        
+        # https://docs.python.org/3.4/library/functions.html#zip
+        puntos = list(zip(x,y)) # https://stackoverflow.com/questions/41468116/python-how-to-combine-two-flat-lists-into-a-2d-array/41468178
+        #print(puntos)
+        Npuntos = np.array(puntos)
+        kmeans.fit(Npuntos)
+        clusters = kmeans.cluster_centers_ # Donde cree scikit que estan los centros
+        prediccion = kmeans.fit_predict(puntos)
+        # voy a cablearlo para 1
+        plt.scatter(Npuntos[prediccion == 0,0], Npuntos[prediccion == 0,1], color='red')
+        #plt.scatter(puntos[y_km == 1,0], puntos[y_km == 1,1], color='green')
+        #plt.scatter(clusters[0][0], clusters[0][1], marker='*', s=200, color='black')
+        #plt.scatter(clusters[1][0], clusters[1][1], marker='*', s=200, color='black')
+    
+        plt.show()
+
 # Aun que no sea matplot lib al ser por terminal dejo la representacion de mapas de geopandas dentro de este fichero
 class mapa_Geopandas():
     def show():
-        print("sin terminar")
+        print("problemas en los paquetes")
 #adfasfd
+
+
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico, ParseParoEspaña, ParseCovid, ParseCpu
-from grafica_mat import Linea_mat, Box_matplotlib , Barras_matplotlib, Histograma_matplotlib, Scatter_matplotlib
+from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico, ParseParoEspaña, ParseCovid, ParseCpu, ParseLol
+from grafica_mat import Linea_mat, Box_matplotlib , Barras_matplotlib, Histograma_matplotlib, Scatter_matplotlib, Clustering_matplotlib
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
 from grafica_ploty import Lineas_plotly, Barras_plotly, Mapa_plotly, Scatter_plotly, Box_plotly, Histograma_plotly
@@ -18,7 +18,8 @@ class Factory:
             2: ParseAccidentesTrafico,
             3: ParseParoEspaña,
             4: ParseCovid,
-            5: ParseCpu
+            5: ParseCpu,
+            6: ParseLol
         }
 
         return switcher.get(int(ruta))
@@ -38,7 +39,7 @@ class Factory:
             8: Box_plotly,
             9: Histograma_matplotlib,
             10: Histograma_plotly,
-            0: Barras_matplotlib
+            0: Clustering_matplotlib
         }
 
         elec = switcher.get(int(eleccion))

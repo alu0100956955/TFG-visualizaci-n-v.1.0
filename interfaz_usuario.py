@@ -33,7 +33,7 @@ class Usuario:
         def graficasNuevo(event):
             nonlocal dataS
             parse = Mediador.getParse(eleccionDropdown(dropdownFuenteDatos.get()))    # le pasamos la eleccion del usuario sobre la fuente de datos
-            dataS = parse().getDataset()
+            dataS = parse().getDataset() # El pase es uno de los parses ubicados en el fichero leerDatos
             #dataS.setNumeroFuenteDatos()
             label2.grid(column = 2, row = 4)
             tipoGrafica.grid(column = 2, row = 5 )
@@ -291,7 +291,7 @@ class Usuario:
         #rbCasosConfirmados.grid(column = 3, row = 1)
         #rbSegunda.grid(column = 3, row = 2)
         #rbParo.grid(column = 4, row = 1)
-        tipos = [ "2: Accidentes de trafico", "3: Paro en españa", "4: Covid" , "5: Cpu"] # "1:  Casos de covid confirmados", 
+        tipos = [ "2: Accidentes de trafico", "3: Paro en españa", "4: Covid" , "5: Cpu", "6: LOL"] # "1:  Casos de covid confirmados", 
         dropdownFuenteDatos["values"] = [*tipos]
         dropdownFuenteDatos.grid(column = 2, row = 1)
         labelEspacio.grid(column = 2, row = 2 )

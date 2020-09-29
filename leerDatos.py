@@ -8,6 +8,28 @@ from dataset import Dataset
 import datetime
 from datetime import datetime
 
+
+class ParseTemplate:
+
+    def __init__(self):
+        self.df = pd.read_csv("data/")
+
+    def getDataset(self):
+        data = Dataset("")
+        data.setIntFuente()
+        data.setOpciones()
+        #----------
+        data.addOpcionEje("")
+
+        #----------
+        data.addElementoEje()
+
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador","4: Barras navegador", 
+                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
+        return data
+
+
+
 #TO DO: cambiar el nombre de esta clase para poder hacer escalable el ecosistema sin problemas con los nombres
 # Esta clase se la encargada de leer los datos de casos confirmados globales
 class ParseCasosConfirmados(Parse):
@@ -277,7 +299,8 @@ class ParseAccidentesTrafico:
         for l in self.matriz:
             opciones.add(l[0])
 
-        return sorted(opciones) # Esto es para que las opciones salgan ordenadas
+            # Sorted es para que las opciones salgan ordenadas
+        return sorted(opciones) 
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -365,6 +388,7 @@ class ParseParoEspaña:
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+# Problema: los datos avanza de forma diaria
 class ParseCovid:
     
     def __init__(self):
@@ -474,6 +498,7 @@ class ParseCovid:
 
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+# Problema: solo tengo una opción a seleccionar que es intel, debo buscar los datos de otras marcas para poder comprar, no dan chance para los de machine learning
 class ParseCpu:
 
     def __init__(self):
@@ -483,7 +508,7 @@ class ParseCpu:
     def getDataset(self):
         data = Dataset("CPU")
         data.setIntFuente(5)
-        data.setOpciones(self.getNombres()) 
+        data.setOpciones(self.getOpciones()) 
         #----------
         data.addOpcionEje("Cores")
         data.addOpcionEje("Cantidad de hilos")
@@ -501,7 +526,7 @@ class ParseCpu:
                               "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
         return data
 
-    def getNombres(self):
+    def getOpciones(self):
         #return np.unique(self.df.loc[:,'Name'].to_numpy()).tolist()
         return ["Intel"]    # Todos estos datos corresponden a los procesadores intel
 
@@ -518,5 +543,126 @@ class ParseCpu:
             frecuencia.append(row['Speed(GHz)'])
             cache.append(row['Cache(M)'])
         return core, hilos, frecuencia, cache
+
+
+ # Todo poner las etiquetas para perdedor y ganador
+ # Meter mas datos disponible dentro de los ficheros
+ # intentar optimizar el get dataset
+class ParseLol:
+
+    def __init__(self):
+        self.df = pd.read_csv("data/Lol_winner.csv")
+        self.df2 = pd.read_csv("data/Lol_looser.csv")
+
+    def getDataset(self):
+        data = Dataset("Corean rankeds")
+        #data.setIntFuente()
+        data.setOpciones(self.getOpciones())
+        #----------
+        data.addOpcionEje("Towerkilss")
+        data.addOpcionEje("InhibitorKills")
+        data.addOpcionEje("baronKills")
+        data.addOpcionEje("riftHeraldKills")
+        #----------
+        # Guardo los datos de los ganadores
+        torres1, inhibidores1, barones1, heraldo1 = self.getDatos(self.df)
+        # Guardo los datos de los perdedores
+        torres2, inhibidores2, barones2, heraldo2 = self.getDatos(self.df2)
+        # Los combino
+        torres  = torres1 + torres2 
+        inhibidores = inhibidores1 + inhibidores2
+        barones = barones1 + barones2
+        heraldo = heraldo1 + heraldo2 
+
+
+
+        data.addElementoEje(torres)
+        data.addElementoEje(inhibidores)
+        data.addElementoEje(barones)
+        data.addElementoEje(heraldo)
+
+
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador","4: Barras navegador", 
+                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
+        return data
+
+
+    def getDatos(self, data):
+        torres = []
+        inhibidores = []
+        barones = []
+        heraldo = []
+        for index, row in data.iterrows(): 
+            torres.append(row['towerKills'])
+            inhibidores.append(row['inhibitorKills'])
+            barones.append(row['baronKills'])
+            heraldo.append(row['riftHeraldKills'])
+
+
+        return torres, inhibidores, barones, heraldo
+
+    def getOpciones(self):
+        #return np.unique(self.df.loc[:,'Name'].to_numpy()).tolist()
+        return ["Corea"]    # Todos estos datos corresponden a corea
+
+
+# Problema: 
+# Podria seperar por generaciones con un generator, pero para la primera version estaran todos los pokemons juntos
+# Tiene etiquetas
+class ParsePokemon:
+
+    def __init__(self):
+        self.df = pd.read_csv("data/Pokemon.csv")
+
+    def getDataset(self):
+        data = Dataset("Pokemon")
+        #data.setIntFuente()
+        
+        #----------
+        data.addOpcionEje("Tipo1")
+        data.addOpcionEje("Tipo2")
+        data.addOpcionEje("Sumatorio estadisticas")
+        data.addOpcionEje("HP")
+        data.addOpcionEje("Atk")
+        data.addOpcionEje("Defense")
+        data.addOpcionEje("Sp. Atk")
+        data.addOpcionEje("Sp. Def")
+        data.addOpcionEje("Speed")
+
+        #----------
+        #  TODO LLAMAR A GET DATOS , GUARDAR LOS DATOS EN EL DATASET Y PROBAR EL DATASET
+        data.setOpciones(self.getOpciones()) # Dado que las opciones seran los pokemons lo pongo detras del metodo que recorre el csv
+        data.setEtiquetas()
+        data.addElementoEje()
+
+        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador","4: Barras navegador", 
+                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
+        return data
+
+    def getDatos(self):
+        nombres = []
+        tipos = []
+        total = []
+        hp = []
+        atk = []
+        defense = []
+        spAtk = []
+        spDef = []
+        speed = []
+
+        for index, row in self.df.iterrows(): 
+            nombres.append(row['Name'])
+            tipos.append( (row['Type 1'], row['Type 2']))   # combino los dos por que importan si es simple o doble, y cuales son esos atributos
+            total.append( row['Total'])
+            hp.append(row['HP'])
+            atk.append(row['Attack'])
+            defense.append(row['Defense'])
+            spAtk.append(row['Sp. Atk'])
+            spDef.append(row['Sp. Def'])
+            speed.append(row['Speed'])
+
+
+        return nombres, tipos, total, hp, atk, defense, spAtk, spDef, speed
+
 
 #adfasf

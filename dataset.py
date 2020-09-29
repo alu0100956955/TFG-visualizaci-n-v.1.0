@@ -70,6 +70,7 @@ class Dataset:
     def getOpcionesEje(self):
         return self.OpcionesEje
 
+    
     def setIntFuente(self,tipo):
         self.intFuente = tipo
 
@@ -152,5 +153,14 @@ class Dataset:
 
     def getTiposGraficas(self):
         return self.tiposGraficas
+
+
+    #------------------ Actualizacion 2, machine learning ----------------------#
+
+    def setEtiquetas(self,array):
+        self.etiquetas = array
+
+    def getEtiquetas(self):
+        return self.etiquetas
 
 #asdfasf
