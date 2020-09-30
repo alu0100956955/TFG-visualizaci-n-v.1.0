@@ -15,17 +15,21 @@ class Representacion:
     def show(data, algoritmo_):
 
         algoritmo = algoritmo_()
-
-
         training_accuracy = []
         test_accuracy = []
 
+        # Para los datos combinare los datos de los dos ejes empleando zip
+        # Las etiquetas seran las opciones escogidas
+        datos, etiquetas = Representacion.DatosEtiquetas(data)
+
+
         # Cambio el porcentaje de entrenamiento y testeo
         porcentajes = np.arange(0.4, 0.9, 0.05)
-        for porcentaje in porcentajes:    # Bucle para hacer la gráfica
+        for porcentaje in porcentajes:    # Bucle para hacer la grï¿½fica
+
 
             # El primero seran los datos el segundo las etiquetas
-            X_train, X_test, y_train, y_test = train_test_split(matriz, tipos, test_size=porcentaje , random_state=0)
+            X_train, X_test, y_train, y_test = train_test_split(datos, etiquetas, test_size=porcentaje , random_state=0)
             algoritmo.fit(X_train, y_train)    
             # record training set accuracy    
             training_accuracy.append(algoritmo.score(X_train, y_train))    
@@ -44,6 +48,22 @@ class Representacion:
         print("Confusion matrix:\n%s" % disp.confusion_matrix)
 
         plt.show()
+
+        # Devuelve los datos y las etiquetas necesarias para que tire el sistema
+    def DatosEtiquetas(data):
+        datos = []
+        etiquetas = []
+
+        # Buble que por cada escogido se mezclaran los datos y aÃ±adiremos a datos, junto a su etiqueta en etiquetas
+        seleccionados = data.getSeleccionados()
+        for selec in seleccionados:
+            aux = list(zip(data.getEje(data.getSeleccionEjeX(),selec),data.getEje(data.getSeleccionEjeY(),selec) ))
+            for i in range(len(aux)):
+                etiquetas.append(selec)
+            datos += aux 
+        return datos, etiquetas
+
+
 
 
 

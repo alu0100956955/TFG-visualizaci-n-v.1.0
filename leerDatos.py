@@ -545,7 +545,7 @@ class ParseCpu:
         return core, hilos, frecuencia, cache
 
 
- # Todo poner las etiquetas para perdedor y ganador
+ # TODO poner las etiquetas para perdedor y ganador | osea generar la opcion a seleccionar de ganador y perdedor
  # Meter mas datos disponible dentro de los ficheros
  # intentar optimizar el get dataset
 class ParseLol:
