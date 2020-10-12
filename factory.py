@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico, ParseParoEspaña, ParseCovid, ParseCpu, ParseLol
+from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico, ParseParoEspaña, ParseCovid, ParseCpu, ParseLol, ParsePokemon
 from grafica_mat import Linea_mat, Box_matplotlib , Barras_matplotlib, Histograma_matplotlib, Scatter_matplotlib, Clustering_matplotlib
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
@@ -20,7 +20,8 @@ class Factory:
             3: ParseParoEspaña,
             4: ParseCovid,
             5: ParseCpu,
-            6: ParseLol
+            6: ParseLol,
+            7: ParsePokemon
         }
 
         return switcher.get(int(ruta))
@@ -40,6 +41,7 @@ class Factory:
             8: Box_plotly,
             9: Histograma_matplotlib,
             10: Histograma_plotly,
+            11: Kneighbors,
             0: Kneighbors
         }
         # 0: cluestering

@@ -321,7 +321,7 @@ class ParseParoEspaña:
         data.setIntFuente(3)    # Para que dentro del dataset este el numero de la fuente de datos
 
         data.addOpcionEje("Años")
-        data.addOpcionEje("Cantidad de Accidentes")
+        data.addOpcionEje("Cantidad de parados")
         #data.addOpcionEje("% de Paro") #Lo tengo comentado porque aun no esta implementado
         data.addElementoEje(self.getAnios())
         data.addElementoEje(self.cantidadParo())
@@ -547,7 +547,7 @@ class ParseCpu:
 
  # TODO poner las etiquetas para perdedor y ganador | osea generar la opcion a seleccionar de ganador y perdedor
  # Meter mas datos disponible dentro de los ficheros
- # intentar optimizar el get dataset
+ # intentar optimizar el get dataset ya que COLAPSA TODO, PETA MUY FUERTE
 class ParseLol:
 
     def __init__(self):
@@ -566,15 +566,32 @@ class ParseLol:
         #----------
         # Guardo los datos de los ganadores
         torres1, inhibidores1, barones1, heraldo1 = self.getDatos(self.df)
+        #etiquetas = ["Winner"] * len(torres)
         # Guardo los datos de los perdedores
         torres2, inhibidores2, barones2, heraldo2 = self.getDatos(self.df2)
         # Los combino
-        torres  = torres1 + torres2 
-        inhibidores = inhibidores1 + inhibidores2
-        barones = barones1 + barones2
-        heraldo = heraldo1 + heraldo2 
+        #for i in range(len(torres2)):
+        #    torres.append(torres2[i]) 
+        #    inhibidores.append(inhibidores2[i])
+        #    barones.append(barones2[i])
+        #    heraldo.append(heraldo2[i])
+        #    etiquetas.append()
 
+        torres = []
+        torres.append(torres1)
+        torres.append(torres2)
 
+        inhibidores = []
+        inhibidores.append(inhibidores1)
+        inhibidores.append(inhibidores2)
+
+        barones = []
+        barones.append(barones1)
+        barones.append(barones2)
+
+        heraldo = []
+        heraldo.append(heraldo1)
+        heraldo.append(heraldo2)
 
         data.addElementoEje(torres)
         data.addElementoEje(inhibidores)
@@ -603,11 +620,11 @@ class ParseLol:
 
     def getOpciones(self):
         #return np.unique(self.df.loc[:,'Name'].to_numpy()).tolist()
-        return ["Corea"]    # Todos estos datos corresponden a corea
+        return ["Winner","Losers"]    # Todos estos datos corresponden a corea
 
 
-# Problema: 
-# Podria seperar por generaciones con un generator, pero para la primera version estaran todos los pokemons juntos
+#  
+# Esta distribuido por tipo de pokemon para hacer el machine learning más interesante
 # Tiene etiquetas
 class ParsePokemon:
 
@@ -619,8 +636,8 @@ class ParsePokemon:
         #data.setIntFuente()
         
         #----------
-        data.addOpcionEje("Tipo1")
-        data.addOpcionEje("Tipo2")
+        #data.addOpcionEje("Tipo1") # Los tipso seran las opciones
+        #data.addOpcionEje("Tipo2")
         data.addOpcionEje("Sumatorio estadisticas")
         data.addOpcionEje("HP")
         data.addOpcionEje("Atk")
@@ -631,16 +648,22 @@ class ParsePokemon:
 
         #----------
         #  TODO LLAMAR A GET DATOS , GUARDAR LOS DATOS EN EL DATASET Y PROBAR EL DATASET
-        data.setOpciones(self.getOpciones()) # Dado que las opciones seran los pokemons lo pongo detras del metodo que recorre el csv
-        data.setEtiquetas()
-        data.addElementoEje()
+        data.setOpciones(self.getOpciones()) # Las opciones seran los tipos de los pokemons
+        #data.setEtiquetas()
+        total, hp, atk, defense, spAtk, spDef, speed = self.getDatos()
+        data.addElementoEje(total)
+        data.addElementoEje(hp)
+        data.addElementoEje(atk)
+        data.addElementoEje(defense)
+        data.addElementoEje(spAtk)
+        data.addElementoEje(spDef)
+        data.addElementoEje(speed)
 
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador","4: Barras navegador", 
-                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
+        data.setTiposGraficas(["1 :  Linea Terminal", "2 : Linea html", "3 : Linea navegador","4 : Barras navegador", 
+                              "6 : dispersion navegador", "7 : box terminal", "9 : Histograma Terminal", "10: Histograma navegador","11: vecino", "0 : Pruebas"]) # "5. Dispersion terminal"
         return data
 
     def getDatos(self):
-        nombres = []
         tipos = []
         total = []
         hp = []
@@ -649,20 +672,42 @@ class ParsePokemon:
         spAtk = []
         spDef = []
         speed = []
+        # Sacar los tipos sin repetir en una lista | ya lo tengo de las opciones asi que debo pasarselo o no
+        tipos = self.df['Type 1'].unique().tolist()
+        # Añado tantas listas secundarias en los almacenamientos como tipos haya
+        for i in range(len(tipos)):
+            total.append([])
+            hp.append([])
+            atk.append([])
+            defense.append([])
+            spAtk.append([])
+            spDef.append([])
+            speed.append([])
 
+
+        # Para cada linea tengo que comprobar que tipo es y saber en que posición esta la lista a la que pertenece
         for index, row in self.df.iterrows(): 
-            nombres.append(row['Name'])
-            tipos.append( (row['Type 1'], row['Type 2']))   # combino los dos por que importan si es simple o doble, y cuales son esos atributos
-            total.append( row['Total'])
-            hp.append(row['HP'])
-            atk.append(row['Attack'])
-            defense.append(row['Defense'])
-            spAtk.append(row['Sp. Atk'])
-            spDef.append(row['Sp. Def'])
-            speed.append(row['Speed'])
+            #nombres.append(row['Name'])
+            #tipos.append( (row['Type 1'], row['Type 2']))   # combino los dos por que importan si es simple o doble, y cuales son esos atributos
+            i = tipos.index(row['Type 1'])  # Saco el indice de donde se guardaran los datos
+            #if(): 
+            #    continue      # Si el indice no existe debido a que tiene el tipo vacio que continue | tambien se podria comprobar ants de intentar sacar el indice
+
+            total[i].append( row['Total'])
+            hp[i].append(row['HP'])
+            atk[i].append(row['Attack'])
+            defense[i].append(row['Defense'])
+            spAtk[i].append(row['Sp. Atk'])
+            spDef[i].append(row['Sp. Def'])
+            speed[i].append(row['Speed'])
 
 
-        return nombres, tipos, total, hp, atk, defense, spAtk, spDef, speed
+        return total, hp, atk, defense, spAtk, spDef, speed
+
+    # Las opciones seran los tipos de los pokemons
+    def  getOpciones(self):
+
+        return self.df['Type 1'].unique().tolist()
 
 
 #adfasf

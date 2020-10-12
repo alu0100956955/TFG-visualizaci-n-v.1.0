@@ -103,26 +103,12 @@ class Usuario:
             dataS.setSeleccionEjeY(ejeY)
             Mediador.show(grafica, dataS)
 
-        # CAmbiar para los histogramas
-        # Metodo para añadir el poder escoger los elementos para las distribuciones
-        def distribuciones():
-            print("Sin terminar")
-            #labelOpcionesDistribuciones.grid(column = 2, row = 14)
-            #if(opcionesDistribucion.winfo_ismapped() == False):# Para no añadir duplicados en la interfaz
-            #    opcionesDistribucion.grid(column = 2, row = 15) # sustituira la posición de elección del eje X
-
-
-        # Metodo para guardar la eleccion del tipo de histograma 
-        def tipoHistograma(event):
-            print("Sin terminar | sera como el addSeleccion")
-            nonlocal dataS
-            #dataS.setOpcionDistribucion(opcionesDistribucion.get())
 
         
 
         #Para saber de las elecciones de los dropdown list cual es la que escogio el usuario
         def eleccionDropdown(eleccion):
-            return int(eleccion[0])
+            return int(eleccion[0:2])
 
         # Metodo para añadir el elemento seleccionado por el usuario
         def addSeleccion(event):
@@ -291,7 +277,7 @@ class Usuario:
         #rbCasosConfirmados.grid(column = 3, row = 1)
         #rbSegunda.grid(column = 3, row = 2)
         #rbParo.grid(column = 4, row = 1)
-        tipos = [ "2: Accidentes de trafico", "3: Paro en españa", "4: Covid" , "5: Cpu", "6: LOL"] # "1:  Casos de covid confirmados", 
+        tipos = [ "2 : Accidentes de trafico", "3 : Paro en españa", "4 : Covid" , "5 : Cpu", "6 : LOL", "7 : Pokemon"] # "1:  Casos de covid confirmados", 
         dropdownFuenteDatos["values"] = [*tipos]
         dropdownFuenteDatos.grid(column = 2, row = 1)
         labelEspacio.grid(column = 2, row = 2 )
