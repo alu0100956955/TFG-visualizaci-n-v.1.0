@@ -42,6 +42,8 @@ class Factory:
             9: Histograma_matplotlib,
             10: Histograma_plotly,
             11: Kneighbors,
+            12: Gausian,
+            13: Tree,
             0: Kneighbors
         }
         # 0: cluestering

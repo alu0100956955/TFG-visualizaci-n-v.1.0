@@ -9,6 +9,9 @@ import datetime
 from datetime import datetime
 
 
+tiposGraficas = ["1 :  Linea Terminal", "2 : Linea html", "3 : Linea navegador","4 : Barras navegador", "6 : dispersion navegador", "7 : box terminal",
+                "9 : Histograma Terminal", "10: Histograma navegador","11: Clasificacion vecino", "12: Clasificacion Gausian", "13: Clasificacion Tree","0 : Pruebas"]
+
 class ParseTemplate:
 
     def __init__(self):
@@ -105,8 +108,9 @@ class ParseCasosConfirmados(Parse):
         paisesFinales = [diccionario.get(n,n) for n in paises]
         #print(type(paisesFinales))
         data.setOpciones(paisesFinales)
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador",
-                              "6: dispersion navegador", "7: box terminal", "9: Histograma terminal","0: pruebas"])
+        #data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", "5: mapa navegador",
+         #                     "6: dispersion navegador", "7: box terminal", "9: Histograma terminal","0: pruebas"])
+        data.setTiposGraficas(tiposGraficas)
         return data
 
 
@@ -244,8 +248,9 @@ class ParseAccidentesTrafico:
         #data.addOpcionEje("% de contagios")
         data.addElementoEje(self.meses())
         data.addElementoEje(self.victimas())
-        data.setTiposGraficas(["1:  Linea Terminal", "3: Linea navegador", "4: Barras navegador",
-                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # ,"8: Box navegador"  "5. Dispersion terminal"
+        #data.setTiposGraficas(["1:  Linea Terminal", "3: Linea navegador", "4: Barras navegador",
+        #                      "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # ,"8: Box navegador"  "5. Dispersion terminal"
+        data.setTiposGraficas(tiposGraficas)
         return data
 
      # Meses
@@ -326,9 +331,9 @@ class ParseParoEspaña:
         data.addElementoEje(self.getAnios())
         data.addElementoEje(self.cantidadParo())
         data.addElementoEje(self.porcentajeParo())
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", 
-                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
-
+        #data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", 
+        #                      "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
+        data.setTiposGraficas(tiposGraficas)
         return data
 
     # Los paises seran las opciones basicas de representación
@@ -417,9 +422,9 @@ class ParseCovid:
         data.addElementoEje(nuevos_casos)
         data.addElementoEje(nuevas_muertes)
 
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", 
-                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
-
+        #data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador", "4: Barras navegador", 
+        #                      "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
+        data.setTiposGraficas(tiposGraficas)
         return data
 
 
@@ -522,8 +527,9 @@ class ParseCpu:
         data.addElementoEje(cache)
 
 
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador","4: Barras navegador", 
-                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
+        #data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador","4: Barras navegador", 
+        #                      "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
+        data.setTiposGraficas(tiposGraficas)
         return data
 
     def getOpciones(self):
@@ -659,8 +665,9 @@ class ParsePokemon:
         data.addElementoEje(spDef)
         data.addElementoEje(speed)
 
-        data.setTiposGraficas(["1 :  Linea Terminal", "2 : Linea html", "3 : Linea navegador","4 : Barras navegador", 
-                              "6 : dispersion navegador", "7 : box terminal", "9 : Histograma Terminal", "10: Histograma navegador","11: vecino", "0 : Pruebas"]) # "5. Dispersion terminal"
+        #data.setTiposGraficas(["1 :  Linea Terminal", "2 : Linea html", "3 : Linea navegador","4 : Barras navegador", 
+        #                      "6 : dispersion navegador", "7 : box terminal", "9 : Histograma Terminal", "10: Histograma navegador","11: vecino", "0 : Pruebas"]) # "5. Dispersion terminal"
+        data.setTiposGraficas(tiposGraficas)
         return data
 
     def getDatos(self):

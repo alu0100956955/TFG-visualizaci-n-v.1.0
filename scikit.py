@@ -119,6 +119,7 @@ class Representacion:
 
 
 
+
 class Gausian:
 
     def show(data):
@@ -137,3 +138,88 @@ class Tree:
 
     def show(data):
         Representacion.show(data,DecisionTreeClassifier)
+
+
+
+class Regresion:
+
+    def show(data, modelo): # Arreglar el parametro extra
+        X_train, X_test, y_train, y_test = train_test_split(hp, atk, test_size=0.6, random_state=0)
+
+        X_train = np.reshape(X_train, (-1, 1))
+        X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
+        #if(type(modelo) !=  '')    # if es de tipo isotonic no hago el reshape
+        X_test = np.reshape(X_test, (-1, 1))
+        #print(X_train)
+        #print(y_train)
+
+        model = model()
+
+        # https://matplotlib.org/3.1.0/gallery/color/named_colors.html Lista de colores
+        plt.scatter(X_train,y_train)
+        model.fit(X_train,y_train)
+
+        #print(X_test)
+        regresion_y = model.predict(X_test)
+        #plt.scatter(X_test,regresion_y)
+        plt.plot(X_test, regresion_y,c = 'red')
+
+
+        plt.show()
+
+
+class Linear:
+
+    def show(data):
+        Regresion.show(data,LinearRegression)
+
+
+class ridge:
+
+    def show(data):
+        Regresion.show(data,Ridge)  # Habria que añadir parametros extra
+
+class Laso:
+
+    def show(data):
+        Regresion.show(data,Lasso)
+
+
+
+
+
+class Clustering:
+
+    def show(data, modelo):
+        print("sin terminar")
+        # Separar los datos
+        # representar los datos del dataset con el metodo
+        # Declarar el modelo
+        # Entrenar el modelo
+        # Representar los datos que usare para predecir, ya con los clusters
+        # Representar los centros de cluster
+
+    # Metodo para dibujar los datos den entrenamiento y los de predecir, deberia usarlo con el de arriba
+    def dibujardatos(datos,titulo):
+        ejex,ejey = zip(*datos)
+        plt.scatter(ejex,ejey)
+        plt.title(titulo)
+    
+
+
+
+class Kmeans:
+
+    def show(data):
+        Clustering.show(data,Kmeans)
+
+class Mixture:
+
+    def show(data):
+        Clustering.show(data,GaussianMixture)
+
+
+class DBscan:
+
+    def show(data):
+        Clustering.show(data,DBSCAN)
