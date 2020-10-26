@@ -7,6 +7,10 @@ from sklearn import datasets, metrics
 from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.isotonic import IsotonicRegression
+import math
 
 
 # Como por ahora las tres clases representan de la misma forma por ahora empleo esta clase para representar pasandole el algoritmo
@@ -95,12 +99,6 @@ class Representacion:
 
         plt.show()
 
-
-
-
-
-
-
         # Devuelve los datos y las etiquetas necesarias para que tire el sistema
     def DatosEtiquetas(data):
         datos = []
@@ -142,47 +140,61 @@ class Tree:
 
 
 class Regresion:
+    # https://matplotlib.org/3.1.0/gallery/color/named_colors.html Lista de colores de matplotlib
+    def show(data, modelo,reshape): # Arreglar el parametro extra
+        # Si pasan varias opciones se podria hacer un bucle que habra varias veces estas graficas
+        # Tambien podria representar solo la grafica final, siendo un color para los datos de entrenamiento otro para los datos de testeo y la linea
 
-    def show(data, modelo): # Arreglar el parametro extra
-        X_train, X_test, y_train, y_test = train_test_split(hp, atk, test_size=0.6, random_state=0)
+        seleccionados = data.getSeleccionados() # Las opciones seleccionadas
+        cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
+        dim = Regresion.dimensiones(cantidadSeleccionados) # con la cantidad de seleccionados genero las dimensiones para el subplot
 
-        X_train = np.reshape(X_train, (-1, 1))
-        X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
-        #if(type(modelo) !=  '')    # if es de tipo isotonic no hago el reshape
-        X_test = np.reshape(X_test, (-1, 1))
-        #print(X_train)
-        #print(y_train)
+        for i in range(cantidadSeleccionados):
+            # TODO: Tendria que controlar si se pasa un eje no numerico
+            X_train, X_test, y_train, y_test = train_test_split(data.getEje(data.getSeleccionEjeX(),seleccionados[i]), data.getEje(data.getSeleccionEjeY(),seleccionados[i]), test_size=0.6, random_state=0)
+            
 
-        model = model()
+            X_train = np.reshape(X_train, (-1, 1))
+            X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
+            if(reshape):    # if es de tipo isotonic no hago el reshape
+                X_test = np.reshape(X_test, (-1, 1))
+            #print(X_train)
+            #print(y_train)
 
-        # https://matplotlib.org/3.1.0/gallery/color/named_colors.html Lista de colores
-        plt.scatter(X_train,y_train)
-        model.fit(X_train,y_train)
-
-        #print(X_test)
-        regresion_y = model.predict(X_test)
-        #plt.scatter(X_test,regresion_y)
-        plt.plot(X_test, regresion_y,c = 'red')
+            model = modelo()
+            model.fit(X_train,y_train)
+            regresion_y = model.predict(X_test)
+            plt.subplot(dim, dim, i+1)
+            plt.scatter(X_train,y_train)
+            plt.plot(X_test, regresion_y,c = 'red')
+            plt.title(seleccionados[i])
 
 
         plt.show()
+
+        # Metodo para calcular la dimension de los subplot
+    def dimensiones(cantidad):
+        # devuelvo la raiz redondeada hacia arriba de 
+        return math.ceil(math.sqrt(cantidad))
+
+        
 
 
 class Linear:
 
     def show(data):
-        Regresion.show(data,LinearRegression)
+        Regresion.show(data,LinearRegression,True)
 
 
-class ridge:
-
-    def show(data):
-        Regresion.show(data,Ridge)  # Habria que añadir parametros extra
-
-class Laso:
+class Gradient: # falta incluirlo en las referencias y los import
 
     def show(data):
-        Regresion.show(data,Lasso)
+        Regresion.show(data,GradientBoostingRegressor,True)  # Habria que añadir parametros extra
+
+class Isotonic:
+
+    def show(data):
+        Regresion.show(data,IsotonicRegression,False)
 
 
 

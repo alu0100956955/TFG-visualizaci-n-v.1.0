@@ -10,7 +10,8 @@ from datetime import datetime
 
 
 tiposGraficas = ["1 :  Linea Terminal", "2 : Linea html", "3 : Linea navegador","4 : Barras navegador", "6 : dispersion navegador", "7 : box terminal",
-                "9 : Histograma Terminal", "10: Histograma navegador","11: Clasificacion vecino", "12: Clasificacion Gausian", "13: Clasificacion Tree","0 : Pruebas"]
+                "9 : Histograma Terminal", "10: Histograma navegador","11: Clasificacion vecino", "12: Clasificacion Gausian", "13: Clasificacion Tree",
+                "14: Regresion Linear","15: Regresion Gradient","16: Regresion Isotonic","0 : Pruebas"]
 
 class ParseTemplate:
 
