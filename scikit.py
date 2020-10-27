@@ -116,13 +116,10 @@ class Representacion:
 
 
 
-
-
 class Gausian:
 
     def show(data):
         Representacion.show(data,GaussianNB)
-
 
 
 class Kneighbors:
@@ -131,13 +128,12 @@ class Kneighbors:
         Representacion.show(data,KNeighborsClassifier)
 
 
-
 class Tree:
 
     def show(data):
         Representacion.show(data,DecisionTreeClassifier)
 
-
+# ////////////////////////////// REGRESION ////////////////////////////////////
 
 class Regresion:
     # https://matplotlib.org/3.1.0/gallery/color/named_colors.html Lista de colores de matplotlib
@@ -177,14 +173,11 @@ class Regresion:
         # devuelvo la raiz redondeada hacia arriba de 
         return math.ceil(math.sqrt(cantidad))
 
-        
-
 
 class Linear:
 
     def show(data):
         Regresion.show(data,LinearRegression,True)
-
 
 class Gradient: # falta incluirlo en las referencias y los import
 
@@ -196,25 +189,50 @@ class Isotonic:
     def show(data):
         Regresion.show(data,IsotonicRegression,False)
 
-
-
-
+# //////////////////////////// CLUSTERING ///////////////////////////////////
 
 class Clustering:
 
     def show(data, modelo):
-        print("sin terminar")
+        print("sin terminar") 
+        # En total quiero que haya 4 graficas que aporten informacion
         # Separar los datos
         # representar los datos del dataset con el metodo
         # Declarar el modelo
         # Entrenar el modelo
         # Representar los datos que usare para predecir, ya con los clusters
         # Representar los centros de cluster
+        # Usar al metodo de medicion de clustering para otra grafica
+
+        ejex, ejey , colores = Clustering.combinacionDatos(data)
+        Clustering.dibujardatos(ejex, ejey,"Datos entrenamiento" +data.getTitle(), colores,2,1) # descablear
+        plt.show()
+
+
+    # Metodo para combinar todos los datos de las opciones
+    def combinacionDatos(data):
+        ejex = []
+        ejey = []
+        colores = []
+        seleccionados = data.getSeleccionados()
+        for i in range(len(seleccionados)):
+            if i == 0:
+                ejex = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
+                ejey = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+            ejex += data.getEje(data.getSeleccionEjeX(),seleccionados[i])
+            ejey += data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+            # Para tener los distintos colores de cada cluster
+            for j in range(len(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))):
+                colores.append(i)
+
+        return ejex, ejey, colores
+
 
     # Metodo para dibujar los datos den entrenamiento y los de predecir, deberia usarlo con el de arriba
-    def dibujardatos(datos,titulo):
-        ejex,ejey = zip(*datos)
-        plt.scatter(ejex,ejey)
+    def dibujardatos(ejex, ejey,titulo, colores, dimension, posicion):
+        #ejex,ejey = zip(*datos)
+        plt.subplot(dimension, dimension, posicion)
+        plt.scatter(ejex,ejey, c = colores)
         plt.title(titulo)
     
 

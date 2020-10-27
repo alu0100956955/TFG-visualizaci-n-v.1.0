@@ -5,7 +5,7 @@ from grafica_mat import Linea_mat, Box_matplotlib , Barras_matplotlib, Histogram
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
 from grafica_ploty import Lineas_plotly, Barras_plotly, Mapa_plotly, Scatter_plotly, Box_plotly, Histograma_plotly
-from scikit import Gausian, Kneighbors, Tree, Linear, Gradient, Isotonic
+from scikit import Gausian, Kneighbors, Tree, Linear, Gradient, Isotonic, Kmeans, Mixture, DBscan
 
 # NO ES UN PATRON FACTORY, tengo que cambiarle el nombre y actualizar las referencias
 class Factory:
@@ -47,7 +47,7 @@ class Factory:
             14: Linear,
             15: Gradient,
             16: Isotonic,
-            0: Kneighbors
+            0: Kmeans
         }
         # 0: cluestering
 
