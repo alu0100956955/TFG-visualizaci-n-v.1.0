@@ -10,6 +10,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.isotonic import IsotonicRegression
+from sklearn.cluster import KMeans
 import math
 
 
@@ -89,8 +90,24 @@ class Representacion:
         plt.xlabel("Porcentaje de conjunto de pruebas")
         plt.legend()
 
+
+        #plt.subplot(224)
+        #coloresClasificacion
+        #plt.scatter(ejex,ejey,c=coloresClasifiacion)
+        #plt.title(data.getTitle() + " Clasificados")
+        #plt.ylabel(data.getSeleccionEjeY())
+        #plt.xlabel(data.getSeleccionEjeX())
+        #plt.legend()
         #plt.show()    
     
+        # https://matplotlib.org/3.1.1/gallery/lines_bars_and_markers/scatter_with_legend.html
+        # fig, ax = 
+        plt.subplot(224)
+        colores = Representacion.coloresClasificacion(algoritmo.predict(datos), data.getSeleccionados())
+        ejex, ejey = list(zip(*datos))
+        plt.scatter(ejex, ejey , c = colores)
+        plt.title("Datos clasificados")
+
         #plt.subplot(224)  # No lo muestra como me gustaria puede deberse a como creo la matriz de confusión
         disp = metrics.plot_confusion_matrix(algoritmo, X_test, y_test, normalize = 'true')
         disp.figure_.suptitle("Confusion Matrix")
@@ -112,6 +129,17 @@ class Representacion:
                 etiquetas.append(selec)
             datos += aux 
         return datos, etiquetas
+
+    def coloresClasificacion(clasificacion,opciones):
+        # Le pasaremos el array con todos los datos clasificados y las opciones escogias, crearemos un metodo que recorra las opciones escogidas y dependiendo de que pos este le de esa num de pos a esa etiqueta
+        # Recorreremos el array y por cada componente llameros la funcion, guardaremos el resultado en una lista
+        # Devolvemos la lista
+        #print("Colores clasificacion")
+        colores = []
+        for i in clasificacion:
+            colores.append(opciones.index(i))
+
+        return colores
 
 
 
@@ -162,7 +190,7 @@ class Regresion:
             regresion_y = model.predict(X_test)
             plt.subplot(dim, dim, i+1)
             plt.scatter(X_train,y_train)
-            plt.plot(X_test, regresion_y,c = 'red')
+            plt.plot(X_test, regresion_y,c = 'red') # repretar varias, cada una con su leyenda, con color <----------------
             plt.title(seleccionados[i])
 
 
@@ -204,8 +232,29 @@ class Clustering:
         # Representar los centros de cluster
         # Usar al metodo de medicion de clustering para otra grafica
 
+        seleccionados = data.getSeleccionados() # Las opciones seleccionadas
+        cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
+
         ejex, ejey , colores = Clustering.combinacionDatos(data)
-        Clustering.dibujardatos(ejex, ejey,"Datos entrenamiento" +data.getTitle(), colores,2,1) # descablear
+        Clustering.dibujardatos(ejex, ejey,"Datos entrenamiento" +data.getTitle(), colores,2,1) # cableado por que habra un numero fijo de subventanas
+
+        
+
+        # metodo clustering
+        puntos = list(zip(ejex,ejey))
+        model = modelo(n_clusters = cantidadSeleccionados).fit(puntos)
+        # entrenarlo
+        
+        y_km = model.fit_predict(puntos)
+        # representarlo
+        plt.subplot(2,2,2)
+        colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
+        #for i in range(cantidadSeleccionados):
+            # podria combertir la i en float y sumarle un 0,1 para la segunda
+        #    plt.scatter(puntos[y_km == i,0], points[y_km == i,1], color = colores[i])   # tengo que generar los float de otra manera| pueden ser slices
+        # Representar mediciones
+        
+
         plt.show()
 
 
@@ -228,6 +277,7 @@ class Clustering:
         return ejex, ejey, colores
 
 
+
     # Metodo para dibujar los datos den entrenamiento y los de predecir, deberia usarlo con el de arriba
     def dibujardatos(ejex, ejey,titulo, colores, dimension, posicion):
         #ejex,ejey = zip(*datos)
@@ -241,7 +291,7 @@ class Clustering:
 class Kmeans:
 
     def show(data):
-        Clustering.show(data,Kmeans)
+        Clustering.show(data,KMeans)
 
 class Mixture:
 
