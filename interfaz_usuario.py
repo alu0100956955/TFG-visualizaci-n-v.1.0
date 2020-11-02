@@ -71,7 +71,7 @@ class Usuario:
             #opcionesEjes.bind("<<comboboxselected>>", elegirEje)
 
             labelEspacio.grid(column = 2, row = 13 )
-            if(eleccionUsuario < 7):
+            if((eleccionUsuario != 7) or (eleccionUsuario != 9) or (eleccionUsuario != 10)):# RLY
                 labelEjeX.grid(column = 2, row = 14)
                 opcionesEjesX.grid(column = 2, row = 15)
             
