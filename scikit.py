@@ -19,6 +19,7 @@ class Representacion:
 
     def show(data, algoritmo_):
 
+        plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
         algoritmo = algoritmo_()
         training_accuracy = []
         test_accuracy = []
@@ -141,7 +142,10 @@ class Representacion:
 
         return colores
 
+class AllClasification:
 
+    def show(data):
+        print("todas las clasificaciones")
 
 
 class Gausian:
@@ -169,6 +173,7 @@ class Regresion:
         # Si pasan varias opciones se podria hacer un bucle que habra varias veces estas graficas
         # Tambien podria representar solo la grafica final, siendo un color para los datos de entrenamiento otro para los datos de testeo y la linea
 
+        plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
         seleccionados = data.getSeleccionados() # Las opciones seleccionadas
         cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
         dim = Regresion.dimensiones(cantidadSeleccionados) # con la cantidad de seleccionados genero las dimensiones para el subplot
@@ -201,6 +206,10 @@ class Regresion:
         # devuelvo la raiz redondeada hacia arriba de 
         return math.ceil(math.sqrt(cantidad))
 
+class AllRegresion:
+
+    def show():
+        print("Todos las regresiones")
 
 class Linear:
 
@@ -222,7 +231,7 @@ class Isotonic:
 class Clustering:
 
     def show(data, modelo):
-        print("sin terminar") 
+        #print("sin terminar") 
         # En total quiero que haya 4 graficas que aporten informacion
         # Separar los datos
         # representar los datos del dataset con el metodo
@@ -232,6 +241,7 @@ class Clustering:
         # Representar los centros de cluster
         # Usar al metodo de medicion de clustering para otra grafica
 
+        plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
         seleccionados = data.getSeleccionados() # Las opciones seleccionadas
         cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
 
@@ -249,9 +259,13 @@ class Clustering:
         # representarlo
         plt.subplot(2,2,2)
         colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
-        #for i in range(cantidadSeleccionados):
+        for i in range(cantidadSeleccionados):
             # podria combertir la i en float y sumarle un 0,1 para la segunda
-        #    plt.scatter(puntos[y_km == i,0], points[y_km == i,1], color = colores[i])   # tengo que generar los float de otra manera| pueden ser slices
+            primero = i+0,0
+            segundo = i+0,1
+            #plt.scatter(puntos[y_km == primero], puntos[y_km == segundo], color = colores[i])   # tengo que generar los float de otra manera| pueden ser slices
+        plt.scatter(ejex, ejey, c = y_km)
+        plt.title("Clustering")
         # Representar mediciones
         
 
@@ -286,7 +300,10 @@ class Clustering:
         plt.title(titulo)
     
 
+class AllClustering:
 
+    def show():
+        print("Todos los clustering")
 
 class Kmeans:
 
