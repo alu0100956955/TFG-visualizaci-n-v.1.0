@@ -11,7 +11,10 @@ from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.isotonic import IsotonicRegression
 from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture
+from sklearn.cluster import DBSCAN
 import math
+import itertools
 
 
 # Como por ahora las tres clases representan de la misma forma por ahora empleo esta clase para representar pasandole el algoritmo
@@ -145,7 +148,8 @@ class Representacion:
 class AllClasification:
 
     def show(data):
-        print("todas las clasificaciones")
+        print("Todas las clasificaciones")
+
 
 
 class Gausian:
@@ -182,8 +186,8 @@ class Regresion:
             # TODO: Tendria que controlar si se pasa un eje no numerico
             X_train, X_test, y_train, y_test = train_test_split(data.getEje(data.getSeleccionEjeX(),seleccionados[i]), data.getEje(data.getSeleccionEjeY(),seleccionados[i]), test_size=0.6, random_state=0)
             
-
-            X_train = np.reshape(X_train, (-1, 1))
+            if(reshape):
+                X_train = np.reshape(X_train, (-1, 1))
             X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
             if(reshape):    # if es de tipo isotonic no hago el reshape
                 X_test = np.reshape(X_test, (-1, 1))
@@ -206,10 +210,110 @@ class Regresion:
         # devuelvo la raiz redondeada hacia arriba de 
         return math.ceil(math.sqrt(cantidad))
 
+    def combinacionDatos(data):
+        ejex = []
+        ejey = []
+        seleccionados = data.getSeleccionados()
+        for i in range(len(seleccionados)):
+            if i == 0:
+                ejex = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
+                ejey = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+            ejex += data.getEje(data.getSeleccionEjeX(),seleccionados[i])
+            ejey += data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+            
+        return ejex, ejey
+
 class AllRegresion:
 
-    def show():
-        print("Todos las regresiones")
+    def show(data):
+        
+        
+        plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
+        seleccionados = data.getSeleccionados() # Las opciones seleccionadas
+        cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
+        dim = Regresion.dimensiones(cantidadSeleccionados) # con la cantidad de seleccionados genero las dimensiones para el subplot
+
+        modelos = [LinearRegression, GradientBoostingRegressor, IsotonicRegression]
+        ejex, ejey = Regresion.combinacionDatos(data)
+        colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
+        for i in range(len(modelos)):
+            # TODO: Tendria que controlar si se pasa un eje no numerico
+            X_train, X_test, y_train, y_test = train_test_split(ejex, ejey, test_size=0.6, random_state=0)
+            #print(np.shape(X_train))
+            if(i != 2):
+                X_train = np.reshape(X_train, (-1, 1))
+            X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
+            if(i != 2):    # if es de tipo isotonic no hago el reshape
+                X_test = np.reshape(X_test, (-1, 1))
+
+            model = modelos[i]()
+            #print(np.shape(X_train))
+            model.fit(X_train,y_train)
+            regresion_y = model.predict(X_test)
+            plt.subplot(1, 3, i+1)
+            plt.scatter(X_train,y_train)
+            plt.plot(X_test, regresion_y,c = colores[i]) # repretar varias, cada una con su leyenda, con color <----------------
+            plt.title(model)
+
+
+        plt.show()
+
+        # slice notation https://stackoverflow.com/questions/509211/understanding-slice-notation
+class AllRegresion2:
+
+    def show(data):
+
+        plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
+        seleccionados = data.getSeleccionados() # Las opciones seleccionadas
+        cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
+        dim = Regresion.dimensiones(cantidadSeleccionados) # con la cantidad de seleccionados genero las dimensiones para el subplot
+        ejex = []
+        ejey = []
+        modelos = [IsotonicRegression, LinearRegression, GradientBoostingRegressor ]
+        #ejex, ejey = Regresion.combinacionDatos(data)
+        colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
+        seleccionados = data.getSeleccionados()
+        cantidadSeleccionados = len(seleccionados)
+        for i in range(len(seleccionados)):
+            ejex = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
+            ejey = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+
+            X_train, X_test, y_train, y_test = train_test_split( ejex , ejey , test_size=0.6, random_state=0) # dimensiones de los X-train
+            plt.subplot(cantidadSeleccionados, 3, i+1)  # Ajustar las dimensiones | cambiar de sitio
+            #print(np.shape(X_train))
+            for j in range(len(modelos)):
+                # TODO: Tendria que controlar si se pasa un eje no numerico
+                
+            
+                if(j != 0):
+                    #print(j)
+                    X_train = np.reshape(X_train, (-1, 1))
+                #if (j == 2):  # Problema de 1d array https://stackoverflow.com/questions/35812074/shortest-syntax-to-use-numpy-1d-array-as-sklearn-x
+                 #   X_train = np.reshape(X_train, (1,-1))
+                 #   X_train = list(itertools.chain(X_train))
+                 #   X_train = X_train[:, None]
+                 #   X_train = np.matrix(X_train).T.A
+                X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
+                if(j != 0):    # if es de tipo isotonic no hago el reshape
+                    X_test = np.reshape(X_test, (-1, 1))
+                #if(j == 2):    # if es de tipo isotonic tengo que rehacer el reshape
+                  #  X_test = list(itertools.chain(X_test))
+                  #  X_test = X_test[:, None]
+                  #  X_test = np.matrix(X_test).T.A
+
+                model = modelos[j]()
+                #print(np.shape(X_train))
+                model.fit(X_train,y_train)
+                regresion_y = model.predict(X_test)
+
+                
+                plt.scatter(X_train,y_train)
+                plt.plot(X_test, regresion_y,c = colores[i]) # repretar varias, cada una con su leyenda, con color <----------------
+                plt.title(model)
+
+
+        plt.show()
+
 
 class Linear:
 
@@ -246,7 +350,7 @@ class Clustering:
         cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
 
         ejex, ejey , colores = Clustering.combinacionDatos(data)
-        Clustering.dibujardatos(ejex, ejey,"Datos entrenamiento" +data.getTitle(), colores,2,1) # cableado por que habra un numero fijo de subventanas
+        Clustering.dibujardatos(ejex, ejey,"Datos entrenamiento" +data.getTitle(), colores,2,2,1) # cableado por que habra un numero fijo de subventanas
 
         
 
@@ -293,17 +397,42 @@ class Clustering:
 
 
     # Metodo para dibujar los datos den entrenamiento y los de predecir, deberia usarlo con el de arriba
-    def dibujardatos(ejex, ejey,titulo, colores, dimension, posicion):
+    def dibujardatos(ejex, ejey,titulo, colores, dimension1, dimension2, posicion):
         #ejex,ejey = zip(*datos)
-        plt.subplot(dimension, dimension, posicion)
+        plt.subplot(dimension1, dimension2, posicion)
         plt.scatter(ejex,ejey, c = colores)
         plt.title(titulo)
     
 
 class AllClustering:
 
-    def show():
-        print("Todos los clustering")
+    def show(data):
+
+        plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
+        seleccionados = data.getSeleccionados() # Las opciones seleccionadas
+        cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
+
+        ejex, ejey , colores = Clustering.combinacionDatos(data)
+
+        puntos = list(zip(ejex,ejey))
+        
+        modelos = [KMeans,GaussianMixture, DBSCAN]  # Los distintos tipos de clustering
+        i = 1
+        for modelo in modelos:
+            if(i == 1):
+                model = modelo(n_clusters = cantidadSeleccionados).fit(puntos)
+            if(i == 2):
+                model = modelo(n_components = cantidadSeleccionados)
+            if(i == 3):
+                model = modelo()
+            y_km = model.fit_predict(puntos)
+            Clustering.dibujardatos(ejex,ejey,modelo,y_km,1,3,i)
+            i += 1
+
+        plt.show()
+
+
+
 
 class Kmeans:
 
