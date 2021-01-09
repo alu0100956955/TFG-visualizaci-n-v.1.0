@@ -250,7 +250,7 @@ class AllRegresion:
             #print(np.shape(X_train))
             model.fit(X_train,y_train)
             regresion_y = model.predict(X_test)
-            plt.subplot(1, 3, i+1)
+            plt.subplot(1, len(modelos), i+1)
             plt.scatter(X_train,y_train)
             plt.plot(X_test, regresion_y,c = colores[i]) # repretar varias, cada una con su leyenda, con color <----------------
             plt.title(model)
@@ -274,17 +274,18 @@ class AllRegresion2:
         colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
         seleccionados = data.getSeleccionados()
         cantidadSeleccionados = len(seleccionados)
+        indiceSubgrafica = 1
         for i in range(len(seleccionados)):
             ejex = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
             ejey = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
 
             X_train, X_test, y_train, y_test = train_test_split( ejex , ejey , test_size=0.6, random_state=0) # dimensiones de los X-train
-            plt.subplot(cantidadSeleccionados, 3, i+1)  # Ajustar las dimensiones | cambiar de sitio
+            
             #print(np.shape(X_train))
             for j in range(len(modelos)):
                 # TODO: Tendria que controlar si se pasa un eje no numerico
-                
-            
+                plt.subplot(cantidadSeleccionados, len(modelos), indiceSubgrafica)  # Para marcar los subplots de las graficas
+                indiceSubgrafica = indiceSubgrafica + 1
                 if(j != 0):
                     #print(j)
                     X_train = np.reshape(X_train, (-1, 1))
