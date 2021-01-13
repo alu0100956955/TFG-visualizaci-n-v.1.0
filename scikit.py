@@ -17,6 +17,9 @@ import math
 import itertools
 
 
+# Para mostrar la matriz de confusion con matplolib
+# https://stackoverflow.com/questions/19233771/sklearn-plot-confusion-matrix-with-labels
+
 # Como por ahora las tres clases representan de la misma forma por ahora empleo esta clase para representar pasandole el algoritmo
 class Representacion:
 
@@ -148,7 +151,57 @@ class Representacion:
 class AllClasification:
 
     def show(data):
-        print("Todas las clasificaciones")
+            plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
+            seleccionados = data.getSeleccionados() # Las opciones seleccionadas
+            cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
+            #dim = Regresion.dimensiones(cantidadSeleccionados) # con la cantidad de seleccionados genero las dimensiones para el subplot
+
+            modelos = [GaussianNB, KNeighborsClassifier, DecisionTreeClassifier] # modelos de clasificacion
+            ejex, ejey = Regresion.combinacionDatos(data)
+            colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
+
+            # Para los datos combinare los datos de los dos ejes empleando zip
+            datos, etiquetas = Representacion.DatosEtiquetas(data)
+            contador = 1 # VAriable para controlar la subgrafica actual
+            for i in range(len(modelos)):
+                algoritmo = modelos[i]()
+                training_accuracy = []
+                test_accuracy = []
+
+                # Cambio el porcentaje de entrenamiento y testeo
+                porcentajes = np.arange(0.4, 0.9, 0.05)
+                for porcentaje in porcentajes:    # Bucle para hacer la gr�fica
+
+
+                    # El primero seran los datos el segundo las etiquetas
+                    X_train, X_test, y_train, y_test = train_test_split(datos, etiquetas, test_size=porcentaje , random_state=0)
+                    algoritmo.fit(X_train, y_train)    
+                    # record training set accuracy    
+                    training_accuracy.append(algoritmo.score(X_train, y_train))    
+                    # record generalization accuracy    
+                    test_accuracy.append(algoritmo.score(X_test, y_test))
+
+                # La primera grafica la encargada de ver como de eficiente es el algoritmo
+                plt.subplot(len(modelos),2,contador)
+                plt.plot(porcentajes, training_accuracy, label="training accuracy")
+                plt.plot(porcentajes, test_accuracy, label="test accuracy")
+                plt.ylabel("Accuracy")
+                plt.xlabel("Porcentaje de conjunto de pruebas")
+                plt.legend()
+
+                contador = contador + 1 # para la siguiente sub grafica
+                #La segunda gráfica 
+                plt.subplot(len(modelos),2,contador)
+                colores = Representacion.coloresClasificacion(algoritmo.predict(datos), data.getSeleccionados())
+                ejex, ejey = list(zip(*datos))
+                plt.scatter(ejex, ejey , c = colores)
+                plt.title("Datos clasificados")
+
+                contador = contador + 1
+
+                
+
+            plt.show()
 
 
 
@@ -223,6 +276,7 @@ class Regresion:
             
         return ejex, ejey
 
+    # Una gráfica por modelo, se combinan los datos de todas las opciones seleccionadas
 class AllRegresion:
 
     def show(data):
@@ -258,7 +312,8 @@ class AllRegresion:
 
         plt.show()
 
-        # slice notation https://stackoverflow.com/questions/509211/understanding-slice-notation
+ # slice notation https://stackoverflow.com/questions/509211/understanding-slice-notation
+ # Una gráfica por metodo y opcion seleccionada
 class AllRegresion2:
 
     def show(data):
@@ -431,7 +486,6 @@ class AllClustering:
             i += 1
 
         plt.show()
-
 
 
 
