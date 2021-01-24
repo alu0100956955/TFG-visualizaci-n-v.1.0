@@ -15,6 +15,7 @@ from sklearn.mixture import GaussianMixture
 from sklearn.cluster import DBSCAN
 import math
 import itertools
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 
 # Para mostrar la matriz de confusion con matplolib
@@ -29,6 +30,8 @@ class Representacion:
         algoritmo = algoritmo_()
         training_accuracy = []
         test_accuracy = []
+        mean_squared = []
+        mean_absolute = []
 
         # Para los datos combinare los datos de los dos ejes empleando zip
         # Las etiquetas seran las opciones escogidas
@@ -47,6 +50,11 @@ class Representacion:
             training_accuracy.append(algoritmo.score(X_train, y_train))    
             # record generalization accuracy    
             test_accuracy.append(algoritmo.score(X_test, y_test))
+            predict = algoritmo.predict(X_train)
+            #print(predict.shape())
+            #print(len(X_train))
+            mean_squared = mean_squared_error(y_train, predict) # Necesita la Y que contiene las etiquetas ya que el predict al ser clasificacion devulve etiquetas
+            mean_absolute = mean_absolute_error(X_train, predict)
 
 
         
@@ -65,7 +73,7 @@ class Representacion:
         colores = [0] * len(ejex)
 
         # Los 3 numeros representan: los dos primeros las dimensiones el tercero la posicion
-        plt.subplot(221)
+        plt.subplot(321)
 
         plt.scatter(ejex,ejey,c=colores)
         plt.title(data.getTitle() + " Datos de entrenamiento")
@@ -81,7 +89,7 @@ class Representacion:
             ejex.append(auxX[i])
             ejey.append(auxY[i])
     
-        plt.subplot(222)
+        plt.subplot(322)
         # CODIGO DUPLICADO, podria hacer esto en un bucle y que lo otro fuese un metodo para añadir nuevos datos al scatter TODO
         plt.scatter(ejex,ejey, c=colores)
         plt.title(data.getTitle() + " + Datos de Testeo")
@@ -90,7 +98,7 @@ class Representacion:
         #plt.show() # Solo un show ya que es como un exit()
 
 
-        plt.subplot(223)
+        plt.subplot(323)
         plt.plot(porcentajes, training_accuracy, label="training accuracy")
         plt.plot(porcentajes, test_accuracy, label="test accuracy")
         plt.ylabel("Accuracy")
@@ -109,11 +117,21 @@ class Representacion:
     
         # https://matplotlib.org/3.1.1/gallery/lines_bars_and_markers/scatter_with_legend.html
         # fig, ax = 
-        plt.subplot(224)
+        plt.subplot(324)
         colores = Representacion.coloresClasificacion(algoritmo.predict(datos), data.getSeleccionados())
         ejex, ejey = list(zip(*datos))
         plt.scatter(ejex, ejey , c = colores)
         plt.title("Datos clasificados")
+
+
+        plt.subplot(325)
+        plt.plot(porcentajes, mean_squared, label="Error cuadratico")
+        plt.plot(porcentajes, mean_absolute, label="Error absoluto")
+        plt.ylabel("Accuracy")
+        plt.xlabel("Porcentaje de conjunto de pruebas")
+        plt.legend()
+
+
 
         #plt.subplot(224)  # No lo muestra como me gustaria puede deberse a como creo la matriz de confusión
         disp = metrics.plot_confusion_matrix(algoritmo, X_test, y_test, normalize = 'true')
@@ -235,6 +253,9 @@ class Regresion:
         cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
         dim = Regresion.dimensiones(cantidadSeleccionados) # con la cantidad de seleccionados genero las dimensiones para el subplot
 
+        mean_squared = [] # para guardar el error cuadratico
+        mean_absolute = [] # para guardar el error absoluto
+
         for i in range(cantidadSeleccionados):
             # TODO: Tendria que controlar si se pasa un eje no numerico
             X_train, X_test, y_train, y_test = train_test_split(data.getEje(data.getSeleccionEjeX(),seleccionados[i]), data.getEje(data.getSeleccionEjeY(),seleccionados[i]), test_size=0.6, random_state=0)
@@ -255,13 +276,28 @@ class Regresion:
             plt.plot(X_test, regresion_y,c = 'red') # repretar varias, cada una con su leyenda, con color <----------------
             plt.title(seleccionados[i])
 
+            predict = model.predict(X_train)
+            mean_squared.append(mean_squared_error(y_train, predict)) # La y_train tiene los datos originales para comprarlos con la predicción
+            mean_absolute.append(mean_absolute_error(y_train, predict))
+
+
+        # hago una subgrafica con los errores absoluto y cuadratico
+        errores = ["Cuadratic","Absolute"]
+
+        plt.subplot(dim, dim, cantidadSeleccionados+1)
+        plt.bar(seleccionados,mean_squared, label="Error cuadratico" )
+        plt.title("Errorr Cuadratico")
+
+        plt.subplot(dim, dim, dim+dim)
+        plt.bar(seleccionados, mean_absolute, label = "Error absoluto")
+        plt.title("Errorr Absoluto")
 
         plt.show()
 
         # Metodo para calcular la dimension de los subplot
     def dimensiones(cantidad):
         # devuelvo la raiz redondeada hacia arriba de 
-        return math.ceil(math.sqrt(cantidad))
+        return math.ceil(math.sqrt(cantidad+2)) # Se le suma 2 para poder meter la subgrafica de los errores medio y cuadratico
 
     def combinacionDatos(data):
         ejex = []
