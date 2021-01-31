@@ -30,8 +30,8 @@ class Representacion:
         algoritmo = algoritmo_()
         training_accuracy = []
         test_accuracy = []
-        mean_squared = []
-        mean_absolute = []
+        #mean_squared = []
+        #mean_absolute = []
 
         # Para los datos combinare los datos de los dos ejes empleando zip
         # Las etiquetas seran las opciones escogidas
@@ -50,11 +50,11 @@ class Representacion:
             training_accuracy.append(algoritmo.score(X_train, y_train))    
             # record generalization accuracy    
             test_accuracy.append(algoritmo.score(X_test, y_test))
-            predict = algoritmo.predict(X_train)
+            #predict = algoritmo.predict(X_train)
             #print(predict.shape())
             #print(len(X_train))
-            mean_squared = mean_squared_error(y_train, predict) # Necesita la Y que contiene las etiquetas ya que el predict al ser clasificacion devulve etiquetas
-            mean_absolute = mean_absolute_error(X_train, predict)
+            #mean_squared = mean_squared_error(y_train, predict) # Necesita la Y que contiene las etiquetas ya que el predict al ser clasificacion devulve etiquetas
+            #mean_absolute = mean_absolute_error(X_train, predict)
 
 
         
@@ -117,19 +117,21 @@ class Representacion:
     
         # https://matplotlib.org/3.1.1/gallery/lines_bars_and_markers/scatter_with_legend.html
         # fig, ax = 
+        seleccionados = data.getSeleccionados()
         plt.subplot(324)
         colores = Representacion.coloresClasificacion(algoritmo.predict(datos), data.getSeleccionados())
         ejex, ejey = list(zip(*datos))
         plt.scatter(ejex, ejey , c = colores)
+        #plt.legend(seleccionados)
         plt.title("Datos clasificados")
 
 
-        plt.subplot(325)
-        plt.plot(porcentajes, mean_squared, label="Error cuadratico")
-        plt.plot(porcentajes, mean_absolute, label="Error absoluto")
-        plt.ylabel("Accuracy")
-        plt.xlabel("Porcentaje de conjunto de pruebas")
-        plt.legend()
+        #plt.subplot(325)
+        #plt.plot(porcentajes, mean_squared, label="Error cuadratico")
+        #plt.plot(porcentajes, mean_absolute, label="Error absoluto")
+        #plt.ylabel("Accuracy")
+        #plt.xlabel("Porcentaje de conjunto de pruebas")
+        #plt.legend()
 
 
 
@@ -138,7 +140,7 @@ class Representacion:
         disp.figure_.suptitle("Confusion Matrix")
         print("Confusion matrix:\n%s" % disp.confusion_matrix)
         
-
+        plt.suptitle(algoritmo_.__name__) # para mostrar el modelo que se esta representando
         plt.show()
 
         # Devuelve los datos y las etiquetas necesarias para que tire el sistema
@@ -292,6 +294,8 @@ class Regresion:
         plt.bar(seleccionados, mean_absolute, label = "Error absoluto")
         plt.title("Errorr Absoluto")
 
+        plt.suptitle(modelo.__name__)
+
         plt.show()
 
         # Metodo para calcular la dimension de los subplot
@@ -343,7 +347,7 @@ class AllRegresion:
             plt.subplot(1, len(modelos), i+1)
             plt.scatter(X_train,y_train)
             plt.plot(X_test, regresion_y,c = colores[i]) # repretar varias, cada una con su leyenda, con color <----------------
-            plt.title(model)
+            plt.title(model.__name__)
 
 
         plt.show()
@@ -409,6 +413,7 @@ class AllRegresion2:
 
 class Linear:
 
+
     def show(data):
         Regresion.show(data,LinearRegression,True)
 
@@ -464,7 +469,7 @@ class Clustering:
         plt.title("Clustering")
         # Representar mediciones
         
-
+        plt.suptitle(modelo.__name__)
         plt.show()
 
 
