@@ -133,14 +133,15 @@ class Representacion:
         #plt.xlabel("Porcentaje de conjunto de pruebas")
         #plt.legend()
 
-
+        plt.suptitle(algoritmo_.__name__) # para mostrar el modelo que se esta representando
+        plt.tight_layout() # Para dar espacio a las subgraficas
 
         #plt.subplot(224)  # No lo muestra como me gustaria puede deberse a como creo la matriz de confusión
         disp = metrics.plot_confusion_matrix(algoritmo, X_test, y_test, normalize = 'true')
         disp.figure_.suptitle("Confusion Matrix")
         print("Confusion matrix:\n%s" % disp.confusion_matrix)
         
-        plt.suptitle(algoritmo_.__name__) # para mostrar el modelo que se esta representando
+        
         plt.show()
 
         # Devuelve los datos y las etiquetas necesarias para que tire el sistema
@@ -220,7 +221,7 @@ class AllClasification:
                 contador = contador + 1
 
                 
-
+            plt.tight_layout() # Para dar espacio a las subgraficas
             plt.show()
 
 
@@ -295,7 +296,7 @@ class Regresion:
         plt.title("Errorr Absoluto")
 
         plt.suptitle(modelo.__name__)
-
+        plt.tight_layout() # Para dar espacio a las subgraficas
         plt.show()
 
         # Metodo para calcular la dimension de los subplot
@@ -349,7 +350,7 @@ class AllRegresion:
             plt.plot(X_test, regresion_y,c = colores[i]) # repretar varias, cada una con su leyenda, con color <----------------
             plt.title(model.__name__)
 
-
+        plt.tight_layout() # Para dar espacio a las subgraficas
         plt.show()
 
  # slice notation https://stackoverflow.com/questions/509211/understanding-slice-notation
@@ -470,6 +471,7 @@ class Clustering:
         # Representar mediciones
         
         plt.suptitle(modelo.__name__)
+        plt.tight_layout() # Para dar espacio a las subgraficas
         plt.show()
 
 
@@ -526,6 +528,7 @@ class AllClustering:
             Clustering.dibujardatos(ejex,ejey,modelo,y_km,1,3,i)
             i += 1
 
+        plt.tight_layout() # Para dar espacio a las subgraficas
         plt.show()
 
 
