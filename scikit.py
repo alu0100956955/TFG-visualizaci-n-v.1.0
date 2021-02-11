@@ -16,7 +16,8 @@ from sklearn.cluster import DBSCAN
 import math
 import itertools
 from sklearn.metrics import mean_squared_error, mean_absolute_error
-
+import tkinter as tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # Para mostrar la matriz de confusion con matplolib
 # https://stackoverflow.com/questions/19233771/sklearn-plot-confusion-matrix-with-labels
@@ -283,6 +284,10 @@ class Regresion:
             mean_squared.append(mean_squared_error(y_train, predict)) # La y_train tiene los datos originales para comprarlos con la predicción
             mean_absolute.append(mean_absolute_error(y_train, predict))
 
+            # Linear regression
+            #peso = model.coef_ # Para los pesos
+            #intercep = model.intercept_ # Intercep
+
 
         # hago una subgrafica con los errores absoluto y cuadratico
         errores = ["Cuadratic","Absolute"]
@@ -297,6 +302,12 @@ class Regresion:
 
         plt.suptitle(modelo.__name__)
         plt.tight_layout() # Para dar espacio a las subgraficas
+        # Para meter las subgraficas en la ventana 
+        #root = tk.Tk() # para mostrar las subgraficas
+        #root.wm_title("Regresiones")
+        #canvas = FigureCanvasTkAgg(plt, master=root)
+        #canvas.show()
+
         plt.show()
 
         # Metodo para calcular la dimension de los subplot
@@ -316,6 +327,7 @@ class Regresion:
             ejey += data.getEje(data.getSeleccionEjeY(),seleccionados[i])
             
         return ejex, ejey
+
 
     # Una gráfica por modelo, se combinan los datos de todas las opciones seleccionadas
 class AllRegresion:
@@ -369,7 +381,8 @@ class AllRegresion2:
         #ejex, ejey = Regresion.combinacionDatos(data)
         colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
         seleccionados = data.getSeleccionados()
-        cantidadSeleccionados = len(seleccionados)
+        cantidadSeleccionados = len(seleccionados) + 2 # sumo dos para poder mostrar los erroes
+        cantidadModelos = len(modelos) + 2 # sumo dos para poder mostrar los errores
         indiceSubgrafica = 1
         for i in range(len(seleccionados)):
             ejex = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
@@ -377,10 +390,13 @@ class AllRegresion2:
 
             X_train, X_test, y_train, y_test = train_test_split( ejex , ejey , test_size=0.6, random_state=0) # dimensiones de los X-train
             
+            mean_squared = [] # para guardar el error cuadratico
+            mean_absolute = [] # para guardar el error absoluto
+
             #print(np.shape(X_train))
             for j in range(len(modelos)):
                 # TODO: Tendria que controlar si se pasa un eje no numerico
-                plt.subplot(cantidadSeleccionados, len(modelos), indiceSubgrafica)  # Para marcar los subplots de las graficas
+                plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)  # Para marcar los subplots de las graficas
                 indiceSubgrafica = indiceSubgrafica + 1
                 if(j != 0):
                     #print(j)
@@ -403,10 +419,27 @@ class AllRegresion2:
                 model.fit(X_train,y_train)
                 regresion_y = model.predict(X_test)
 
+                predict = model.predict(X_train)
+                mean_squared.append(mean_squared_error(y_train, predict)) # La y_train tiene los datos originales para comprarlos con la predicción
+                mean_absolute.append(mean_absolute_error(y_train, predict))
+
                 
                 plt.scatter(X_train,y_train)
                 plt.plot(X_test, regresion_y,c = colores[i]) # repretar varias, cada una con su leyenda, con color <----------------
                 plt.title(model)
+                #plt.tight_layout() # Para dar espacio a las subgraficas
+
+
+            graficas = ["Isotonic", "Linear", "Gradient"]
+            plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)
+            indiceSubgrafica = indiceSubgrafica + 1
+            plt.bar(graficas,mean_squared, label="Error cuadratico" )
+            plt.title("Errorr Cuadratico")
+
+            plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)
+            indiceSubgrafica = indiceSubgrafica + 1
+            plt.bar(graficas, mean_absolute, label = "Error absoluto")
+            plt.title("Errorr Absoluto")
 
 
         plt.show()
