@@ -156,7 +156,7 @@ class Dataset:
 
 
     #------------------ Actualizacion 2, machine learning ----------------------#
-
+    # Sin uso por ahora
     def setEtiquetas(self,array):
         self.etiquetas = array
 

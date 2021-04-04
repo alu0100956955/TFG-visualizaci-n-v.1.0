@@ -29,7 +29,11 @@ class Usuario:
         
         # El orden de como seran llamas estas funciones segun la interacion con el usuario esta indicada en el comentario encima del metodo
 
-        # 1. PRIMERO Metodo para cuando se escoja la fuente de datos
+        # 0. Elección de en serie o paralelo (Spark)
+        def spark():
+            print("Elección entre spark")
+
+        # 1.1 PRIMERO Metodo para cuando se escoja la fuente de datos
         def graficasNuevo(event):
             nonlocal dataS
             parse = Mediador.getParse(eleccionDropdown(dropdownFuenteDatos.get()))    # le pasamos la eleccion del usuario sobre la fuente de datos
@@ -45,6 +49,14 @@ class Usuario:
             opcionesEjesX["values"] = [*ejes]
             #opcionesDistribucion["values"] = ["1: Combinado","2: Sumado"]
             limpiarSeleccionado()
+
+        # 1.2 Primero Metodo para cuando se escoja spark para la selección de datos
+        # TODO declarar todo lo necesario para este metdodo
+        def graficasParalelo(event):
+            nonlocal dataS
+            parse = Mediador.getPaseParalelo(eleccionDropdownParalelo(dropdownFuenteDatosParalelo.get())) 
+            dataS = parse().getDataset()
+            # Espera si va a ser todo igual es mejor separar el metodo inicial con una condicion
 
 
         #2. SEGUNDO Metodo para añadir a la ventana el dropdownList para quel usuario escoja los elementos que quiere seleccionar
@@ -277,7 +289,8 @@ class Usuario:
         #rbCasosConfirmados.grid(column = 3, row = 1)
         #rbSegunda.grid(column = 3, row = 2)
         #rbParo.grid(column = 4, row = 1)
-        tipos = [ "2 : Accidentes de trafico", "3 : Paro en españa", "4 : Covid" , "5 : Cpu", "6 : LOL", "7 : Pokemon"] # "1:  Casos de covid confirmados", 
+        # "1:  Casos de covid confirmados", 
+        tipos = [ "2 : Accidentes de trafico", "3 : Paro en españa", "4 : Covid" , "5 : Cpu", "6 : LOL", "7 : Pokemon","8 : Derrame"] 
         dropdownFuenteDatos["values"] = [*tipos]
         dropdownFuenteDatos.grid(column = 2, row = 1)
         labelEspacio.grid(column = 2, row = 2 )

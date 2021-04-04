@@ -21,16 +21,18 @@ class ParseTemplate:
 
     def getDataset(self):
         data = Dataset("")
-        data.setIntFuente()
-        data.setOpciones()
+        #data.setIntFuente()
+        #data.setOpciones()
+
         #----------
         data.addOpcionEje("")
 
         #----------
         data.addElementoEje()
 
-        data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador","4: Barras navegador", 
-                              "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
+        #data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador","4: Barras navegador", 
+        #                      "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
+        data.setTiposGraficas(tiposGraficas)
         return data
 
 
@@ -671,7 +673,8 @@ class ParsePokemon:
         #                      "6 : dispersion navegador", "7 : box terminal", "9 : Histograma Terminal", "10: Histograma navegador","11: vecino", "0 : Pruebas"]) # "5. Dispersion terminal"
         data.setTiposGraficas(tiposGraficas)
         return data
-
+    #Si te preguntas por que hago una función que solo sera llamda una única vez es para que si tengo que modificar como guardar los dtos
+    # se que se encuentra todo dentro de esta función y así no ensució la función principal
     def getDatos(self):
         tipos = []
         total = []
@@ -718,5 +721,84 @@ class ParsePokemon:
 
         return self.df['Type 1'].unique().tolist()
 
+    # Sinceramente se que deben de haber otras formas de organizar la información en vez de tener que declarar tantas listas pero solo quiero terminar esto
+class ParseStroke:
+
+    def __init__(self):
+        self.df = pd.read_csv("data/Stroke-data.csv")
+
+    def getDataset(self):
+        data = Dataset("Derrame")
+        #data.setIntFuente()
+        #data.setOpciones()
+
+
+        #----------
+        data.addOpcionEje("Genero")
+        data.addOpcionEje("Edad")
+        data.addOpcionEje("Hypertension")
+        data.addOpcionEje("Problemas de corazon")
+        data.addOpcionEje("Trabajo")
+        data.addOpcionEje("Residencia")
+        data.addOpcionEje("Glucosa")
+        data.addOpcionEje("Bmi")
+        data.addOpcionEje("Fumador")
+
+        data.setOpciones(self.getOpciones()) # LAs opcuiiones
+
+        #----------
+        genero,edad,hypertension,corazon,trabajo,residencia,glucosa,bmi,fumador = self.getDatos()
+        data.addElementoEje(genero)
+        data.addElementoEje(edad)
+        data.addElementoEje(hypertension)
+        data.addElementoEje(corazon)
+        data.addElementoEje(trabajo)
+        data.addElementoEje(residencia)
+        data.addElementoEje(glucosa)
+        data.addElementoEje(bmi)
+        data.addElementoEje(fumador)
+
+        data.setTiposGraficas(tiposGraficas)
+        return data
+
+    def getDatos(self):
+        opciones = self.df['stroke'].unique().tolist() # Las opciones que seran mostradas al usuario
+        gender = []
+        age = []
+        hypertension = []
+        heart_disease = []
+        work = []
+        residence = []
+        glucose = []
+        bmi = []
+        smoking = []
+        for i in range(len(opciones)):
+            gender.append([])
+            age.append([])
+            hypertension.append([])
+            heart_disease.append([])
+            work.append([])
+            residence.append([])
+            glucose.append([])
+            bmi.append([])
+            smoking.append([])
+
+        for index, row in self.df.iterrows():
+            i = opciones.index(row['stroke'])  # Saco el indice de donde se guardaran los datos
+            gender[i].append(row['gender'])
+            age[i].append(row['age'])
+            hypertension[i].append(row['hypertension'])
+            heart_disease[i].append(row['heart_disease']) 
+            work[i].append(row['work_type'])
+            residence[i].append(row['Residence_type'])
+            glucose[i].append(row['avg_glucose_level'])
+            bmi[i].append(row['bmi']) # Cuidado con valores raros
+            smoking[i].append(row['smoking_status'])
+
+        return gender,age,hypertension,heart_disease,work,residence,glucose,bmi,smoking
+
+    def  getOpciones(self):
+
+        return self.df['stroke'].unique().tolist()
 
 #adfasf
