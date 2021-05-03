@@ -30,9 +30,8 @@ class ParseTemplate:
         #----------
         data.addElementoEje()
 
-        #data.setTiposGraficas(["1:  Linea Terminal", "2: Linea html", "3: Linea navegador","4: Barras navegador", 
-        #                      "6: dispersion navegador", "7: box terminal", "9: Histograma Terminal", "0: Pruebas"]) # "5. Dispersion terminal"
-        data.setTiposGraficas(tiposGraficas)
+
+        data.setTiposGraficas(tiposGraficas) # Los tipos de graficas es una variable global
         return data
 
 
@@ -671,7 +670,7 @@ class ParsePokemon:
 
         #data.setTiposGraficas(["1 :  Linea Terminal", "2 : Linea html", "3 : Linea navegador","4 : Barras navegador", 
         #                      "6 : dispersion navegador", "7 : box terminal", "9 : Histograma Terminal", "10: Histograma navegador","11: vecino", "0 : Pruebas"]) # "5. Dispersion terminal"
-        data.setTiposGraficas(tiposGraficas)
+        data.setTiposGraficas(tiposGraficas)  
         return data
     #Si te preguntas por que hago una función que solo sera llamda una única vez es para que si tengo que modificar como guardar los dtos
     # se que se encuentra todo dentro de esta función y así no ensució la función principal

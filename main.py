@@ -8,7 +8,7 @@ from interfaz_usuario import Usuario
 # main simple inicial para probar las graficas
 # to do : la labor de hablar con la clase Lector y Grafica deberia ser un mediador, por tanto implementar una clase mediador
 
-Instalador.comprobarLibrerias()
+Instalador.comprobarLibrerias() # TODO: Añadir librerias spark
 Usuario.ventanaUsuario()
 #Mediador.show()
 

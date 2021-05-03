@@ -37,7 +37,7 @@ class Usuario:
         def graficasNuevo(event):
             nonlocal dataS
             parse = Mediador.getParse(eleccionDropdown(dropdownFuenteDatos.get()))    # le pasamos la eleccion del usuario sobre la fuente de datos
-            dataS = parse().getDataset() # El pase es uno de los parses ubicados en el fichero leerDatos
+            dataS = parse().getDataset() # El parse es uno de los parses ubicados en el fichero leerDatos
             #dataS.setNumeroFuenteDatos()
             label2.grid(column = 2, row = 4)
             tipoGrafica.grid(column = 2, row = 5 )
@@ -52,12 +52,21 @@ class Usuario:
 
         # 1.2 Primero Metodo para cuando se escoja spark para la selección de datos
         # TODO declarar todo lo necesario para este metdodo
-        def graficasParalelo(event):
+        def graficasSpark(event):
             nonlocal dataS
-            parse = Mediador.getPaseParalelo(eleccionDropdownParalelo(dropdownFuenteDatosParalelo.get())) 
+            parse = Mediador.getParseSpark(eleccionDropdown(dropdownFuenteDatos.get())) # dropdownFuenteDatosParalelo ponerlo cuando este el boton para escoger spakr
             dataS = parse().getDataset()
             # Espera si va a ser todo igual es mejor separar el metodo inicial con una condicion
+            label2.grid(column = 2, row = 4)
+            tipoGrafica.grid(column = 2, row = 5 ) # Tiene que ser otra variable con desplegable, para poder bindear el metodo correcto
+            tipos = dataS.getTiposGraficas()
+            tipoGrafica["values"] = [*tipos] # PAra al dropdown que contiene los tipos de graficas tenga las opciones
+            # Para actualizar o implementar valores a las opciones de los ejes
+            ejes = dataS.getOpcionesEje()
+            opcionesEjesY["values"] = [*ejes]
+            opcionesEjesX["values"] = [*ejes]
 
+            limpiarSeleccionado()# Revisar que este metodo funcione para spark
 
         #2. SEGUNDO Metodo para añadir a la ventana el dropdownList para quel usuario escoja los elementos que quiere seleccionar
         def getSeleccionados(event):
@@ -100,6 +109,27 @@ class Usuario:
                 opcionesEjesX.grid_remove()
                 labelEjeX.grid_remove()
 
+        # Es igual al de arriba pero por si no funciona el de arriba y hay que modificar algo ya lo tengo en limpio
+        def getSeleccionadosParalelo(event):
+            nonlocal dataS
+            label3.grid(column = 2, row = 18)
+            opciones_ = dataS.getOpciones()
+            seleccionado.set(opciones[0])   # le asigno el primero como default
+            eleccionUsuario = eleccionDropdown(tipoGrafica.get())
+            nonlocal dropDownSeleccion
+            dropDownSeleccion["values"] = [*opciones_];
+            #dropDownSeleccion.set_completion_list(opciones_)   # intento de dropdown con autocomplete
+            dropDownSeleccion.bind("<<ComboboxSelected>>", addSeleccion)
+
+            labelEspacio.grid(column = 2, row = 13 )
+
+            labelEjeY.grid(column = 2, row = 16)
+            opcionesEjesY.grid(column = 2, row = 17) # esto es para elegir que representara el eje
+            botonTodasOpciones.grid(column = 3, row = 19)
+            dropDownSeleccion.grid(column = 2, row = 19 )
+
+            
+
         # 4. CUARTO metodo para poner en la ventana el boton para mostrar la grafica
         def getBotonShow(): # La funcion que Añade el boton para hacer la grafica | esta separado porque se puede pedir dentro de seleccionados o si es un mapa se pide solo
             # En la funcion recibe la opcion de grafica (int), el array con los elementos elegidos para mostrar (array), y la url de la fuente de datos para obtener el dataset (string)
@@ -113,7 +143,8 @@ class Usuario:
             dataS.setSeleccionados(elegidos)
             dataS.setSeleccionEjeX(ejeX)
             dataS.setSeleccionEjeY(ejeY)
-            Mediador.show(grafica, dataS)
+            Mediador.show(grafica, dataS) 
+
 
 
         
@@ -233,7 +264,8 @@ class Usuario:
         #rbSegunda.configure(state="disabled")   #Lo desactivo mientras mejoro el sistema, despues me pongo arreglar el parse
 
         dropdownFuenteDatos= ttk.Combobox(state = "readonly")
-        dropdownFuenteDatos.bind("<<ComboboxSelected>>",graficasNuevo)
+        dropdownFuenteDatos.bind("<<ComboboxSelected>>",graficasNuevo) 
+        #dropdownFuenteDatos.bind("<<ComboboxSelected>>",graficasSpark) # Metodo para Spark
 
         # --------------- Elementos para los histogramas -----------------
         labelOpcionesDistribuciones = ttk.Label(ventana, text = "Agrupación datos histograma")
@@ -291,7 +323,8 @@ class Usuario:
         #rbParo.grid(column = 4, row = 1)
         # "1:  Casos de covid confirmados", 
         tipos = [ "2 : Accidentes de trafico", "3 : Paro en españa", "4 : Covid" , "5 : Cpu", "6 : LOL", "7 : Pokemon","8 : Derrame"] 
-        dropdownFuenteDatos["values"] = [*tipos]
+        tiposSpark = ["1 : Pokemon","2 : Derrame"]
+        dropdownFuenteDatos["values"] = [*tipos] # MODIFICADO PARA PROBAR SPARK  !!!!!!!!!!!!!!!!!!!!!!!!! %%%%%%%%%%%%%%%%%
         dropdownFuenteDatos.grid(column = 2, row = 1)
         labelEspacio.grid(column = 2, row = 2 )
 

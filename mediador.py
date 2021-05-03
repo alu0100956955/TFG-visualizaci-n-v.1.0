@@ -23,6 +23,8 @@ class Mediador:
     def getParse(eleccion):  # le indicamos a la clase se seleccion que ha seleccionado el usuario y nos devuelve el parse correspondiente
         #return Factory.getParse(url)
         return Factory.getParse(eleccion)
+    def getParseSpark(eleccion):
+        return Factory.getParseSpark(eleccion)
 
     # Metodo antiguo
     # Llamo a la interfaz de usuario, esta me devuelve los valores del usuario, se los paso al parse, que me devulve las clases que necesito y ejecuto los metodos principales

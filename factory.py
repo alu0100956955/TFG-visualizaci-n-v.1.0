@@ -6,6 +6,8 @@ from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
 from grafica_ploty import Lineas_plotly, Barras_plotly, Mapa_plotly, Scatter_plotly, Box_plotly, Histograma_plotly
 from scikit import Gausian, Kneighbors, Tree, Linear, Gradient, Isotonic,AllRegresion, Kmeans, Mixture, DBscan,AllClustering, AllClasification, AllRegresion2
+from leerDatosSpark import ParsePokemonSpark
+
 
 # NO ES UN PATRON FACTORY, tengo que cambiarle el nombre y actualizar las referencias
 class Factory:
@@ -61,6 +63,16 @@ class Factory:
         elec = switcher.get(int(eleccion))
         contexto.setGrafica(elec)
 
+
+    def getParseSpark(eleccion):
+        switcher = {
+            1: ParsePokemonSpark,
+            2: "ParseAccidentesTrafico",
+            3: "Sin terminar"
+
+        }
+
+        return switcher.get(int(eleccion))
 
 
 #gfsdfgsdf
