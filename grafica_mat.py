@@ -31,7 +31,7 @@ class auxiliar():
 class Linea_mat(Grafica):
 
 
-#funcion encargada de hacer que no aparezcan todos los valores ya que eso hara la vision mas jodida
+#funcion encargada de hacer que no aparezcan todos los valores ya que eso hara la vision mas jodida | solo si es string algun eeje
     def ticks(self,array):
         i = 0
         for x in array:
@@ -54,6 +54,8 @@ class Linea_mat(Grafica):
             #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),seleccionados[i]), data.getSeleccionEjeY())
             ejeX = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
             ejeY = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+
+            ejeX,ejeY = Linea_mat.sort(ejeX,ejeY)
             #print(ejeX)
             #print(ejeY)
 
@@ -96,6 +98,15 @@ class Linea_mat(Grafica):
         else:
             colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w' ]
         return colors[indice]
+
+    # En caso de que el ejeX sea numerico lo ordena
+    # Le paso los dos ejes para que el valor de Y sea el que le corresponde
+    def sort(ejex,ejey): 
+        # https://www.programiz.com/python-programming/methods/built-in/sorted
+        if(isinstance(ejex[0],int) or isintance(ejex[0],float)  ):# Si es un int o float hay que ordenar
+            ejex, ejey = (list(t) for t in zip(*sorted(zip(ejex, ejey))))
+        
+        return ejex, ejey
 
     def prueba():
         a = l.ejeX(4)

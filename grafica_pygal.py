@@ -27,12 +27,12 @@ class Linea_pygal(Grafica):
         # Esto es para poner la orientacion dependiendo de donde ubique los datos de tipo temporal
         if(Linea_pygal.orientacion(data.getSeleccionEjeX())):
             
-            chart.x_labels = data.getEje(data.getSeleccionEjeX(), 0)
+            chart.x_labels = data.getEje(data.getSeleccionEjeX(), 0) # Por que 0?
             for selec in seleccionados:
                 chart.add(selec, data.getEje(data.getSeleccionEjeY(), selec))
         else:
             chart = pygal.HorizontalLine()
-            chart.x_labels = data.getEje(data.getSeleccionEjeY(), 0)
+            chart.x_labels = data.getEje(data.getSeleccionEjeY(), 0)# Por que 0?
             for selec in seleccionados:
                 chart.add(selec, data.getEje(data.getSeleccionEjeX(), selec))
 

@@ -96,7 +96,10 @@ class Dataset:
         #print(self.matrizEje[self.opciones.index(elemento)])
         #index = np.where(self.opciones == elemento) # esto podria meterlo en una funcion ya que lo uso en dos partes
         #print(elemento)
-        index = self.opciones.index(elemento)
+        if(elemento !=0):
+            index = self.opciones.index(elemento)
+        else:
+            index = 0
         #print(index)
         return matriz[index]
 
