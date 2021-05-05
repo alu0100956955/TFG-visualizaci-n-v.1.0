@@ -61,6 +61,7 @@ class Lineas_plotly(Grafica):
             #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
             ejeX = data.getEje(data.getSeleccionEjeX(),selec)
             ejeY = data.getEje(data.getSeleccionEjeY(),selec)
+            ejeX,ejeY = Lineas_plotly.sort(ejeX,ejeY)
             fig.add_trace(go.Scatter(x = ejeX, y = ejeY, name = selec))
         #fig.update_layout(title = 'Casos confirmados', xaxis_title="fecha",yaxis_title="Numero de casos")
         #fig.update_layout(xaxis_title=l.ejeX())
@@ -72,6 +73,13 @@ class Lineas_plotly(Grafica):
         # Para cambiar los valores del eje X
         #fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Grafica.espaciar(data.getEje("Dias",0))))
         fig.show()
+
+    def sort(ejex,ejey): 
+        # https://www.programiz.com/python-programming/methods/built-in/sorted
+        if(isinstance(ejex[0],int) or isintance(ejex[0],float)  ):# Si es un int o float hay que ordenar
+            ejex, ejey = (list(t) for t in zip(*sorted(zip(ejex, ejey))))
+        
+        return ejex, ejey
 
     # Metodo para comprobar si la eleccion del eje es de tipo dia, para arreglar el tipo de dato
     
