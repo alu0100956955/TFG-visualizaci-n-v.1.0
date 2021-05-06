@@ -232,8 +232,9 @@ class Histograma_matplotlib(Grafica):
             plt.subplot(x,y,i+1)
             ejeY = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
             plt.hist(ejeY, density=True, bins = 10)
-            ticks = np.linspace(min(ejeY),max(ejeY),10).astype(int)
-            plt.xticks(ticks) # Para los ticks del ejeX
+            # Esto me genera un intervalo de x ticks según el minimo y el máximo del eje que le indique
+            #ticks = np.linspace(min(ejeY),max(ejeY),10).astype(int) 
+            #plt.xticks(ticks) # Para los ticks del ejeX
             plt.ylabel("Frecuencia valores") # Label del eje Y
             plt.title(seleccionados[i])
             plt.xlabel(data.getSeleccionEjeY())
