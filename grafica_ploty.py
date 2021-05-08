@@ -43,7 +43,9 @@ class Barras_plotly(Grafica):
         for i in range(len(data.getEje(data.getSeleccionEjeX(),seleccionados[0]))):    # Que hace un 0 ahí??
             ticksy.append(i)
         # Para cambiar el eje X
-        fig.update_layout(xaxis = dict( tickmode = 'array', tickvals =ticksy , ticktext = Grafica.espaciar(data.getEje(data.getSeleccionEjeX(),seleccionados[0])) ) )
+        fig.update_layout(xaxis = dict(title=data.getSeleccionEjeX(), tickmode = 'array', tickvals =ticksy , 
+                                       ticktext = Grafica.espaciar(data.getEje(data.getSeleccionEjeX(),seleccionados[0])) ),
+                         yaxis=dict(title=data.getSeleccionEjeY())  )
         fig.show()
 
 
@@ -66,7 +68,7 @@ class Lineas_plotly(Grafica):
         #fig.update_layout(title = 'Casos confirmados', xaxis_title="fecha",yaxis_title="Numero de casos")
         #fig.update_layout(xaxis_title=l.ejeX())
         #fig.write_html('output/lineas_ploty.html', auto_open=True)   # para guardar la grafica en un html
-        fig.update_layout(title = data.getTitle())
+        fig.update_layout(title = data.getTitle(),xaxis=dict(title=data.getSeleccionEjeX()),yaxis=dict(title=data.getSeleccionEjeY()))
         #ticksy = []
         #for i in range(data.getEje("Dias",0).size):   # Este es el eje X por eso pongo Dias
         #    ticksy.append(i)
@@ -76,7 +78,7 @@ class Lineas_plotly(Grafica):
 
     def sort(ejex,ejey): 
         # https://www.programiz.com/python-programming/methods/built-in/sorted
-        if(isinstance(ejex[0],int) or isintance(ejex[0],float)  ):# Si es un int o float hay que ordenar
+        if(isinstance(ejex[0],int) or isinstance(ejex[0],float)  ):# Si es un int o float hay que ordenar
             ejex, ejey = (list(t) for t in zip(*sorted(zip(ejex, ejey))))
         
         return ejex, ejey
@@ -210,6 +212,7 @@ class Box_plotly(Grafica):
         #dataframe = pd.DataFrame({ "Seleccionado":seleccionados , data.getSeleccionEjeY():ejeY })
         print(dataframe)
         fig = px.box(dataframe, x=seleccionados, y=data.getSeleccionEjeY())   
+        fig.update_layout(title = data.getTitle(),xaxis=dict(title=data.getSeleccionEjeX()),yaxis=dict(title=data.getSeleccionEjeY()))
         fig.show()
 
 # https://www.tutorialspoint.com/plotly/plotly_distplots_density_and_error_bar_plot.htm

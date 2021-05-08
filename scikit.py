@@ -279,6 +279,8 @@ class Regresion:
             plt.scatter(X_train,y_train)
             plt.plot(X_test, regresion_y,c = 'red') # repretar varias, cada una con su leyenda, con color <----------------
             plt.title(seleccionados[i])
+            plt.xlabel(data.getSeleccionEjeX())
+            plt.ylabel(data.getSeleccionEjeY())
 
             predict = model.predict(X_train)
             mean_squared.append(mean_squared_error(y_train, predict)) # La y_train tiene los datos originales para comprarlos con la predicción
@@ -293,21 +295,17 @@ class Regresion:
 
             # Isotonic regresion y = 
 
-
-            
-
-
         # hago una subgrafica con los errores absoluto y cuadratico
         errores = ["Cuadratic","Absolute"]
 
         plt.subplot(dim, dim, cantidadSeleccionados+1)
         plt.bar(seleccionados,mean_squared, label="Error cuadratico" )
-        plt.title("Errorr Cuadratico")
+        plt.title("Error Cuadratico")
 
         plt.subplot(dim, dim, dim+dim)
         plt.bar(seleccionados, mean_absolute, label = "Error absoluto")
-        plt.title("Errorr Absoluto")
-
+        plt.title("Error Absoluto")
+        
         plt.suptitle(modelo.__name__)
         plt.tight_layout() # Para dar espacio a las subgraficas
         # Para meter las subgraficas en la ventana 
@@ -478,7 +476,6 @@ class Isotonic:
 class Clustering:
 
     def show(data, modelo):
-        #print("sin terminar") 
         # En total quiero que haya 4 graficas que aporten informacion
         # Separar los datos
         # representar los datos del dataset con el metodo
@@ -493,13 +490,15 @@ class Clustering:
         cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
 
         ejex, ejey , colores = Clustering.combinacionDatos(data)
-        Clustering.dibujardatos(ejex, ejey,"Datos entrenamiento" +data.getTitle(), colores,2,2,1) # cableado por que habra un numero fijo de subventanas
+        # cableado por que habra un numero fijo de subventanas
+        Clustering.dibujardatos(ejex, ejey,"Datos entrenamiento" +data.getTitle(), colores,2,2,1, data.getSeleccionEjeX(),data.getSeleccionEjeY()) 
 
         
 
         # metodo clustering
         puntos = list(zip(ejex,ejey))
-        model = modelo(n_clusters = cantidadSeleccionados).fit(puntos)
+        #model = modelo(n_clusters = cantidadSeleccionados).fit(puntos)# solo se puede hacer esto si es KMeans
+        model = modelo().fit(puntos)
         # entrenarlo
         
         y_km = model.fit_predict(puntos)
@@ -513,6 +512,9 @@ class Clustering:
             #plt.scatter(puntos[y_km == primero], puntos[y_km == segundo], color = colores[i])   # tengo que generar los float de otra manera| pueden ser slices
         plt.scatter(ejex, ejey, c = y_km)
         plt.title("Clustering")
+        plt.xlabel(data.getSeleccionEjeX())
+        plt.ylabel(data.getSeleccionEjeY())
+        
         # Representar mediciones
         
         plt.suptitle(modelo.__name__)
@@ -541,11 +543,13 @@ class Clustering:
 
 
     # Metodo para dibujar los datos den entrenamiento y los de predecir, deberia usarlo con el de arriba
-    def dibujardatos(ejex, ejey,titulo, colores, dimension1, dimension2, posicion):
+    def dibujardatos(ejex, ejey,titulo, colores, dimension1, dimension2, posicion, xlabel, ylabel):
         #ejex,ejey = zip(*datos)
         plt.subplot(dimension1, dimension2, posicion)
         plt.scatter(ejex,ejey, c = colores)
         plt.title(titulo)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
     
 
 class AllClustering:

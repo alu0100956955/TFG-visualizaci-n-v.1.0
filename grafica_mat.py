@@ -68,6 +68,8 @@ class Linea_mat(Grafica):
         plt.xticks(rotation=1)
         #plt.set_ylabel(data.getSeleccionEjeY())
         #plt.set_xlabel(data.getSeleccionEjeX())
+        plt.xlabel(data.getSeleccionEjeX())
+        plt.ylabel(data.getSeleccionEjeY())
         plt.title(data.getTitle())
         plt.legend()
         plt.grid()
@@ -103,7 +105,7 @@ class Linea_mat(Grafica):
     # Le paso los dos ejes para que el valor de Y sea el que le corresponde
     def sort(ejex,ejey): 
         # https://www.programiz.com/python-programming/methods/built-in/sorted
-        if(isinstance(ejex[0],int) or isintance(ejex[0],float)  ):# Si es un int o float hay que ordenar
+        if( (isinstance(ejex[0],int)) or (isinstance(ejex[0],float))  ):# Si es un int o float hay que ordenar
             ejex, ejey = (list(t) for t in zip(*sorted(zip(ejex, ejey))))
         
         return ejex, ejey
