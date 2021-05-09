@@ -93,7 +93,7 @@ class Representacion:
         plt.subplot(322)
         # CODIGO DUPLICADO, podria hacer esto en un bucle y que lo otro fuese un metodo para añadir nuevos datos al scatter TODO
         plt.scatter(ejex,ejey, c=colores)
-        plt.title(data.getTitle() + " + Datos de Testeo")
+        plt.title(data.getTitle() + " Datos de Testeo")
         plt.ylabel(data.getSeleccionEjeY())
         plt.xlabel(data.getSeleccionEjeX())
         #plt.show() # Solo un show ya que es como un exit()
@@ -105,6 +105,7 @@ class Representacion:
         plt.ylabel("Accuracy")
         plt.xlabel("Porcentaje de conjunto de pruebas")
         plt.legend()
+        plt.title("Precisión")
 
 
         #plt.subplot(224)
@@ -125,6 +126,8 @@ class Representacion:
         plt.scatter(ejex, ejey , c = colores)
         #plt.legend(seleccionados)
         plt.title("Datos clasificados")
+        plt.ylabel(data.getSeleccionEjeY())
+        plt.xlabel(data.getSeleccionEjeX())
 
 
         #plt.subplot(325)
@@ -216,8 +219,10 @@ class AllClasification:
                 plt.subplot(len(modelos),2,contador)
                 colores = Representacion.coloresClasificacion(algoritmo.predict(datos), data.getSeleccionados())
                 ejex, ejey = list(zip(*datos))
-                plt.scatter(ejex, ejey , c = colores)
+                plt.scatter(ejex, ejey , c = colores, label=seleccionados )
                 plt.title("Datos clasificados")
+                plt.xlabel(data.getSeleccionEjeX())
+                plt.ylabel(data.getSeleccionEjeY())
 
                 contador = contador + 1
 
@@ -432,7 +437,9 @@ class AllRegresion2:
                 
                 plt.scatter(X_train,y_train)
                 plt.plot(X_test, regresion_y,c = colores[i]) # repretar varias, cada una con su leyenda, con color <----------------
-                plt.title(model)
+                plt.title(model.__class__.__name__)
+                plt.xlabel(data.getSeleccionEjeX())
+                plt.ylabel(data.getSeleccionEjeY())
                 
 
 
@@ -574,7 +581,7 @@ class AllClustering:
             if(i == 3):
                 model = modelo()
             y_km = model.fit_predict(puntos)
-            Clustering.dibujardatos(ejex,ejey,modelo,y_km,1,3,i)
+            Clustering.dibujardatos(ejex,ejey,model.__class__.__name__,y_km,1,3,i,data.getSeleccionEjeX(),data.getSeleccionEjeY())
             i += 1
 
         plt.tight_layout() # Para dar espacio a las subgraficas

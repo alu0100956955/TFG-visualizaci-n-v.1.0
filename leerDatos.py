@@ -22,7 +22,7 @@ class ParseTemplate:
     def getDataset(self):
         data = Dataset("")
         #data.setIntFuente()
-        #data.setOpciones()
+        data.setOpciones() # Las opciones que se peuden escoger
 
         #----------
         data.addOpcionEje("")
@@ -729,7 +729,7 @@ class ParseStroke:
     def getDataset(self):
         data = Dataset("Derrame")
         #data.setIntFuente()
-        #data.setOpciones()
+        data.setOpciones(self.getOpciones())
 
 
         #----------
@@ -798,6 +798,6 @@ class ParseStroke:
 
     def  getOpciones(self):
 
-        return self.df['stroke'].unique().tolist()
+        return self.df['stroke'].unique().tolist() # pasarlos a tipo string
 
 #adfasf
