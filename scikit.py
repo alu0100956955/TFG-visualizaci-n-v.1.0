@@ -18,9 +18,28 @@ import itertools
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from sklearn.preprocessing import LabelEncoder
 
 # Para mostrar la matriz de confusion con matplolib
 # https://stackoverflow.com/questions/19233771/sklearn-plot-confusion-matrix-with-labels
+
+class auxiliar:
+    # Metodo para poder obtener las labels en tipo int de los ejes que sean de tipo string
+    # Ya que los ejes de tipo string no los admite los metodos que estan desarrollados
+    def StringAxis(eje):
+        columna='label'
+        lab = LabelEncoder()
+        df = pd.DataFrame(eje,columns=[columna])
+        df[columna] = lab.fit_transform(df[columna]) 
+        return df[columna].tolist()
+
+    #Metodo para verificar si el eje es de tipo String
+    # En caso de ser tipo string devuelve solo el string original
+    def VerificarEje(ejeOriginal):
+        ejeLabel= False
+        if(isinstance(ejeOriginal[0],str) ): # Si es de tipo string lo pone tipo label
+            return auxiliar.StringAxis(ejeOriginal),ejeOriginal # Como el eje orignal tiene los string lo mando como label
+        return ejeOriginal, ejeLabel
 
 # Como por ahora las tres clases representan de la misma forma por ahora empleo esta clase para representar pasandole el algoritmo
 class Representacion:
@@ -267,7 +286,11 @@ class Regresion:
 
         for i in range(cantidadSeleccionados):
             # TODO: Tendria que controlar si se pasa un eje no numerico
-            X_train, X_test, y_train, y_test = train_test_split(data.getEje(data.getSeleccionEjeX(),seleccionados[i]), data.getEje(data.getSeleccionEjeY(),seleccionados[i]), test_size=0.6, random_state=0)
+            EjeX = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
+            EjeY = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+            EjeX,Xlabels = auxiliar.VerificarEje(EjeX)
+
+            X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.6, random_state=0)
             
             if(reshape):
                 X_train = np.reshape(X_train, (-1, 1))
