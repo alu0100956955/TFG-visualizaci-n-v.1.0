@@ -800,4 +800,61 @@ class ParseStroke:
 
         return self.df['stroke'].unique().tolist() # pasarlos a tipo string
 
+
+class ParseMushrooms:
+
+    def __init__(self):
+        self.df = pd.read_csv("data/mushrooms.csv")
+
+    def getDataset(self):
+        data = Dataset("Setas")
+        #data.setIntFuente()
+        data.setOpciones(self.getOpciones()) # Las opciones que se peuden escoger
+
+        #----------
+        data.addOpcionEje("cap-shape")
+        data.addOpcionEje("cap-surface")
+        data.addOpcionEje("cap-color")
+        data.addOpcionEje("odor")
+
+        #----------
+        cap_shape,cap_surface,cap_color,odor = self.getDatos()
+        data.addElementoEje(cap_shape)
+        data.addElementoEje(cap_surface)
+        data.addElementoEje(cap_color)
+        data.addElementoEje(odor)
+
+
+
+        data.setTiposGraficas(tiposGraficas) # Los tipos de graficas es una variable global
+        return data
+
+    def getDatos(self):
+        opciones = self.df['class'].unique().tolist() # Las opciones que seran mostradas al usuario
+        cap_shape = []
+        cap_surface = []
+        cap_color = []
+        odor = []
+        
+        for i in range(len(opciones)):
+            cap_shape.append([])
+            cap_surface.append([])
+            cap_color.append([])
+            odor.append([])
+            
+
+        for index, row in self.df.iterrows():
+            i = opciones.index(row['class'])  # Saco el indice de donde se guardaran los datos
+            cap_shape[i].append(row['cap-shape'])
+            cap_surface[i].append(row['cap-surface'])
+            cap_color[i].append(row['cap-color'])
+            odor[i].append(row['odor']) 
+            
+
+        return cap_shape, cap_surface, cap_color, odor
+
+    def  getOpciones(self):
+
+        return self.df['class'].unique().tolist() 
+
 #adfasf

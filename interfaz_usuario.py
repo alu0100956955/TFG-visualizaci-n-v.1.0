@@ -322,7 +322,7 @@ class Usuario:
         #rbSegunda.grid(column = 3, row = 2)
         #rbParo.grid(column = 4, row = 1)
         # "1:  Casos de covid confirmados", 
-        tipos = [ "2 : Accidentes de trafico", "3 : Paro en españa", "4 : Covid" , "5 : Cpu", "6 : LOL", "7 : Pokemon","8 : Derrame"] 
+        tipos = [ "2 : Accidentes de trafico", "3 : Paro en españa", "4 : Covid" , "5 : Cpu", "6 : LOL", "7 : Pokemon","8 : Setas"] 
         tiposSpark = ["1 : Pokemon","2 : Derrame"]
         dropdownFuenteDatos["values"] = [*tipos] # MODIFICADO PARA PROBAR SPARK  !!!!!!!!!!!!!!!!!!!!!!!!! %%%%%%%%%%%%%%%%%
         dropdownFuenteDatos.grid(column = 2, row = 1)

@@ -289,6 +289,7 @@ class Regresion:
             EjeX = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
             EjeY = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
             EjeX,Xlabels = auxiliar.VerificarEje(EjeX)
+            EjeY,Ylabels = auxiliar.VerificarEje(EjeY)
 
             X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.6, random_state=0)
             
