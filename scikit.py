@@ -286,10 +286,8 @@ class Regresion:
 
         for i in range(cantidadSeleccionados):
             # TODO: Tendria que controlar si se pasa un eje no numerico
-            EjeX = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
-            EjeY = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
-            EjeX,Xlabels = auxiliar.VerificarEje(EjeX)
-            EjeY,Ylabels = auxiliar.VerificarEje(EjeY)
+            EjeX,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+            EjeY,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
 
             X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.6, random_state=0)
             
@@ -310,6 +308,10 @@ class Regresion:
             plt.title(seleccionados[i])
             plt.xlabel(data.getSeleccionEjeX())
             plt.ylabel(data.getSeleccionEjeY())
+            if(isinstance(Xlabels,list)): 
+                plt.xticks(EjeX,Xlabels)
+            if(isinstance(Ylabels,list)):
+                plt.yticks(EjeY,Ylabels)
 
             predict = model.predict(X_train)
             mean_squared.append(mean_squared_error(y_train, predict)) # La y_train tiene los datos originales para comprarlos con la predicción
@@ -380,6 +382,8 @@ class AllRegresion:
         colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
         for i in range(len(modelos)):
             # TODO: Tendria que controlar si se pasa un eje no numerico
+            EjeX,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+            EjeY,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
             X_train, X_test, y_train, y_test = train_test_split(ejex, ejey, test_size=0.6, random_state=0)
             #print(np.shape(X_train))
             if(i != 2):
@@ -396,6 +400,10 @@ class AllRegresion:
             plt.scatter(X_train,y_train)
             plt.plot(X_test, regresion_y,c = colores[i]) # repretar varias, cada una con su leyenda, con color <----------------
             plt.title(model.__name__)
+            if(isinstance(Xlabels,list)): 
+                plt.xticks(EjeX,Xlabels)
+            if(isinstance(Ylabels,list)):
+                plt.yticks(EjeY,Ylabels)
 
         plt.tight_layout() # Para dar espacio a las subgraficas
         plt.show()
@@ -420,10 +428,10 @@ class AllRegresion2:
         cantidadModelos = len(modelos) + 2 # sumo dos para poder mostrar los errores
         indiceSubgrafica = 1
         for i in range(len(seleccionados)):
-            ejex = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
-            ejey = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+            EjeX,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+            EjeY,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
 
-            X_train, X_test, y_train, y_test = train_test_split( ejex , ejey , test_size=0.6, random_state=0) # dimensiones de los X-train
+            X_train, X_test, y_train, y_test = train_test_split( EjeX , EjeY , test_size=0.6, random_state=0) # dimensiones de los X-train
             
             mean_squared = [] # para guardar el error cuadratico
             mean_absolute = [] # para guardar el error absoluto
@@ -464,6 +472,10 @@ class AllRegresion2:
                 plt.title(model.__class__.__name__)
                 plt.xlabel(data.getSeleccionEjeX())
                 plt.ylabel(data.getSeleccionEjeY())
+                if(isinstance(Xlabels,list)): 
+                    plt.xticks(EjeX,Xlabels)
+                if(isinstance(Ylabels,list)):
+                    plt.yticks(EjeY,Ylabels)
                 
 
 
@@ -527,7 +539,9 @@ class Clustering:
         
 
         # metodo clustering
-        puntos = list(zip(ejex,ejey))
+        EjeX,Xlabels = auxiliar.VerificarEje(ejex)
+        EjeY,Ylabels = auxiliar.VerificarEje(ejey)
+        puntos = list(zip(EjeX,EjeY))
         #model = modelo(n_clusters = cantidadSeleccionados).fit(puntos)# solo se puede hacer esto si es KMeans
         model = modelo().fit(puntos)
         # entrenarlo
@@ -545,6 +559,11 @@ class Clustering:
         plt.title("Clustering")
         plt.xlabel(data.getSeleccionEjeX())
         plt.ylabel(data.getSeleccionEjeY())
+        if(isinstance(Xlabels,list)): 
+            plt.xticks(EjeX,Xlabels)
+        if(isinstance(Ylabels,list)):
+            plt.yticks(EjeY,Ylabels)
+        
         
         # Representar mediciones
         
@@ -592,8 +611,9 @@ class AllClustering:
         cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
 
         ejex, ejey , colores = Clustering.combinacionDatos(data)
-
-        puntos = list(zip(ejex,ejey))
+        EjeX,Xlabels = auxiliar.VerificarEje(ejex)
+        EjeY,Ylabels = auxiliar.VerificarEje(ejey)
+        puntos = list(zip(EjeX,EjeY))
         
         modelos = [KMeans,GaussianMixture, DBSCAN]  # Los distintos tipos de clustering
         i = 1
@@ -605,10 +625,14 @@ class AllClustering:
             if(i == 3):
                 model = modelo()
             y_km = model.fit_predict(puntos)
-            Clustering.dibujardatos(ejex,ejey,model.__class__.__name__,y_km,1,3,i,data.getSeleccionEjeX(),data.getSeleccionEjeY())
+            Clustering.dibujardatos(EjeX,EjeY,model.__class__.__name__,y_km,1,3,i,data.getSeleccionEjeX(),data.getSeleccionEjeY())
             i += 1
 
         plt.tight_layout() # Para dar espacio a las subgraficas
+        if(isinstance(Xlabels,list)): 
+            plt.xticks(EjeX,Xlabels)
+        if(isinstance(Ylabels,list)):
+            plt.yticks(EjeY,Ylabels)
         plt.show()
 
 
