@@ -42,6 +42,7 @@ class auxiliar:
         return ejeOriginal, ejeLabel
 
 # Como por ahora las tres clases representan de la misma forma por ahora empleo esta clase para representar pasandole el algoritmo
+# Clase para representar los metodos de clasificacion
 class Representacion:
 
     def show(data, algoritmo_):
@@ -55,7 +56,7 @@ class Representacion:
 
         # Para los datos combinare los datos de los dos ejes empleando zip
         # Las etiquetas seran las opciones escogidas
-        datos, etiquetas = Representacion.DatosEtiquetas(data)
+        datos, etiquetas, Xlabels, Ylabels = Representacion.DatosEtiquetas(data)
 
 
         # Cambio el porcentaje de entrenamiento y testeo
@@ -99,6 +100,10 @@ class Representacion:
         plt.title(data.getTitle() + " Datos de entrenamiento")
         plt.ylabel(data.getSeleccionEjeY())
         plt.xlabel(data.getSeleccionEjeX())
+        #if(isinstance(Xlabels,list)): 
+        #    plt.xticks(ejex,Xlabels)
+        #if(isinstance(Ylabels,list)):
+        #    plt.yticks(ejey,Ylabels)
         #plt.show() # solo un show() ya que es como un exit()
 
         #Ahora le añado los valores de testeo
@@ -115,6 +120,10 @@ class Representacion:
         plt.title(data.getTitle() + " Datos de Testeo")
         plt.ylabel(data.getSeleccionEjeY())
         plt.xlabel(data.getSeleccionEjeX())
+        #if(isinstance(Xlabels,list)): 
+        #    plt.xticks(ejex,Xlabels)
+        #if(isinstance(Ylabels,list)):
+        #    plt.yticks(ejey,Ylabels)
         #plt.show() # Solo un show ya que es como un exit()
 
 
@@ -147,6 +156,10 @@ class Representacion:
         plt.title("Datos clasificados")
         plt.ylabel(data.getSeleccionEjeY())
         plt.xlabel(data.getSeleccionEjeX())
+        #if(isinstance(Xlabels,list)): 
+        #    plt.xticks(ejex,Xlabels)
+        #if(isinstance(Ylabels,list)):
+        #    plt.yticks(ejey,Ylabels)
 
 
         #plt.subplot(325)
@@ -175,11 +188,13 @@ class Representacion:
         # Buble que por cada escogido se mezclaran los datos y añadiremos a datos, junto a su etiqueta en etiquetas
         seleccionados = data.getSeleccionados()
         for selec in seleccionados:
-            aux = list(zip(data.getEje(data.getSeleccionEjeX(),selec),data.getEje(data.getSeleccionEjeY(),selec) ))
+            EjeX,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),selec))
+            EjeY,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),selec))
+            aux = list(zip(EjeX,EjeY ))
             for i in range(len(aux)):
                 etiquetas.append(selec)
             datos += aux 
-        return datos, etiquetas
+        return datos, etiquetas, Xlabels, Ylabels
 
     def coloresClasificacion(clasificacion,opciones):
         # Le pasaremos el array con todos los datos clasificados y las opciones escogias, crearemos un metodo que recorra las opciones escogidas y dependiendo de que pos este le de esa num de pos a esa etiqueta
@@ -201,11 +216,11 @@ class AllClasification:
             #dim = Regresion.dimensiones(cantidadSeleccionados) # con la cantidad de seleccionados genero las dimensiones para el subplot
 
             modelos = [GaussianNB, KNeighborsClassifier, DecisionTreeClassifier] # modelos de clasificacion
-            ejex, ejey = Regresion.combinacionDatos(data)
+            #ejex, ejey, Xlabels, Ylabels  = Regresion.combinacionDatos(data) # Y esto aqui?
             colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
 
             # Para los datos combinare los datos de los dos ejes empleando zip
-            datos, etiquetas = Representacion.DatosEtiquetas(data)
+            datos, etiquetas, Xlabels, Ylabels = Representacion.DatosEtiquetas(data)
             contador = 1 # VAriable para controlar la subgrafica actual
             for i in range(len(modelos)):
                 algoritmo = modelos[i]()
@@ -358,12 +373,14 @@ class Regresion:
         seleccionados = data.getSeleccionados()
         for i in range(len(seleccionados)):
             if i == 0:
-                ejex = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
-                ejey = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
-            ejex += data.getEje(data.getSeleccionEjeX(),seleccionados[i])
-            ejey += data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+                ejex,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+                ejex,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+            EjeX,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+            EjeY,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+            ejex += EjeX
+            ejey += EjeY
             
-        return ejex, ejey
+        return ejex, ejey , Xlabels, Ylabels
 
 
     # Una gráfica por modelo, se combinan los datos de todas las opciones seleccionadas
@@ -532,7 +549,7 @@ class Clustering:
         seleccionados = data.getSeleccionados() # Las opciones seleccionadas
         cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
 
-        ejex, ejey , colores = Clustering.combinacionDatos(data)
+        ejex, ejey , colores = Clustering.combinacionDatos(data) # Combinar para que?, si despues es más dificil mostrar las etiquetas
         # cableado por que habra un numero fijo de subventanas
         Clustering.dibujardatos(ejex, ejey,"Datos entrenamiento" +data.getTitle(), colores,2,2,1, data.getSeleccionEjeX(),data.getSeleccionEjeY()) 
 
@@ -569,6 +586,7 @@ class Clustering:
         
         plt.suptitle(modelo.__name__)
         plt.tight_layout() # Para dar espacio a las subgraficas
+        plt.legend(seleccionados)
         plt.show()
 
 
