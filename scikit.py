@@ -452,11 +452,12 @@ class AllRegresion2:
             
             mean_squared = [] # para guardar el error cuadratico
             mean_absolute = [] # para guardar el error absoluto
-
+            plt.figure(i) # Sera una ventana por cada opción
             #print(np.shape(X_train))
             for j in range(len(modelos)):
-                # TODO: Tendria que controlar si se pasa un eje no numerico
-                plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)  # Para marcar los subplots de las graficas
+                
+                #plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)  # Para marcar los subplots de las graficas
+                plt.subplot(1, cantidadModelos, j+1) # El indice no puede ser 0
                 indiceSubgrafica = indiceSubgrafica + 1
                 if(j != 0):
                     #print(j)
@@ -495,23 +496,27 @@ class AllRegresion2:
                     plt.yticks(EjeY,Ylabels)
                 
 
-
+            #plt.figure() # Un ultima ventana para los errores
             graficas = ["Isotonic", "Linear", "Gradient"]
-            plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)
+            #plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)
+            plt.subplot(1, cantidadModelos, len(modelos)+1)
             indiceSubgrafica = indiceSubgrafica + 1
             plt.bar(graficas,mean_squared, label="Error cuadratico" )
-            plt.title("Errorr Cuadratico")
+            plt.title("Error Cuadratico")
 
-            plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)
+            #plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)
+            plt.subplot(1, cantidadModelos, len(modelos)+2)
             indiceSubgrafica = indiceSubgrafica + 1
             plt.bar(graficas, mean_absolute, label = "Error absoluto")
-            plt.title("Errorr Absoluto")
+            plt.title("Error Absoluto")
+
+            plt.suptitle(seleccionados[i])
 
 
         #plt.tight_layout() # Para dar espacio a las subgraficas | no va bien
         #plt.subplots_adjust(left=0.05,right=1.05,top=0.8)
         #plt.subplots_adjust(hspace=0.23)
-        plt.subplots_adjust(left=0.06,bottom=0.08, right=0.95,top=0.93)
+        #plt.subplots_adjust(left=0.06,bottom=0.08, right=0.95,top=0.93)
         plt.show()
 
 
