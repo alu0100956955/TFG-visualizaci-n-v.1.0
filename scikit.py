@@ -19,6 +19,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from sklearn.preprocessing import LabelEncoder
+import random # para poder generar los colores de forma random
 
 # Para mostrar la matriz de confusion con matplolib
 # https://stackoverflow.com/questions/19233771/sklearn-plot-confusion-matrix-with-labels
@@ -553,10 +554,12 @@ class Clustering:
         plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
         seleccionados = data.getSeleccionados() # Las opciones seleccionadas
         cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
-
+        dimensionx = 1 # La cantidad de filas para los subplots
+        dimensiony = 2 # La cntidad de columnas para los subplots
+        Clustering.dibujarDatosIniciales(data,dimensionx,dimensiony,1)
         ejex, ejey , colores = Clustering.combinacionDatos(data) # Combinar para que?, si despues es más dificil mostrar las etiquetas
         # cableado por que habra un numero fijo de subventanas
-        Clustering.dibujardatos(ejex, ejey,"Datos entrenamiento" +data.getTitle(), colores,2,2,1, data.getSeleccionEjeX(),data.getSeleccionEjeY()) 
+        #Clustering.dibujardatos(ejex, ejey,"Datos entrenamiento" +data.getTitle(), colores,2,2,1, data.getSeleccionEjeX(),data.getSeleccionEjeY()) 
 
         
 
@@ -570,21 +573,21 @@ class Clustering:
         
         y_km = model.fit_predict(puntos)
         # representarlo
-        plt.subplot(2,2,2)
+        plt.subplot(dimensionx,dimensiony,2)
         colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
         for i in range(cantidadSeleccionados):
             # podria combertir la i en float y sumarle un 0,1 para la segunda
             primero = i+0,0
             segundo = i+0,1
             #plt.scatter(puntos[y_km == primero], puntos[y_km == segundo], color = colores[i])   # tengo que generar los float de otra manera| pueden ser slices
-        plt.scatter(ejex, ejey, c = y_km)
+        plt.scatter(ejex, ejey, c = y_km) # Muestro los ejes originales ya los verificados es solo para entrenar el modelo
         plt.title("Clustering")
         plt.xlabel(data.getSeleccionEjeX())
         plt.ylabel(data.getSeleccionEjeY())
-        if(isinstance(Xlabels,list)): 
-            plt.xticks(EjeX,Xlabels)
-        if(isinstance(Ylabels,list)):
-            plt.yticks(EjeY,Ylabels)
+        #if(isinstance(Xlabels,list)): 
+        #    plt.xticks(EjeX,Xlabels)
+        #if(isinstance(Ylabels,list)):
+        #    plt.yticks(EjeY,Ylabels)
         
         
         # Representar mediciones
@@ -623,7 +626,23 @@ class Clustering:
         plt.title(titulo)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-    
+
+    def dibujarDatosIniciales(data,dimension1,dimension2, posicion):
+        seleccionados = data.getSeleccionados()
+        plt.subplot(dimension1, dimension2, posicion)
+        for i in range(len(seleccionados)):
+            r = random.random()
+            b = random.random()
+            g = random.random()
+            colour = (r, g, b)
+            color = [colour for i in range(len(data.getEje(data.getSeleccionEjeY(),seleccionados[i])))]
+            plt.scatter(data.getEje(data.getSeleccionEjeX(),seleccionados[i]),data.getEje(data.getSeleccionEjeY(),seleccionados[i]),c=color, label=seleccionados[i])
+            
+        plt.legend()
+        plt.title("Datos Pre Clustering" +data.getTitle())
+        plt.xlabel(data.getSeleccionEjeX())
+        plt.ylabel(data.getSeleccionEjeY())
+        #plt.show() # Si hago un show aqui ya no muestra más
 
 class AllClustering:
 
@@ -648,14 +667,14 @@ class AllClustering:
             if(i == 3):
                 model = modelo()
             y_km = model.fit_predict(puntos)
-            Clustering.dibujardatos(EjeX,EjeY,model.__class__.__name__,y_km,1,3,i,data.getSeleccionEjeX(),data.getSeleccionEjeY())
+            Clustering.dibujardatos(ejex,ejey,model.__class__.__name__,y_km,1,3,i,data.getSeleccionEjeX(),data.getSeleccionEjeY())
             i += 1
 
         plt.tight_layout() # Para dar espacio a las subgraficas
-        if(isinstance(Xlabels,list)): 
-            plt.xticks(EjeX,Xlabels)
-        if(isinstance(Ylabels,list)):
-            plt.yticks(EjeY,Ylabels)
+        #if(isinstance(Xlabels,list)): 
+        #    plt.xticks(EjeX,Xlabels)
+        #if(isinstance(Ylabels,list)):
+        #    plt.yticks(EjeY,Ylabels)
         plt.show()
 
 
