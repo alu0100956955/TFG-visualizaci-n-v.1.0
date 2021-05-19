@@ -255,7 +255,7 @@ class AllClasification:
                 colores = Representacion.coloresClasificacion(algoritmo.predict(datos), data.getSeleccionados())
                 ejex, ejey = list(zip(*datos))
                 plt.scatter(ejex, ejey , c = colores, label=seleccionados )
-                plt.title("Datos clasificados")
+                plt.title(algoritmo.__class__.__name__)
                 plt.xlabel(data.getSeleccionEjeX())
                 plt.ylabel(data.getSeleccionEjeY())
 

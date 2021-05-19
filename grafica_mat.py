@@ -45,6 +45,7 @@ class Linea_mat(Grafica):
 # Permitir distintos tipos de graficas o tener distintos metodos para hacere las graficas
     def show(data):
         #paises = ['Spain','Italy','China','Portugal']
+        plt.clf() # Para limpiar graficas anteriores
         seleccionados = data.getSeleccionados()
         for i in range(len(seleccionados)): # Lo hago con el rango para los metodos complementarios
             #TO DO: pasar de forma parametrizada el eje que se quiere representar
@@ -123,6 +124,7 @@ class Barras_matplotlib(Grafica):
     # https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.bar.html
 
     def show(data):
+        plt.clf() # Para limpiar graficas anteriores
         seleccionados = data.getSeleccionados()
         fig, ax = plt.subplots()
 
@@ -184,7 +186,8 @@ class Barras_matplotlib(Grafica):
 class Scatter_matplotlib(Grafica):
     # TODO: Leyendas para los ejes
     def show(data):
-        print("Scatter matplotlib")
+        #print("Scatter matplotlib")
+        plt.clf() # Para limpiar graficas anteriores
         fig, ax = plt.subplots()
         seleccionados = data.getSeleccionados()
         for selec in seleccionados:
@@ -198,7 +201,7 @@ class Scatter_matplotlib(Grafica):
 class Box_matplotlib(Grafica):
 
     def show(data):
-
+        plt.clf() # Para limpiar graficas anteriores
         seleccionados = data.getSeleccionados()
         ejeY = []
         for selec in seleccionados:
@@ -226,6 +229,7 @@ class Histograma_matplotlib(Grafica):
 
         #funcion = Histograma_matplotlib.switch(data.getIntFuente())   #ESTA CABLEADO POR AHORA
         #ejeY = funcion(data)
+        plt.clf() # Para limpiar graficas anteriores
         seleccionados = data.getSeleccionados()
         x,y = Histograma_matplotlib.dimensiones(len(seleccionados))
         #plt.title(data.getTitle())  # Le asigno el titulo a la gráfica
@@ -319,7 +323,7 @@ class Histograma_matplotlib(Grafica):
             matriz += data.getEje(data.getSeleccionEjeY(),seleccionados[i])
         return matriz
 
-
+    # What, pero si ya tengo un metodo de scatter??
 class Clustering_matplotlib(Grafica):
     # primero guardar todos los putos X e Y cada uno en un respectivo array
     # Segundo generar los conjuntos de entrenamiento y visualización / creo que no hace falta entrenar
@@ -327,6 +331,7 @@ class Clustering_matplotlib(Grafica):
     # Cuarto pasarle los puntos al Kmeans
     # Quinto con el modelo hacer scatter (con diferente color para cada uno ) de los distintos nucleos (mirar como disferenciar entre nucleos)
     def show(data):
+        plt.clf() # Para limpiar graficas anteriores
         seleccionados = data.getSeleccionados()
         x = []
         y = []
@@ -353,7 +358,8 @@ class Clustering_matplotlib(Grafica):
 # Aun que no sea matplot lib al ser por terminal dejo la representacion de mapas de geopandas dentro de este fichero
 class mapa_Geopandas():
     def show():
-        print("problemas en los paquetes")
+        print("problemas en los paquetes") # el código funciona en la zona de pruebas de jupyter
+        # Pero si dejo aqui el código entonces el framework no se ejecutara
 #adfasfd
 
 
