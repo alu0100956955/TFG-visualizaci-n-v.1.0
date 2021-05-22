@@ -552,7 +552,7 @@ class Clustering:
         # Usar al metodo de medicion de clustering para otra grafica
 
         plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
-        seleccionados = data.getSeleccionados() # Las opciones seleccionadas
+        seleccionados = data.getSeleccionados() # Las opciones seleccionadas, pero para que guardarlo si puede llamar a este procedimiento?
         cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
         dimensionx = 1 # La cantidad de filas para los subplots
         dimensiony = 2 # La cntidad de columnas para los subplots
@@ -567,23 +567,31 @@ class Clustering:
         EjeX,Xlabels = auxiliar.VerificarEje(ejex)
         EjeY,Ylabels = auxiliar.VerificarEje(ejey)
         puntos = list(zip(EjeX,EjeY))
-        #model = modelo(n_clusters = cantidadSeleccionados).fit(puntos)# solo se puede hacer esto si es KMeans
-        model = modelo().fit(puntos)
+        
+        if( isinstance(modelo(),KMeans)): # si el modelo es kmeans
+            model = modelo(n_clusters = cantidadSeleccionados).fit(puntos)# solo se puede hacer esto si es KMeans
+        if( isinstance(modelo(),GaussianMixture)): # si el modelo es Mixture
+            model = modelo(n_components = cantidadSeleccionados)
+        if( isinstance(modelo(),DBSCAN)): # si el modelo es DBscan
+            model = modelo().fit(puntos)
         # entrenarlo
         
         y_km = model.fit_predict(puntos)
         # representarlo
-        plt.subplot(dimensionx,dimensiony,2)
+        
         colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
         for i in range(cantidadSeleccionados):
             # podria combertir la i en float y sumarle un 0,1 para la segunda
             primero = i+0,0
             segundo = i+0,1
             #plt.scatter(puntos[y_km == primero], puntos[y_km == segundo], color = colores[i])   # tengo que generar los float de otra manera| pueden ser slices
-        plt.scatter(ejex, ejey, c = y_km) # Muestro los ejes originales ya los verificados es solo para entrenar el modelo
-        plt.title("Clustering")
-        plt.xlabel(data.getSeleccionEjeX())
-        plt.ylabel(data.getSeleccionEjeY())
+        #plt.subplot(dimensionx,dimensiony,2)
+        #plt.scatter(ejex, ejey, c = y_km) # Muestro los ejes originales ya los verificados es solo para entrenar el modelo
+        Clustering.dibujardatos2(ejex, ejey, "Clustering", y_km,dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),data.getSeleccionados())
+        #Clustering.dibujardatos(ejex, ejey, "Clustering", y_km,dimensionx,dimensiony,3, data.getSeleccionEjeX(),data.getSeleccionEjeY())
+        #plt.title("Clustering")
+        #plt.xlabel(data.getSeleccionEjeX())
+        #plt.ylabel(data.getSeleccionEjeY())
         #if(isinstance(Xlabels,list)): 
         #    plt.xticks(EjeX,Xlabels)
         #if(isinstance(Ylabels,list)):
@@ -594,7 +602,7 @@ class Clustering:
         
         plt.suptitle(modelo.__name__)
         plt.tight_layout() # Para dar espacio a las subgraficas
-        plt.legend(seleccionados)
+        #plt.legend(seleccionados)
         plt.show()
 
 
@@ -627,6 +635,38 @@ class Clustering:
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
 
+    def dibujardatos2(ejex, ejey,titulo, colores, dimension1, dimension2, posicion, xlabel, ylabel,seleccionados):
+        #ejex,ejey = zip(*datos)
+        color = list(set(colores)) # Los colores es un array que indica con int que clusters colorea según el punto ej [1,1,0,1,0,1,0,0]
+        plt.subplot(dimension1, dimension2, posicion)
+        #print(colores)
+        x = []
+        y = []
+        co = []
+        for i in color:
+            r = random.random()
+            b = random.random()
+            g = random.random()
+            colour = (r, g, b)
+            #co = [colour for _ in range(len(ejex)) ] # Monto el array con el color del mismo len que el eje, ç
+            # pero como no todos los elementos son los que quiero no lo puedo hacer asi
+            for z in range(len(ejex)): # Solo guardo los elementos de los ejes que ha distinguido el cluster
+                if(colores[z] == i ):
+                    x.append(ejex[z])
+                    y.append(ejey[z])
+                    co.append(colour)
+            plt.scatter(x,y, c = co,label = "Cluster "+ seleccionados[i])
+            x.clear()
+            y.clear()
+            co.clear()
+
+        
+        #plt.scatter(ejex,ejey, c = colores)
+        plt.title(titulo)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.legend()
+
     def dibujarDatosIniciales(data,dimension1,dimension2, posicion):
         seleccionados = data.getSeleccionados()
         plt.subplot(dimension1, dimension2, posicion)
@@ -658,9 +698,9 @@ class AllClustering:
         puntos = list(zip(EjeX,EjeY))
         
         modelos = [KMeans,GaussianMixture, DBSCAN]  # Los distintos tipos de clustering
-        i = 1
+        i = 1 # ?
         for modelo in modelos:
-            if(i == 1):
+            if(i == 1): # Comparar con 1?
                 model = modelo(n_clusters = cantidadSeleccionados).fit(puntos)
             if(i == 2):
                 model = modelo(n_components = cantidadSeleccionados)
@@ -668,7 +708,7 @@ class AllClustering:
                 model = modelo()
             y_km = model.fit_predict(puntos)
             Clustering.dibujardatos(ejex,ejey,model.__class__.__name__,y_km,1,3,i,data.getSeleccionEjeX(),data.getSeleccionEjeY())
-            i += 1
+            i += 1 # oh, rly has hecho esto¿¿
 
         plt.tight_layout() # Para dar espacio a las subgraficas
         #if(isinstance(Xlabels,list)): 
