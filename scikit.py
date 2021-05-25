@@ -428,6 +428,7 @@ class AllRegresion:
 
  # slice notation https://stackoverflow.com/questions/509211/understanding-slice-notation
  # Una gráfica por metodo y opcion seleccionada
+ # https://stackoverflow.com/questions/5993206/is-it-possible-to-have-multiple-pyplot-windows-or-am-i-limited-to-subplots
 class AllRegresion2:
 
     def show(data):
@@ -655,7 +656,7 @@ class Clustering:
                     x.append(ejex[z])
                     y.append(ejey[z])
                     co.append(colour)
-            plt.scatter(x,y, c = co,label = "Cluster "+ seleccionados[i])
+            plt.scatter(x,y, c = co,label = "Cluster "+ str(i+1))
             x.clear()
             y.clear()
             co.clear()

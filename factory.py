@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico, ParseParoEspaña, ParseCovid, ParseCpu, ParseLol, ParsePokemon, ParseMushrooms
+from leerDatos import ParsePokemon2
 from grafica_mat import Linea_mat, Box_matplotlib , Barras_matplotlib, Histograma_matplotlib, Scatter_matplotlib, Clustering_matplotlib
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
@@ -22,7 +23,7 @@ class Factory:
             3: ParseParoEspaña,
             4: ParseCovid,
             5: ParseCpu,
-            6: ParseLol,
+            6: ParsePokemon2,
             7: ParsePokemon,
             8: ParseMushrooms
         }

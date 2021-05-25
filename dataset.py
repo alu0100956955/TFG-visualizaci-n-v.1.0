@@ -11,6 +11,7 @@ class Dataset:
         #Inicializo las variables para almacenar los ejes y que representa cada eje
         self.OpcionesEje = []
         self.matrizEje = []
+        self.pandas = False # Para controlar cuando uso el metodo antiguo de guardar datos
 
 
     def getTitle(self):
@@ -84,6 +85,14 @@ class Dataset:
     # Si por el contrario es una matriz buscaremos el indice del elemento que nos han pasado ( hacer un metodo para buscar el indice segun el array de opciones) y lo usamos para pasar la fila correcta de la matriz
     # TO DO: si no encuentra el elemento que devuelva algo aunque sea
     def getEje(self, eje, elemento):
+        if(self.pandas): # ESTO ES SOLO PARA LOS PARSEOS MODIFICADOS, debido a que guardare directamente el dataset en vez de matriz de matriz
+            #return self.matrizEje[self.indexEje(eje)]  ç
+
+            filtrado = self.df[self.df[self.filtrar].isin([elemento])]
+            #filtrado = self.df[self.df["Name"].isin(['Grass'])]
+            filtrado = filtrado[eje].values
+            #print(filtrado)
+            return filtrado
         matriz = self.matrizEje[self.indexEje(eje)]
         #print(matriz)
         # Esta condicion tengo que cambiarlo por ver su tamaño
@@ -166,5 +175,14 @@ class Dataset:
 
     def getEtiquetas(self):
         return self.etiquetas
+
+    #------------------ Actualizacion 3, Crear un verdadero dataset ----------------------#
+    def setDataset(self,dataset):
+        self.df = dataset  # Guardo el dataset
+        self.pandas = True # Para evitar cargarme todo uso esta variable para controlar cuando he guardado un dataset o e usado el antiguo metodo
+
+    def setFiltrado(self,opcion): # La columna por la cual se filtrara y el usuario tendra las distintas opciones a representar
+        self.filtrar = opcion
+        #self.filtrado.append(opcion)
 
 #asdfasf
