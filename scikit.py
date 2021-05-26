@@ -613,17 +613,30 @@ class Clustering:
         ejey = []
         colores = []
         seleccionados = data.getSeleccionados()
-        for i in range(len(seleccionados)):
-            if i == 0:
-                ejex = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
-                ejey = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
-            ejex += data.getEje(data.getSeleccionEjeX(),seleccionados[i])
-            ejey += data.getEje(data.getSeleccionEjeY(),seleccionados[i])
-            # Para tener los distintos colores de cada cluster
-            for j in range(len(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))):
-                colores.append(i)
+        if(data.pandas):
+            for i in range(len(seleccionados)):
+                if i == 0:
+                    ejex = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
+                    ejey = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+                ejex = np.append( ejex,  data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+                ejey = np.append( ejey, data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+                # Para tener los distintos colores de cada cluster
+                for j in range(len(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))):
+                    colores.append(i)
 
-        return ejex, ejey, colores
+            return ejex, ejey, colores
+        else:
+            for i in range(len(seleccionados)):
+                if i == 0:
+                    ejex = data.getEje(data.getSeleccionEjeX(),seleccionados[i])
+                    ejey = data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+                ejex += data.getEje(data.getSeleccionEjeX(),seleccionados[i])
+                ejey += data.getEje(data.getSeleccionEjeY(),seleccionados[i])
+                # Para tener los distintos colores de cada cluster
+                for j in range(len(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))):
+                    colores.append(i)
+
+            return ejex, ejey, colores
 
 
 
