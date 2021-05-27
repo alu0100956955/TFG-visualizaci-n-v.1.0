@@ -80,6 +80,11 @@ class Lineas_plotly(Grafica):
         # https://www.programiz.com/python-programming/methods/built-in/sorted
         if(isinstance(ejex[0],int) or isinstance(ejex[0],float)  ):# Si es un int o float hay que ordenar
             ejex, ejey = (list(t) for t in zip(*sorted(zip(ejex, ejey))))
+
+        if( ejex.dtype == 'int64'): # TODO comprar con los otros typos de numeros
+            orden = ejex.argsort()   
+            ejex = ejex[orden]
+            ejey = ejey[orden]
         
         return ejex, ejey
 

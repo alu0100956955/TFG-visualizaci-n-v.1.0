@@ -869,11 +869,8 @@ class ParsePokemon2:
 
     def getDataset(self):
         data = Dataset("Pokemon")
-        #data.setIntFuente()
         
         #----------
-        #data.addOpcionEje("Tipo1") # Los tipso seran las opciones
-        #data.addOpcionEje("Tipo2")
         #data.addOpcionEje("Sumatorio estadisticas")
         # Cuidado que los nombres tienen que ser EXACTAMENTE iguales al column name para que filtre correctamente
         data.addOpcionEje("HP")
@@ -884,35 +881,50 @@ class ParsePokemon2:
         data.addOpcionEje("Speed")
 
         #----------
-        #  TODO LLAMAR A GET DATOS , GUARDAR LOS DATOS EN EL DATASET Y PROBAR EL DATASET
+
         data.setOpciones(self.getOpciones()) # Las opciones seran los tipos de los pokemons
         
-        #data.setEtiquetas()
-        total, hp, atk, defense, spAtk, spDef, speed = self.getDatos()
-        
-
-        #data.setTiposGraficas(["1 :  Linea Terminal", "2 : Linea html", "3 : Linea navegador","4 : Barras navegador", 
-        #                      "6 : dispersion navegador", "7 : box terminal", "9 : Histograma Terminal", "10: Histograma navegador","11: vecino", "0 : Pruebas"]) # "5. Dispersion terminal"
         data.setTiposGraficas(tiposGraficas)  
         data.setFiltrado("Type 1")
         data.setDataset(self.df)
         return data
-    #Si te preguntas por que hago una función que solo sera llamda una única vez es para que si tengo que modificar como guardar los dtos
-    # se que se encuentra todo dentro de esta función y así no ensució la función principal
-    def getDatos(self):
-        tipos = self.df['Type 1'].values
-        total = self.df['Total'].values
-        hp = self.df['HP'].values
-        atk = self.df['Attack'].values
-        defense = self.df['Defense'].values
-        spAtk = self.df['Sp. Atk'].values
-        spDef = self.df['Sp. Def'].values
-        speed = self.df['Speed'].values
-
-        return total, hp, atk, defense, spAtk, spDef, speed
+    
 
     # Las opciones seran los tipos de los pokemons
     def  getOpciones(self):
 
         return self.df['Type 1'].unique().tolist()
+
+class ParseMushrooms2:
+
+    def __init__(self):
+        self.df = pd.read_csv("data/mushrooms.csv")
+
+    def getDataset(self):
+        data = Dataset("Setas")
+        #data.setIntFuente()
+        data.setOpciones(self.getOpciones()) # Las opciones que se peuden escoger
+
+        #----------
+        data.addOpcionEje("cap-shape")
+        data.addOpcionEje("cap-surface")
+        data.addOpcionEje("cap-color")
+        data.addOpcionEje("odor")
+
+        #----------
+
+        data.setFiltrado("class")
+        data.setDataset(self.df)
+        data.setTiposGraficas(tiposGraficas) # Los tipos de graficas es una variable global
+        return data
+
+
+    def  getOpciones(self):
+        return self.df['class'].unique().tolist() 
+
+
+
+
+
+
 #adfasf
