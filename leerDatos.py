@@ -903,6 +903,7 @@ class ParseMushrooms2:
     def getDataset(self):
         data = Dataset("Setas")
         #data.setIntFuente()
+        self.df["class"].replace({"p": "Poisonous", "e": "edible"}, inplace=True) # Cambio los 1 y 0 por "positivo" y "negativo"
         data.setOpciones(self.getOpciones()) # Las opciones que se peuden escoger
 
         #----------
@@ -923,7 +924,7 @@ class ParseMushrooms2:
         return self.df['class'].unique().tolist() 
 
     # TODO, la forma en la que se guardan las opciones de los ejes, usar df.colmuns()
-    # TODO, cambiar la columna de output de 1 0 a positivo negativo
+    # https://www.kite.com/python/answers/how-to-replace-column-values-in-a-pandas-dataframe-in-python
 class ParseDiabetes:
 
     def __init__(self):

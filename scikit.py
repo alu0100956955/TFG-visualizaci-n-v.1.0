@@ -92,10 +92,11 @@ class Representacion:
         ejex, ejey = zip(*X_train)
         ejex=list(ejex)
         ejey=list(ejey)
-        #print(type(ejex))
+        #print(len(y_train))
+        #print(len(ejex))
         #https://stackoverflow.com/questions/8528178/list-of-zeros-in-python
-        colores = [0] * len(ejex)
-
+        #colores = [0] * len(ejex)
+        colores= Representacion.coloresClasificacion(y_train ,len(ejex))
         # Los 3 numeros representan: los dos primeros las dimensiones el tercero la posicion
         plt.subplot(dimensionx, dimensiony, 1)
 
@@ -108,18 +109,25 @@ class Representacion:
         #Ahora le añado los valores de testeo
 
         auxX,auxY = zip(*X_test)
-        for i in range(len(X_test)):
-            colores.append(1)
-            ejex.append(auxX[i])
-            ejey.append(auxY[i])
+        #for i in range(len(X_test)):
+        #    colores.append(1)
+        #    ejex.append(auxX[i])
+        #    ejey.append(auxY[i])
     
+        ejex.extend(auxX)
+        ejey.extend(auxY)
+        #print(len(auxX))
+        #print(len(y_train))
+        colores.extend(Representacion.coloresClasificacion(y_test ,len(auxX)))
+
+
         #plt.subplot(322)
         # CODIGO DUPLICADO, podria hacer esto en un bucle y que lo otro fuese un metodo para añadir nuevos datos al scatter TODO
         #plt.scatter(ejex,ejey, c=colores)
         #plt.title(data.getTitle() + " Datos de Testeo")
         #plt.ylabel(data.getSeleccionEjeY())
         #plt.xlabel(data.getSeleccionEjeX())
-        Clustering.dibujardatos2(ejex,ejey, "Datos de Testeo",colores, dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),"Conjunto ")
+        Clustering.dibujardatos2(ejex,ejey, "Datos de Testeo",colores, dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
 
 
         plt.subplot(dimensionx, dimensiony, 3)
@@ -151,7 +159,7 @@ class Representacion:
         #plt.title("Datos clasificados")
         #plt.ylabel(data.getSeleccionEjeY())
         #plt.xlabel(data.getSeleccionEjeX())
-        Clustering.dibujardatos2(ejex,ejey, "Datos de Testeo",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),data.getSeleccionados())
+        Clustering.dibujardatos2(ejex,ejey, "Datos de Testeo",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
 
         #plt.subplot(325)
         #plt.plot(porcentajes, mean_squared, label="Error cuadratico")
@@ -187,15 +195,15 @@ class Representacion:
             datos += aux 
         return datos, etiquetas, Xlabels, Ylabels
 
-    def coloresClasificacion(clasificacion,opciones):
-        # Le pasaremos el array con todos los datos clasificados y las opciones escogias, crearemos un metodo que recorra las opciones escogidas y dependiendo de que pos este le de esa num de pos a esa etiqueta
-        # Recorreremos el array y por cada componente llameros la funcion, guardaremos el resultado en una lista
-        # Devolvemos la lista
+    def coloresClasificacion(labels,lenth):
+        # Le pasaremos el array con todos las labels y el tamaño del ejex, 
+        # Devolvemos la lista de colores
         #print("Colores clasificacion")
         colores = []
-        for i in clasificacion:
-            colores.append(opciones.index(i))
-
+        uniqueLabel = list(set(labels)) # Obtengo una lista sin duplicados de las etiqutas
+        for i in range(lenth):
+            colores.append(uniqueLabel.index(labels[i-1])) # Guardo la posición dentro del vector de unicos 
+            # De esta forma tendre un array de "colores" del mismo tamaño del ejex
         return colores
 
 class AllClasification:
