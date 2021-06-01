@@ -43,9 +43,9 @@ class Barras_plotly(Grafica):
         for i in range(len(data.getEje(data.getSeleccionEjeX(),seleccionados[0]))):    # Que hace un 0 ahí??
             ticksy.append(i)
         # Para cambiar el eje X
-        fig.update_layout(xaxis = dict(title=data.getSeleccionEjeX(), tickmode = 'array', tickvals =ticksy , 
-                                       ticktext = Grafica.espaciar(data.getEje(data.getSeleccionEjeX(),seleccionados[0])) ),
-                         yaxis=dict(title=data.getSeleccionEjeY())  )
+        #fig.update_layout(xaxis = dict(title=data.getSeleccionEjeX(), tickmode = 'array', tickvals =ticksy , 
+        #                               ticktext = Grafica.espaciar(data.getEje(data.getSeleccionEjeX(),seleccionados[0])) ),
+        #                 yaxis=dict(title=data.getSeleccionEjeY())  )
         fig.show()
 
 

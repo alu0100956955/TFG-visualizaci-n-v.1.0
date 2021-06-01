@@ -308,7 +308,10 @@ class Regresion:
             EjeY,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
 
             X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.6, random_state=0)
-            
+            # Para meter las strin, tengo que hacer que el split sea como en la clasificacion
+            # Que el ejeX tenga los datso y zipearlos mientras en el y las labels
+
+
             if(reshape):
                 X_train = np.reshape(X_train, (-1, 1))
             X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
@@ -322,7 +325,7 @@ class Regresion:
             regresion_y = model.predict(X_test)
             plt.subplot(dim, dim, i+1)
             plt.scatter(X_train,y_train)
-            plt.plot(X_test, regresion_y,c = 'red') # repretar varias, cada una con su leyenda, con color <----------------
+            plt.plot(X_test, regresion_y,c = 'red') # repretar varias, cada una con su leyenda, con color <------------- | NO
             plt.title(seleccionados[i])
             plt.xlabel(data.getSeleccionEjeX())
             plt.ylabel(data.getSeleccionEjeY())
@@ -353,7 +356,7 @@ class Regresion:
         plt.xlabel(data.getSeleccionEjeX())
         plt.ylabel(data.getSeleccionEjeY())
 
-        plt.subplot(dim, dim, dim+dim)
+        plt.subplot(dim, dim, cantidadSeleccionados+2)
         plt.bar(seleccionados, mean_absolute, label = "Error absoluto")
         plt.title("Error Absoluto")
         plt.xlabel(data.getSeleccionEjeX())
