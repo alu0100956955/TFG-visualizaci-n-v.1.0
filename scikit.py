@@ -202,6 +202,16 @@ class Representacion:
             colores.append(uniqueLabel.index(labels[i-1])) # Guardo la posición dentro del vector de unicos 
             # De esta forma tendre un array de "colores" del mismo tamaño del ejex
         return colores
+    def coloresClasificacionFit(clasificacion,opciones):
+        # Le pasaremos el array con todos los datos clasificados y las opciones escogias, crearemos un metodo que recorra las opciones escogidas y dependiendo de que pos este le de esa num de pos a esa etiqueta
+        # Recorreremos el array y por cada componente llameros la funcion, guardaremos el resultado en una lista
+        # Devolvemos la lista
+        colores = []
+        for i in clasificacion:
+            colores.append(opciones.index(i))
+
+        return colores
+
 
 class AllClasification:
 
@@ -250,12 +260,9 @@ class AllClasification:
                 contador = contador + 1 # para la siguiente sub grafica
                 #La segunda gráfica 
                 #plt.subplot(len(modelos),2,contador)
-                colores = Representacion.coloresClasificacion(algoritmo.predict(datos), data.getSeleccionados())
+                colores = Representacion.coloresClasificacionFit(algoritmo.predict(datos), data.getSeleccionados())
                 ejex, ejey = list(zip(*datos))
-                #plt.scatter(ejex, ejey , c = colores, label=seleccionados )
-                #plt.title(algoritmo.__class__.__name__)
-                #plt.xlabel(data.getSeleccionEjeX())
-                #plt.ylabel(data.getSeleccionEjeY())
+
                 Clustering.dibujardatos2(ejex,ejey, algoritmo.__class__.__name__,colores, dimensionx,dimensiony,contador, data.getSeleccionEjeX(),data.getSeleccionEjeY(),data.getSeleccionados())
 
                 contador = contador + 1
