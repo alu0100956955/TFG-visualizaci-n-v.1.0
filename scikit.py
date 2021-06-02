@@ -104,20 +104,15 @@ class Representacion:
         plt.title(data.getTitle() + " Datos de entrenamiento")
         plt.ylabel(data.getSeleccionEjeY())
         plt.xlabel(data.getSeleccionEjeX())
-        #plt.legend() # El color no sale bien repersentado por ello es mejor no ponerlo
 
-        #Ahora le añado los valores de testeo
 
         auxX,auxY = zip(*X_test)
-        #for i in range(len(X_test)):
-        #    colores.append(1)
-        #    ejex.append(auxX[i])
-        #    ejey.append(auxY[i])
-    
-        ejex.extend(auxX)
+        colores2 = Representacion.coloresClasificacion(y_test ,len(auxX))
+        Clustering.dibujardatos2(auxX,auxY, "Datos de Testeo",colores2, dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
+       
+        #Ahora le añado los valores de testeo, para que? | osea tendría que mostar solo los de testeo y pasarlos por el modelo
+        ejex.extend(auxX) 
         ejey.extend(auxY)
-        #print(len(auxX))
-        #print(len(y_train))
         colores.extend(Representacion.coloresClasificacion(y_test ,len(auxX)))
 
 
@@ -127,7 +122,7 @@ class Representacion:
         #plt.title(data.getTitle() + " Datos de Testeo")
         #plt.ylabel(data.getSeleccionEjeY())
         #plt.xlabel(data.getSeleccionEjeX())
-        Clustering.dibujardatos2(ejex,ejey, "Datos de Testeo",colores, dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
+        
 
 
         plt.subplot(dimensionx, dimensiony, 3)
@@ -159,7 +154,9 @@ class Representacion:
         #plt.title("Datos clasificados")
         #plt.ylabel(data.getSeleccionEjeY())
         #plt.xlabel(data.getSeleccionEjeX())
-        Clustering.dibujardatos2(ejex,ejey, "Datos de Testeo",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
+
+        #FALTA LOS DATOS PASADOS POR EL MODELO
+        Clustering.dibujardatos2(ejex,ejey, "Datos clasificados",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
 
         #plt.subplot(325)
         #plt.plot(porcentajes, mean_squared, label="Error cuadratico")
