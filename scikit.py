@@ -54,6 +54,7 @@ class Representacion:
         test_accuracy = []
         dimensionx = 2
         dimensiony = 2
+        porcentajeTesteo = 0.4
         #mean_squared = []
         #mean_absolute = []
 
@@ -83,8 +84,8 @@ class Representacion:
 
         
 
-        # Para cambiar el tamaño del set de pruebas
-        X_train, X_test, y_train, y_test = train_test_split(datos, etiquetas, test_size=0.7 , random_state=0)
+        # Para cambiar el tamaño del set de pruebas | el test_size es bueno que sea más pequeño que el train set
+        X_train, X_test, y_train, y_test = train_test_split(datos, etiquetas, test_size=porcentajeTesteo , random_state=0)
 
         # Representacion de los datos de entrenamiento
         #print(X_train)
@@ -101,14 +102,16 @@ class Representacion:
         plt.subplot(dimensionx, dimensiony, 1)
 
         plt.scatter(ejex,ejey,c=colores, label= "Entrenamiento")
-        plt.title(data.getTitle() + " Datos de entrenamiento")
+        plt.title(" Datos de entrenamiento " + str(((1- porcentajeTesteo) * 100))  + "%" )
         plt.ylabel(data.getSeleccionEjeY())
         plt.xlabel(data.getSeleccionEjeX())
 
 
         auxX,auxY = zip(*X_test)
         colores2 = Representacion.coloresClasificacion(y_test ,len(auxX))
-        Clustering.dibujardatos2(auxX,auxY, "Datos de Testeo",colores2, dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
+        Clustering.dibujardatos2(auxX,auxY, "Datos de Testeo" + str(( porcentajeTesteo * 100))  + "%" ,
+                                 colores2, dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),
+                                 list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
        
         #Ahora le añado los valores de testeo, para que? | osea tendría que mostar solo los de testeo y pasarlos por el modelo
         ejex.extend(auxX) 
@@ -156,7 +159,11 @@ class Representacion:
         #plt.xlabel(data.getSeleccionEjeX())
 
         #FALTA LOS DATOS PASADOS POR EL MODELO
-        Clustering.dibujardatos2(ejex,ejey, "Datos clasificados",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
+        algoritmo.fit(X_train, y_train) # Entreno el modelo
+        datosTesteo = list(zip(X_test, y_test))
+        #datosTesteo = Representacion.DatosEtiquetasAntiguo(data) # No se puede por que no encajaran los shapes
+        colores = Representacion.coloresClasificacionFit(algoritmo.predict(datosTesteo), data.getSeleccionados()) # Hago el predict con los datos de testeo
+        Clustering.dibujardatos2(X_test,y_test, "Datos clasificados",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
 
         #plt.subplot(325)
         #plt.plot(porcentajes, mean_squared, label="Error cuadratico")
@@ -177,7 +184,7 @@ class Representacion:
         plt.show()
 
         # Devuelve los datos y las etiquetas necesarias para que tire el sistema
-    def DatosEtiquetas(data):
+    def DatosEtiquetasAntiguo(data):
         datos = []
         etiquetas = []
 
@@ -191,6 +198,21 @@ class Representacion:
                 etiquetas.append(selec)
             datos += aux 
         return datos, etiquetas, Xlabels, Ylabels
+
+    def DatosEtiquetas(data):
+        etiquetas = []
+
+        # Buble que por cada escogido se mezclaran los datos y añadiremos a datos, junto a su etiqueta en etiquetas
+        seleccionados = data.getSeleccionados()
+        EjeX,Xlabels = auxiliar.VerificarEje(data.getEjes(data.getSeleccionEjeX(),seleccionados))
+        EjeY,Ylabels = auxiliar.VerificarEje(data.getEjes(data.getSeleccionEjeY(),seleccionados))
+        datos = list(zip(EjeX,EjeY ))
+        # Este doble bucle no me gusta pero voy muy justo de tiempo
+        for selec in seleccionados:
+            for i in range(len(data.getEje(data.getSeleccionEjeX(),selec))):
+                etiquetas.append(selec) 
+        return datos, etiquetas, Xlabels, Ylabels
+
 
     def coloresClasificacion(labels,lenth):
         # Le pasaremos el array con todos las labels y el tamaño del ejex, 
@@ -226,7 +248,7 @@ class AllClasification:
             colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
 
             # Para los datos combinare los datos de los dos ejes empleando zip
-            datos, etiquetas, Xlabels, Ylabels = Representacion.DatosEtiquetas(data)
+            datos, etiquetas, Xlabels, Ylabels = Representacion.DatosEtiquetasAntiguo(data)
             contador = 1 # VAriable para controlar la subgrafica actual
 
             dimensionx = len(modelos)

@@ -9,7 +9,7 @@ import datetime
 from datetime import datetime
 
 #  "2 : Linea html", , "10: Histograma navegador"
-tiposGraficas = ["1 :  Linea Terminal", "3 : Linea navegador","4 : Barras navegador", "6 : dispersion navegador", "7 : box terminal",
+tiposGraficas = ["1 :  Linea Terminal", "3 : Linea navegador","4 : Barras navegador", "6 : dispersion navegador", "7 : Dispersion terminal", "8 : box terminal",
                 "9 : Histograma Terminal","11: Clasificacion vecino", "12: Clasificacion Gausian", "13: Clasificacion Tree",
                 "14: Regresion Linear","15: Regresion Gradient","16: Regresion Isotonic","17: Kmeans","18: Mixture","19: DBscan",
                 "20: Todas las clasificaciones","21: Todas las regresion", "22: Todos los clustering","0 : Pruebas"]

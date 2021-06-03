@@ -10,6 +10,8 @@ import scipy.stats as st    # Para la linea de densidad en los histogramas | Reg
 import math
 import seaborn as sns
 from sklearn.cluster import KMeans
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
 #from scipy import scipy
 
 #import geopandas as gpd 
@@ -197,10 +199,23 @@ class Scatter_matplotlib(Grafica):
         fig, ax = plt.subplots()
         seleccionados = data.getSeleccionados()
         for selec in seleccionados:
-            ax.scatter(data.getEje(data.getSeleccionEjeX(),selec),data.getEje(data.getSeleccionEjeY(),selec),alpha=0.3)
+            ax.scatter(data.getEje(data.getSeleccionEjeX(),selec),data.getEje(data.getSeleccionEjeY(),selec),alpha=0.3,label=selec)
         
         ax.legend()
         ax.grid(True)
+        # Para mostrar la regresion 
+        EjeX = data.getEjes(data.getSeleccionEjeX(), seleccionados)
+        EjeY = data.getEjes(data.getSeleccionEjeX(), seleccionados)
+        X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.4, random_state=0)
+
+        X_train = np.reshape(X_train, (-1, 1))
+        X_test =  np.sort(X_test, kind = 'mergesort')
+
+        model = LinearRegression
+        model.fit(X_train,y_train)
+        regresion_y = model.predict(X_test)
+        plt.plot(X_test, regresion_y,c = 'red')
+
 
         plt.show()
 

@@ -23,8 +23,8 @@ class Factory:
             3: ParseParoEspaña,
             4: ParseCovid,
             5: ParseCpu,
-            6: ParsePokemon2,
-            7: ParsePokemon,
+            6: ParsePokemon,
+            7: ParsePokemon2,
             8: ParseMushrooms2,
             9: ParseDiabetes
         }
@@ -42,8 +42,8 @@ class Factory:
             4: Barras_plotly,
             5: Mapa_plotly,
             6: Scatter_plotly,
-            7: Box_matplotlib,
-            8: Box_plotly,
+            7: Scatter_matplotlib,
+            8: Box_matplotlib,
             9: Histograma_matplotlib,
             10: Histograma_plotly,
             11: Kneighbors,

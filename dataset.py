@@ -88,7 +88,7 @@ class Dataset:
         if(self.pandas): # ESTO ES SOLO PARA LOS PARSEOS MODIFICADOS, debido a que guardare directamente el dataset en vez de matriz de matriz
             #return self.matrizEje[self.indexEje(eje)]  ç
 
-            filtrado = self.df[self.df[self.filtrar].isin([elemento])]
+            filtrado = self.df[self.df[self.filtrar].isin([elemento])] # Pongo el elemnto entre corchetes por que isin solo se aplica a listas
             #filtrado = self.df[self.df["Name"].isin(['Grass'])]
             filtrado = filtrado[eje].values
             #print(filtrado)
@@ -112,6 +112,12 @@ class Dataset:
             index = 0
         #print(index)
         return matriz[index]
+
+    # A diferencia del getEje, este me devuelve en un solo array el eje de varios elementos, necesario para las clasificaciones y otros metodos
+    def getEjes(self, eje, elementos):
+        filtrado = self.df[self.df[self.filtrar].isin(elementos)]
+        filtrado = filtrado[eje].values
+        return filtrado
 
     #Metodo para comprobar si el elemento existe | para mapas basicamente
     def existeElemento(self, elemento):
