@@ -205,16 +205,19 @@ class Scatter_matplotlib(Grafica):
         ax.grid(True)
         # Para mostrar la regresion 
         EjeX = data.getEjes(data.getSeleccionEjeX(), seleccionados)
-        EjeY = data.getEjes(data.getSeleccionEjeX(), seleccionados)
+        EjeY = data.getEjes(data.getSeleccionEjeY(), seleccionados)
         X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.4, random_state=0)
 
         X_train = np.reshape(X_train, (-1, 1))
         X_test =  np.sort(X_test, kind = 'mergesort')
-
-        model = LinearRegression
+        X_test = np.reshape(X_test, (-1, 1))
+        model = LinearRegression()
         model.fit(X_train,y_train)
         regresion_y = model.predict(X_test)
         plt.plot(X_test, regresion_y,c = 'red')
+        plt.xlabel(data.getSeleccionEjeX())
+        plt.ylabel(data.getSeleccionEjeY())
+        plt.title("Dispersión con regresión")
 
 
         plt.show()
