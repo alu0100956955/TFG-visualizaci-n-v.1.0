@@ -116,7 +116,8 @@ class Dataset:
     # A diferencia del getEje, este me devuelve en un solo array el eje de varios elementos, necesario para las clasificaciones y otros metodos
     def getEjes(self, eje, elementos):
         filtrado = self.df[self.df[self.filtrar].isin(elementos)]
-        filtrado = filtrado[eje].values
+        filtrado.head()
+        filtrado = filtrado[eje].values # Esto ordena los valores?
         return filtrado
 
     #Metodo para comprobar si el elemento existe | para mapas basicamente

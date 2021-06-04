@@ -83,7 +83,8 @@ class Representacion:
 
 
         
-
+        # En los datos estan los datos de los ejes por lo que en X_train y X_test estan los datos para representar los ejes
+        # En y_test e y_train estan las etiquetas, por lo que ojo cuidado a la hora de usar estas variables
         # Para cambiar el tamaño del set de pruebas | el test_size es bueno que sea más pequeño que el train set
         X_train, X_test, y_train, y_test = train_test_split(datos, etiquetas, test_size=porcentajeTesteo , random_state=0)
 
@@ -109,14 +110,14 @@ class Representacion:
 
         auxX,auxY = zip(*X_test)
         colores2 = Representacion.coloresClasificacion(y_test ,len(auxX))
-        Clustering.dibujardatos2(auxX,auxY, "Datos de Testeo" + str(( porcentajeTesteo * 100))  + "%" ,
+        Clustering.dibujardatos2(auxX,auxY, "Datos a clasificar" + str(( porcentajeTesteo * 100))  + "%" ,
                                  colores2, dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),
                                  list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
        
         #Ahora le añado los valores de testeo, para que? | osea tendría que mostar solo los de testeo y pasarlos por el modelo
-        ejex.extend(auxX) 
-        ejey.extend(auxY)
-        colores.extend(Representacion.coloresClasificacion(y_test ,len(auxX)))
+        #ejex.extend(auxX) 
+        #ejey.extend(auxY)
+        #colores.extend(Representacion.coloresClasificacion(y_test ,len(auxX)))
 
 
         #plt.subplot(322)
@@ -160,10 +161,12 @@ class Representacion:
 
         #FALTA LOS DATOS PASADOS POR EL MODELO
         algoritmo.fit(X_train, y_train) # Entreno el modelo
-        datosTesteo = list(zip(X_test, y_test))
+        #datosTesteo = list(zip(X_test, y_test)) # Estoy juntando los datos y las etiquetas
         #datosTesteo = Representacion.DatosEtiquetasAntiguo(data) # No se puede por que no encajaran los shapes
-        colores = Representacion.coloresClasificacionFit(algoritmo.predict(datosTesteo), data.getSeleccionados()) # Hago el predict con los datos de testeo
-        Clustering.dibujardatos2(X_test,y_test, "Datos clasificados",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
+        
+        colores = Representacion.coloresClasificacionFit(algoritmo.predict(X_test), data.getSeleccionados()) # Hago el predict con los datos de testeo
+        ejex,ejey = list(zip(*X_test))
+        Clustering.dibujardatos2(ejex,ejey, "Datos clasificados",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
 
         #plt.subplot(325)
         #plt.plot(porcentajes, mean_squared, label="Error cuadratico")
@@ -248,7 +251,7 @@ class AllClasification:
             colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
 
             # Para los datos combinare los datos de los dos ejes empleando zip
-            datos, etiquetas, Xlabels, Ylabels = Representacion.DatosEtiquetasAntiguo(data)
+            datos, etiquetas, Xlabels, Ylabels = Representacion.DatosEtiquetas(data)
             contador = 1 # VAriable para controlar la subgrafica actual
 
             dimensionx = len(modelos)
