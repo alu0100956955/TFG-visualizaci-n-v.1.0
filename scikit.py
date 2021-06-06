@@ -24,7 +24,7 @@ import random # para poder generar los colores de forma random
 # Para mostrar la matriz de confusion con matplolib
 # https://stackoverflow.com/questions/19233771/sklearn-plot-confusion-matrix-with-labels
 
-class auxiliar:
+class Auxiliar:
     # Metodo para poder obtener las labels en tipo int de los ejes que sean de tipo string
     # Ya que los ejes de tipo string no los admite los metodos que estan desarrollados
     def StringAxis(eje):
@@ -39,8 +39,58 @@ class auxiliar:
     def VerificarEje(ejeOriginal):
         ejeLabel= False
         if(isinstance(ejeOriginal[0],str) ): # Si es de tipo string lo pone tipo label
-            return auxiliar.StringAxis(ejeOriginal),ejeOriginal # Como el eje orignal tiene los string lo mando como label
+            return Auxiliar.StringAxis(ejeOriginal),ejeOriginal # Como el eje orignal tiene los string lo mando como label
         return ejeOriginal, ejeLabel
+
+    def dibujarDispersionInicial(data,dimension1,dimension2, posicion, titulo):
+        seleccionados = data.getSeleccionados()
+        plt.subplot(dimension1, dimension2, posicion)
+        for i in range(len(seleccionados)):
+            r = random.random()
+            b = random.random()
+            g = random.random()
+            colour = (r, g, b)
+            color = [colour for i in range(len(data.getEje(data.getSeleccionEjeY(),seleccionados[i])))]
+            plt.scatter(data.getEje(data.getSeleccionEjeX(),seleccionados[i]),data.getEje(data.getSeleccionEjeY(),seleccionados[i]),c=color, label=seleccionados[i])
+            
+        plt.legend()
+        plt.title(titulo)
+        plt.xlabel(data.getSeleccionEjeX())
+        plt.ylabel(data.getSeleccionEjeY())
+
+    def dibujarDispersion(ejex, ejey,titulo, colores, dimension1, dimension2, posicion, xlabel, ylabel,etiqueta):
+        #ejex,ejey = zip(*datos)
+        color = list(set(colores)) # Los colores es un array que indica con int que clusters colorea según el punto ej [1,1,0,1,0,1,0,0]
+        plt.subplot(dimension1, dimension2, posicion)
+        #print(colores)
+        x = []
+        y = []
+        co = []
+        if(isinstance(etiqueta,str)):
+            etiqueta = [etiqueta] * len(color)
+        for i in color:
+            r = random.random()
+            b = random.random()
+            g = random.random()
+            colour = (r, g, b)
+            #co = [colour for _ in range(len(ejex)) ] # Monto el array con el color del mismo len que el eje, ç
+            # pero como no todos los elementos son los que quiero no lo puedo hacer asi
+            for z in range(len(ejex)): # Solo guardo los elementos de los ejes que ha distinguido el cluster
+                if(colores[z] == i ):
+                    x.append(ejex[z])
+                    y.append(ejey[z])
+                    co.append(colour)
+            plt.scatter(x,y, c = co,label = etiqueta[i] + str(i+1))
+            x.clear()
+            y.clear()
+            co.clear()
+
+        
+        #plt.scatter(ejex,ejey, c = colores)
+        plt.title(titulo)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.legend()
 
 # Como por ahora las tres clases representan de la misma forma por ahora empleo esta clase para representar pasandole el algoritmo
 # Clase para representar los metodos de clasificacion
@@ -55,8 +105,7 @@ class Representacion:
         dimensionx = 2
         dimensiony = 2
         porcentajeTesteo = 0.4
-        #mean_squared = []
-        #mean_absolute = []
+
 
         # Para los datos combinare los datos de los dos ejes empleando zip
         # Las etiquetas seran las opciones escogidas
@@ -64,7 +113,7 @@ class Representacion:
 
 
         # Cambio el porcentaje de entrenamiento y testeo
-        porcentajes = np.arange(0.4, 0.9, 0.05)
+        porcentajes = np.arange(0.3, 0.9, 0.05)
         for porcentaje in porcentajes:    # Bucle para hacer la gr�fica
 
 
@@ -75,11 +124,7 @@ class Representacion:
             training_accuracy.append(algoritmo.score(X_train, y_train))    
             # record generalization accuracy    
             test_accuracy.append(algoritmo.score(X_test, y_test))
-            #predict = algoritmo.predict(X_train)
-            #print(predict.shape())
-            #print(len(X_train))
-            #mean_squared = mean_squared_error(y_train, predict) # Necesita la Y que contiene las etiquetas ya que el predict al ser clasificacion devulve etiquetas
-            #mean_absolute = mean_absolute_error(X_train, predict)
+            
 
 
         
@@ -88,18 +133,14 @@ class Representacion:
         # Para cambiar el tamaño del set de pruebas | el test_size es bueno que sea más pequeño que el train set
         X_train, X_test, y_train, y_test = train_test_split(datos, etiquetas, test_size=porcentajeTesteo , random_state=0)
 
-        # Representacion de los datos de entrenamiento
-        #print(X_train)
-        #print(y_train)
+        # 1º grafiaca Representacion de los datos de entrenamiento
+
         ejex, ejey = zip(*X_train)
         ejex=list(ejex)
         ejey=list(ejey)
-        #print(len(y_train))
-        #print(len(ejex))
         #https://stackoverflow.com/questions/8528178/list-of-zeros-in-python
         #colores = [0] * len(ejex)
         colores= Representacion.coloresClasificacion(y_train ,len(ejex))
-        # Los 3 numeros representan: los dos primeros las dimensiones el tercero la posicion
         plt.subplot(dimensionx, dimensiony, 1)
 
         plt.scatter(ejex,ejey,c=colores, label= "Entrenamiento")
@@ -107,10 +148,10 @@ class Representacion:
         plt.ylabel(data.getSeleccionEjeY())
         plt.xlabel(data.getSeleccionEjeX())
 
-
+        # 2º grafica Representacion de los datos de testeo
         auxX,auxY = zip(*X_test)
         colores2 = Representacion.coloresClasificacion(y_test ,len(auxX))
-        Clustering.dibujardatos2(auxX,auxY, "Datos a clasificar" + str(( porcentajeTesteo * 100))  + "%" ,
+        Auxiliar.dibujarDispersion(auxX,auxY, "Datos a clasificar" + str(( porcentajeTesteo * 100))  + "%" ,
                                  colores2, dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),
                                  list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
        
@@ -119,16 +160,7 @@ class Representacion:
         #ejey.extend(auxY)
         #colores.extend(Representacion.coloresClasificacion(y_test ,len(auxX)))
 
-
-        #plt.subplot(322)
-        # CODIGO DUPLICADO, podria hacer esto en un bucle y que lo otro fuese un metodo para añadir nuevos datos al scatter TODO
-        #plt.scatter(ejex,ejey, c=colores)
-        #plt.title(data.getTitle() + " Datos de Testeo")
-        #plt.ylabel(data.getSeleccionEjeY())
-        #plt.xlabel(data.getSeleccionEjeX())
-        
-
-
+        #3º gráfica representacion del accuraci del metodo con los diferentes porcentajes en las pruebas
         plt.subplot(dimensionx, dimensiony, 3)
         plt.plot(porcentajes, training_accuracy, label="training accuracy")
         plt.plot(porcentajes, test_accuracy, label="test accuracy")
@@ -137,53 +169,20 @@ class Representacion:
         plt.legend()
         plt.title("Precisión")
 
-
-        #plt.subplot(224)
-        #coloresClasificacion
-        #plt.scatter(ejex,ejey,c=coloresClasifiacion)
-        #plt.title(data.getTitle() + " Clasificados")
-        #plt.ylabel(data.getSeleccionEjeY())
-        #plt.xlabel(data.getSeleccionEjeX())
-        #plt.legend()
-        #plt.show()    
-    
-        # https://matplotlib.org/3.1.1/gallery/lines_bars_and_markers/scatter_with_legend.html
-        # fig, ax = 
-        #seleccionados = data.getSeleccionados()
-        #plt.subplot(dimensionx, dimensiony, 4)
-        #colores = Representacion.coloresClasificacion(algoritmo.predict(datos), data.getSeleccionados())
-        #ejex, ejey = list(zip(*datos))
-        #plt.scatter(ejex, ejey , c = colores)
-        #plt.legend(seleccionados)
-        #plt.title("Datos clasificados")
-        #plt.ylabel(data.getSeleccionEjeY())
-        #plt.xlabel(data.getSeleccionEjeX())
-
-        #FALTA LOS DATOS PASADOS POR EL MODELO
-        algoritmo.fit(X_train, y_train) # Entreno el modelo
-        #datosTesteo = list(zip(X_test, y_test)) # Estoy juntando los datos y las etiquetas
-        #datosTesteo = Representacion.DatosEtiquetasAntiguo(data) # No se puede por que no encajaran los shapes
-        
+        # 4º gráfica, representación de los datos de testeo con las etiquetas que precide el modelo
+        algoritmo.fit(X_train, y_train) # Entreno el modelo  
         colores = Representacion.coloresClasificacionFit(algoritmo.predict(X_test), data.getSeleccionados()) # Hago el predict con los datos de testeo
-        ejex,ejey = list(zip(*X_test))
-        Clustering.dibujardatos2(ejex,ejey, "Datos clasificados",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
+        ejex,ejey = list(zip(*X_test)) # Separa X_test por que es la que contiene los datos de los dos ejes
+        Auxiliar.dibujarDispersion(ejex,ejey, "Datos clasificados",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
 
-        #plt.subplot(325)
-        #plt.plot(porcentajes, mean_squared, label="Error cuadratico")
-        #plt.plot(porcentajes, mean_absolute, label="Error absoluto")
-        #plt.ylabel("Accuracy")
-        #plt.xlabel("Porcentaje de conjunto de pruebas")
-        #plt.legend()
 
         plt.suptitle(algoritmo_.__name__) # para mostrar el modelo que se esta representando
         plt.tight_layout() # Para dar espacio a las subgraficas
 
-        #plt.subplot(224)  # No lo muestra como me gustaria puede deberse a como creo la matriz de confusión
+        # 5º gráfica, la matriz de confusión
         disp = metrics.plot_confusion_matrix(algoritmo, X_test, y_test, normalize = 'true')
         disp.figure_.suptitle("Confusion Matrix")
-        #print("Confusion matrix:\n%s" % disp.confusion_matrix)
-        
-        
+
         plt.show()
 
         # Devuelve los datos y las etiquetas necesarias para que tire el sistema
@@ -194,8 +193,8 @@ class Representacion:
         # Buble que por cada escogido se mezclaran los datos y añadiremos a datos, junto a su etiqueta en etiquetas
         seleccionados = data.getSeleccionados()
         for selec in seleccionados:
-            EjeX,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),selec))
-            EjeY,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),selec))
+            EjeX,Xlabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),selec))
+            EjeY,Ylabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),selec))
             aux = list(zip(EjeX,EjeY ))
             for i in range(len(aux)):
                 etiquetas.append(selec)
@@ -207,8 +206,8 @@ class Representacion:
 
         # Buble que por cada escogido se mezclaran los datos y añadiremos a datos, junto a su etiqueta en etiquetas
         seleccionados = data.getSeleccionados()
-        EjeX,Xlabels = auxiliar.VerificarEje(data.getEjes(data.getSeleccionEjeX(),seleccionados))
-        EjeY,Ylabels = auxiliar.VerificarEje(data.getEjes(data.getSeleccionEjeY(),seleccionados))
+        EjeX,Xlabels = Auxiliar.VerificarEje(data.getEjes(data.getSeleccionEjeX(),seleccionados))
+        EjeY,Ylabels = Auxiliar.VerificarEje(data.getEjes(data.getSeleccionEjeY(),seleccionados))
         datos = list(zip(EjeX,EjeY ))
         # Este doble bucle no me gusta pero voy muy justo de tiempo
         for selec in seleccionados:
@@ -288,11 +287,10 @@ class AllClasification:
                 colores = Representacion.coloresClasificacionFit(algoritmo.predict(datos), data.getSeleccionados())
                 ejex, ejey = list(zip(*datos))
 
-                Clustering.dibujardatos2(ejex,ejey, algoritmo.__class__.__name__,colores, dimensionx,dimensiony,contador, data.getSeleccionEjeX(),data.getSeleccionEjeY(),data.getSeleccionados())
+                Auxiliar.dibujarDispersion(ejex,ejey, algoritmo.__class__.__name__,colores, dimensionx,dimensiony,contador, data.getSeleccionEjeX(),data.getSeleccionEjeY(),data.getSeleccionados())
 
                 contador = contador + 1
-
-                
+  
             plt.tight_layout() # Para dar espacio a las subgraficas
             plt.show()
 
@@ -315,7 +313,7 @@ class Tree:
     def show(data):
         Representacion.show(data,DecisionTreeClassifier)
 
-# ////////////////////////////// REGRESION ////////////////////////////////////
+# ///////////////////////////////////////////////////// REGRESION ////////////////////////////////////////////////////////////////////////
 
 class Regresion:
     # https://matplotlib.org/3.1.0/gallery/color/named_colors.html Lista de colores de matplotlib
@@ -333,8 +331,8 @@ class Regresion:
 
         for i in range(cantidadSeleccionados):
             # TODO: Tendria que controlar si se pasa un eje no numerico
-            EjeX,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
-            EjeY,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+            EjeX,Xlabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+            EjeY,Ylabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
 
             X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.6, random_state=0)
             # Para meter las strin, tengo que hacer que el split sea como en la clasificacion
@@ -346,15 +344,14 @@ class Regresion:
             X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
             if(reshape):    # if es de tipo isotonic no hago el reshape
                 X_test = np.reshape(X_test, (-1, 1))
-            #print(X_train)
-            #print(y_train)
+
 
             model = modelo()
             model.fit(X_train,y_train)
             regresion_y = model.predict(X_test)
             plt.subplot(dim, dim, i+1)
             plt.scatter(X_train,y_train)
-            plt.plot(X_test, regresion_y,c = 'red') # repretar varias, cada una con su leyenda, con color <------------- | NO
+            plt.plot(X_test, regresion_y,c = 'red') 
             plt.title(seleccionados[i])
             plt.xlabel(data.getSeleccionEjeX())
             plt.ylabel(data.getSeleccionEjeY())
@@ -367,14 +364,6 @@ class Regresion:
             mean_squared.append(mean_squared_error(y_train, predict)) # La y_train tiene los datos originales para comprarlos con la predicción
             mean_absolute.append(mean_absolute_error(y_train, predict))
 
-            # Linear regression y = xm + n
-            #peso = model.coef_ # La pendiente, lo que multiplica por x
-            #intercep = model.intercept_ # Intercep
-
-
-            # Gradient regression y = 
-
-            # Isotonic regresion y = 
 
         # hago una subgrafica con los errores absoluto y cuadratico
         errores = ["Cuadratic","Absolute"]
@@ -393,11 +382,6 @@ class Regresion:
         
         plt.suptitle(modelo.__name__)
         plt.tight_layout() # Para dar espacio a las subgraficas
-        # Para meter las subgraficas en la ventana 
-        #root = tk.Tk() # para mostrar las subgraficas
-        #root.wm_title("Regresiones")
-        #canvas = FigureCanvasTkAgg(plt, master=root)
-        #canvas.show()
 
         plt.show()
 
@@ -412,10 +396,10 @@ class Regresion:
         seleccionados = data.getSeleccionados()
         for i in range(len(seleccionados)):
             if i == 0:
-                ejex,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
-                ejex,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
-            EjeX,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
-            EjeY,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+                ejex,Xlabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+                ejex,Ylabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+            EjeX,Xlabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+            EjeY,Ylabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
             ejex += EjeX
             ejey += EjeY
             
@@ -423,7 +407,7 @@ class Regresion:
 
 
     # Una gráfica por modelo, se combinan los datos de todas las opciones seleccionadas
-class AllRegresion:
+class AllRegresionAntiguo:
 
     def show(data):
         
@@ -438,8 +422,8 @@ class AllRegresion:
         colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
         for i in range(len(modelos)):
             # TODO: Tendria que controlar si se pasa un eje no numerico
-            EjeX,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
-            EjeY,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+            EjeX,Xlabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+            EjeY,Ylabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
             X_train, X_test, y_train, y_test = train_test_split(ejex, ejey, test_size=0.6, random_state=0)
             #print(np.shape(X_train))
             if(i != 2):
@@ -487,8 +471,8 @@ class AllRegresion2:
         dimensionx = 2
         dimensiony = len(modelos)
         for i in range(len(seleccionados)):
-            EjeX,Xlabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
-            EjeY,Ylabels = auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+            EjeX,Xlabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+            EjeY,Ylabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
 
             X_train, X_test, y_train, y_test = train_test_split( EjeX , EjeY , test_size=0.6, random_state=0) # dimensiones de los X-train
             
@@ -502,23 +486,12 @@ class AllRegresion2:
                 plt.subplot(dimensionx, dimensiony, j+1) # El indice no puede ser 0
                 indiceSubgrafica = indiceSubgrafica + 1
                 if(j != 0):
-                    #print(j)
                     X_train = np.reshape(X_train, (-1, 1))
-                #if (j == 2):  # Problema de 1d array https://stackoverflow.com/questions/35812074/shortest-syntax-to-use-numpy-1d-array-as-sklearn-x
-                 #   X_train = np.reshape(X_train, (1,-1))
-                 #   X_train = list(itertools.chain(X_train))
-                 #   X_train = X_train[:, None]
-                 #   X_train = np.matrix(X_train).T.A
                 X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
                 if(j != 0):    # if es de tipo isotonic no hago el reshape
                     X_test = np.reshape(X_test, (-1, 1))
-                #if(j == 2):    # if es de tipo isotonic tengo que rehacer el reshape
-                  #  X_test = list(itertools.chain(X_test))
-                  #  X_test = X_test[:, None]
-                  #  X_test = np.matrix(X_test).T.A
 
                 model = modelos[j]()
-                #print(np.shape(X_train))
                 model.fit(X_train,y_train)
                 regresion_y = model.predict(X_test)
 
@@ -587,30 +560,21 @@ class Isotonic:
 class Clustering:
 
     def show(data, modelo):
-        # En total quiero que haya 4 graficas que aporten informacion
-        # Separar los datos
-        # representar los datos del dataset con el metodo
-        # Declarar el modelo
-        # Entrenar el modelo
-        # Representar los datos que usare para predecir, ya con los clusters
-        # Representar los centros de cluster
-        # Usar al metodo de medicion de clustering para otra grafica
 
         plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
         seleccionados = data.getSeleccionados() # Las opciones seleccionadas, pero para que guardarlo si puede llamar a este procedimiento?
         cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
         dimensionx = 1 # La cantidad de filas para los subplots
         dimensiony = 2 # La cntidad de columnas para los subplots
-        Clustering.dibujarDatosIniciales(data,dimensionx,dimensiony,1)
+        #Clustering.dibujarDatosIniciales(data,dimensionx,dimensiony,1)
+        Auxiliar.dibujarDispersionInicial(data,dimensionx,dimensiony,1, "Datos Pre Clustering" +data.getTitle())
         ejex, ejey , colores = Clustering.combinacionDatos(data) # Combinar para que?, si despues es más dificil mostrar las etiquetas
-        # cableado por que habra un numero fijo de subventanas
-        #Clustering.dibujardatos(ejex, ejey,"Datos entrenamiento" +data.getTitle(), colores,2,2,1, data.getSeleccionEjeX(),data.getSeleccionEjeY()) 
-
+       
         
 
         # metodo clustering
-        EjeX,Xlabels = auxiliar.VerificarEje(ejex)
-        EjeY,Ylabels = auxiliar.VerificarEje(ejey)
+        EjeX,Xlabels = Auxiliar.VerificarEje(ejex)
+        EjeY,Ylabels = Auxiliar.VerificarEje(ejey)
         puntos = list(zip(EjeX,EjeY))
         
         if( isinstance(modelo(),KMeans)): # si el modelo es kmeans
@@ -620,30 +584,10 @@ class Clustering:
         if( isinstance(modelo(),DBSCAN)): # si el modelo es DBscan
             model = modelo().fit(puntos)
         # entrenarlo
-        
         y_km = model.fit_predict(puntos)
         # representarlo
-        
-        colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
-        for i in range(cantidadSeleccionados):
-            # podria combertir la i en float y sumarle un 0,1 para la segunda
-            primero = i+0,0
-            segundo = i+0,1
-            #plt.scatter(puntos[y_km == primero], puntos[y_km == segundo], color = colores[i])   # tengo que generar los float de otra manera| pueden ser slices
-        #plt.subplot(dimensionx,dimensiony,2)
-        #plt.scatter(ejex, ejey, c = y_km) # Muestro los ejes originales ya los verificados es solo para entrenar el modelo
-        Clustering.dibujardatos2(ejex, ejey, "Clustering", y_km,dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),"Cluster ")
-        #Clustering.dibujardatos(ejex, ejey, "Clustering", y_km,dimensionx,dimensiony,3, data.getSeleccionEjeX(),data.getSeleccionEjeY())
-        #plt.title("Clustering")
-        #plt.xlabel(data.getSeleccionEjeX())
-        #plt.ylabel(data.getSeleccionEjeY())
-        #if(isinstance(Xlabels,list)): 
-        #    plt.xticks(EjeX,Xlabels)
-        #if(isinstance(Ylabels,list)):
-        #    plt.yticks(EjeY,Ylabels)
-        
-        
-        # Representar mediciones
+        Auxiliar.dibujarDispersion(ejex, ejey, "Clustering", y_km,dimensionx,dimensiony,2,
+                                  data.getSeleccionEjeX(),data.getSeleccionEjeY(),"Cluster ")
         
         plt.suptitle(modelo.__name__)
         plt.tight_layout() # Para dar espacio a las subgraficas
@@ -682,67 +626,7 @@ class Clustering:
 
             return ejex, ejey, colores
 
-
-
-    # Metodo para dibujar los datos den entrenamiento y los de predecir, deberia usarlo con el de arriba
-    def dibujardatos(ejex, ejey,titulo, colores, dimension1, dimension2, posicion, xlabel, ylabel):
-        #ejex,ejey = zip(*datos)
-        plt.subplot(dimension1, dimension2, posicion)
-        plt.scatter(ejex,ejey, c = colores)
-        plt.title(titulo)
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
-
-    def dibujardatos2(ejex, ejey,titulo, colores, dimension1, dimension2, posicion, xlabel, ylabel,etiqueta):
-        #ejex,ejey = zip(*datos)
-        color = list(set(colores)) # Los colores es un array que indica con int que clusters colorea según el punto ej [1,1,0,1,0,1,0,0]
-        plt.subplot(dimension1, dimension2, posicion)
-        #print(colores)
-        x = []
-        y = []
-        co = []
-        if(isinstance(etiqueta,str)):
-            etiqueta = [etiqueta] * len(color)
-        for i in color:
-            r = random.random()
-            b = random.random()
-            g = random.random()
-            colour = (r, g, b)
-            #co = [colour for _ in range(len(ejex)) ] # Monto el array con el color del mismo len que el eje, ç
-            # pero como no todos los elementos son los que quiero no lo puedo hacer asi
-            for z in range(len(ejex)): # Solo guardo los elementos de los ejes que ha distinguido el cluster
-                if(colores[z] == i ):
-                    x.append(ejex[z])
-                    y.append(ejey[z])
-                    co.append(colour)
-            plt.scatter(x,y, c = co,label = etiqueta[i] + str(i+1))
-            x.clear()
-            y.clear()
-            co.clear()
-
-        
-        #plt.scatter(ejex,ejey, c = colores)
-        plt.title(titulo)
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
-        plt.legend()
-
-    def dibujarDatosIniciales(data,dimension1,dimension2, posicion):
-        seleccionados = data.getSeleccionados()
-        plt.subplot(dimension1, dimension2, posicion)
-        for i in range(len(seleccionados)):
-            r = random.random()
-            b = random.random()
-            g = random.random()
-            colour = (r, g, b)
-            color = [colour for i in range(len(data.getEje(data.getSeleccionEjeY(),seleccionados[i])))]
-            plt.scatter(data.getEje(data.getSeleccionEjeX(),seleccionados[i]),data.getEje(data.getSeleccionEjeY(),seleccionados[i]),c=color, label=seleccionados[i])
-            
-        plt.legend()
-        plt.title("Datos Pre Clustering" +data.getTitle())
-        plt.xlabel(data.getSeleccionEjeX())
-        plt.ylabel(data.getSeleccionEjeY())
-        #plt.show() # Si hago un show aqui ya no muestra más
+  
 
 class AllClustering:
 
@@ -753,28 +637,23 @@ class AllClustering:
         cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
 
         ejex, ejey , colores = Clustering.combinacionDatos(data)
-        EjeX,Xlabels = auxiliar.VerificarEje(ejex)
-        EjeY,Ylabels = auxiliar.VerificarEje(ejey)
+        EjeX,Xlabels = Auxiliar.VerificarEje(ejex)
+        EjeY,Ylabels = Auxiliar.VerificarEje(ejey)
         puntos = list(zip(EjeX,EjeY))
         
         modelos = [KMeans,GaussianMixture, DBSCAN]  # Los distintos tipos de clustering
-        i = 1 # ?
         for modelo in modelos:
-            if(i == 1): # Comparar con 1?
+            if(isinstance(modelo(),KMeans)): 
                 model = modelo(n_clusters = cantidadSeleccionados).fit(puntos)
-            if(i == 2):
+            if(isinstance(modelo(),GaussianMixture)):
                 model = modelo(n_components = cantidadSeleccionados)
-            if(i == 3):
+            if(isinstance(modelo(),DBSCAN)):
                 model = modelo()
             y_km = model.fit_predict(puntos)
             Clustering.dibujardatos(ejex,ejey,model.__class__.__name__,y_km,1,3,i,data.getSeleccionEjeX(),data.getSeleccionEjeY())
-            i += 1 # oh, rly has hecho esto¿¿
+
 
         plt.tight_layout() # Para dar espacio a las subgraficas
-        #if(isinstance(Xlabels,list)): 
-        #    plt.xticks(EjeX,Xlabels)
-        #if(isinstance(Ylabels,list)):
-        #    plt.yticks(EjeY,Ylabels)
         plt.show()
 
 
