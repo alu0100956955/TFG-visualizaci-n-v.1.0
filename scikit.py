@@ -353,34 +353,34 @@ class Regresion:
 
         for i in range(cantidadSeleccionados):
             # TODO: Tendria que controlar si se pasa un eje no numerico
-            EjeX,Xlabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
-            EjeY,Ylabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+            #EjeX,Xlabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+            #EjeY,Ylabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
 
-            X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.6, random_state=0)
+            #X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.6, random_state=0)
+            X_train, X_test, y_train, y_test = train_test_split(data.getEje(data.getSeleccionEjeX(),seleccionados[i]),data.getEje(data.getSeleccionEjeY(),seleccionados[i]), test_size=0.6, random_state=0)
             # Para meter las strin, tengo que hacer que el split sea como en la clasificacion
             # Que el ejeX tenga los datso y zipearlos mientras en el y las labels
 
-
+            model = modelo()
+            X_train,ejex = Auxiliar.VerificarEje(X_train)
+            y_train,ejey = Auxiliar.VerificarEje(y_train)
             if(reshape):
                 X_train = np.reshape(X_train, (-1, 1))
+            model.fit(X_train,y_train) # FIT ¡¡¡
+            
+            X_test,ejex_t = Auxiliar.VerificarEje(X_test)
             X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
             if(reshape):    # if es de tipo isotonic no hago el reshape
                 X_test = np.reshape(X_test, (-1, 1))
-
-
-            model = modelo()
-            model.fit(X_train,y_train)
-            regresion_y = model.predict(X_test)
+            regresion_y = model.predict(X_test) # PREDICT ¡¡¡
             plt.subplot(dim, dim, i+1)
-            plt.scatter(X_train,y_train)
+            
+            plt.scatter(ejex,ejey)
             plt.plot(X_test, regresion_y,c = 'red') 
             plt.title(seleccionados[i])
             plt.xlabel(data.getSeleccionEjeX())
             plt.ylabel(data.getSeleccionEjeY())
-            if(isinstance(Xlabels,list)): 
-                plt.xticks(EjeX,Xlabels)
-            if(isinstance(Ylabels,list)):
-                plt.yticks(EjeY,Ylabels)
+            
 
             predict = model.predict(X_train)
             mean_squared.append(mean_squared_error(y_train, predict)) # La y_train tiene los datos originales para comprarlos con la predicción
@@ -493,28 +493,36 @@ class AllRegresion2:
         dimensionx = 2
         dimensiony = len(modelos)
         for i in range(len(seleccionados)):
-            EjeX,Xlabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
-            EjeY,Ylabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
+            #EjeX,Xlabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
+            #EjeY,Ylabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
 
-            X_train, X_test, y_train, y_test = train_test_split( EjeX , EjeY , test_size=0.6, random_state=0) # dimensiones de los X-train
+            #X_train, X_test, y_train, y_test = train_test_split( EjeX , EjeY , test_size=0.6, random_state=0) # dimensiones de los X-train
+            X_train, X_test, y_train, y_test = train_test_split(data.getEje(data.getSeleccionEjeX(),seleccionados[i]),data.getEje(data.getSeleccionEjeY(),seleccionados[i]), test_size=0.6, random_state=0)
             
             mean_squared = [] # para guardar el error cuadratico
             mean_absolute = [] # para guardar el error absoluto
             plt.figure(i) # Sera una ventana por cada opción
             #print(np.shape(X_train))
+
+            X_train,ejex = Auxiliar.VerificarEje(X_train)
+            y_train,ejey = Auxiliar.VerificarEje(y_train)
+            X_test,ejex_t = Auxiliar.VerificarEje(X_test)
             for j in range(len(modelos)):
                 
                 #plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)  # Para marcar los subplots de las graficas
                 plt.subplot(dimensionx, dimensiony, j+1) # El indice no puede ser 0
                 indiceSubgrafica = indiceSubgrafica + 1
+                model = modelos[j]()
+                
                 if(j != 0):
                     X_train = np.reshape(X_train, (-1, 1))
+                model.fit(X_train,y_train) # FIT ¡¡¡
+
+                
                 X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
                 if(j != 0):    # if es de tipo isotonic no hago el reshape
                     X_test = np.reshape(X_test, (-1, 1))
 
-                model = modelos[j]()
-                model.fit(X_train,y_train)
                 regresion_y = model.predict(X_test)
 
                 predict = model.predict(X_train)
@@ -522,15 +530,12 @@ class AllRegresion2:
                 mean_absolute.append(mean_absolute_error(y_train, predict))
 
                 
-                plt.scatter(X_train,y_train)
+                plt.scatter(ejex,ejey)
                 plt.plot(X_test, regresion_y,c = colores[i]) # repretar varias, cada una con su leyenda, con color <----------------
                 plt.title(model.__class__.__name__)
                 plt.xlabel(data.getSeleccionEjeX())
                 plt.ylabel(data.getSeleccionEjeY())
-                if(isinstance(Xlabels,list)): 
-                    plt.xticks(EjeX,Xlabels)
-                if(isinstance(Ylabels,list)):
-                    plt.yticks(EjeY,Ylabels)
+                
                 
 
             #plt.figure() # Un ultima ventana para los errores
