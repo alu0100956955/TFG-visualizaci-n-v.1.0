@@ -428,47 +428,6 @@ class Regresion:
         return ejex, ejey , Xlabels, Ylabels
 
 
-    # Una gráfica por modelo, se combinan los datos de todas las opciones seleccionadas
-class AllRegresionAntiguo:
-
-    def show(data):
-        
-        
-        plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
-        seleccionados = data.getSeleccionados() # Las opciones seleccionadas
-        cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
-        dim = Regresion.dimensiones(cantidadSeleccionados) # con la cantidad de seleccionados genero las dimensiones para el subplot
-
-        modelos = [LinearRegression, GradientBoostingRegressor, IsotonicRegression]
-        ejex, ejey = Regresion.combinacionDatos(data)
-        colores = ['red','green','yellow','cyan','indigo','maroon','teal','gold','orange','coral']
-        for i in range(len(modelos)):
-            # TODO: Tendria que controlar si se pasa un eje no numerico
-            EjeX,Xlabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
-            EjeY,Ylabels = Auxiliar.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
-            X_train, X_test, y_train, y_test = train_test_split(ejex, ejey, test_size=0.6, random_state=0)
-            #print(np.shape(X_train))
-            if(i != 2):
-                X_train = np.reshape(X_train, (-1, 1))
-            X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
-            if(i != 2):    # if es de tipo isotonic no hago el reshape
-                X_test = np.reshape(X_test, (-1, 1))
-
-            model = modelos[i]()
-            #print(np.shape(X_train))
-            model.fit(X_train,y_train)
-            regresion_y = model.predict(X_test)
-            plt.subplot(1, len(modelos), i+1)
-            plt.scatter(X_train,y_train)
-            plt.plot(X_test, regresion_y,c = colores[i]) # repretar varias, cada una con su leyenda, con color <----------------
-            plt.title(model.__name__)
-            if(isinstance(Xlabels,list)): 
-                plt.xticks(EjeX,Xlabels)
-            if(isinstance(Ylabels,list)):
-                plt.yticks(EjeY,Ylabels)
-
-        plt.tight_layout() # Para dar espacio a las subgraficas
-        plt.show()
 
  # slice notation https://stackoverflow.com/questions/509211/understanding-slice-notation
  # Una gráfica por metodo y opcion seleccionada
