@@ -22,17 +22,19 @@ class ParseTemplate:
     def getDataset(self):
         data = Dataset("")
         #data.setIntFuente()
-        data.setOpciones() # Las opciones que se peuden escoger
+        data.setOpciones(self.getOpciones()) # Las opciones que se peuden escoger
 
         #----------
         data.addOpcionEje("")
 
         #----------
-        data.addElementoEje()
-
-
+        data.setFiltrado("XYZ")
+        data.setDataset(self.df)
         data.setTiposGraficas(tiposGraficas) # Los tipos de graficas es una variable global
         return data
+
+    def  getOpciones(self):
+        return self.df['XYZ'].unique().tolist() 
 
 
 
@@ -959,4 +961,33 @@ class ParseDiabetes:
         return self.df['Outcome'].unique().tolist() 
 
 
+class ParseCovid2:
+    # https://github.com/owid/covid-19-data
+    def __init__(self):
+        self.df = pd.read_csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv")
+
+    def getDataset(self):
+        data = Dataset("Covid")
+        #data.setIntFuente()
+
+        data.setOpciones(self.getOpciones()) # Las opciones que se peuden escoger
+
+        #----------
+        opciones = ["total_cases","new_cases","total_deaths","new_deaths","date","continent","people_vaccinated","population",
+            "population_density","median_age","life_expectancy","gdp_per_capita"]
+        for i in opciones:
+            data.addOpcionEje(i)
+            self.df[i].replace({None: 0}, inplace=True)
+
+        #----------
+        # Cuidado que hay que añadir la columna por la que luego se filtrara
+        self.df = self.df[["location","total_cases","new_cases","total_deaths","new_deaths","date","continent","people_vaccinated","population",
+            "population_density","median_age","life_expectancy","gdp_per_capita"]]
+        data.setFiltrado("location")
+        data.setDataset(self.df)
+        data.setTiposGraficas(tiposGraficas) # Los tipos de graficas es una variable global
+        return data
+
+    def  getOpciones(self):
+        return self.df['location'].unique().tolist() 
 #adfasf

@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico, ParseParoEspaña, ParseCovid, ParseCpu, ParseLol, ParsePokemon, ParseMushrooms
+from leerDatos import ParseCasosConfirmados, ParseAccidentesTrafico, ParseParoEspaña, ParseCovid, ParseCpu, ParseLol, ParsePokemon, ParseMushrooms, ParseCovid2
 from leerDatos import ParsePokemon2, ParseMushrooms2, ParseDiabetes
 from grafica_mat import Linea_mat, Box_matplotlib , Barras_matplotlib, Histograma_matplotlib, Scatter_matplotlib, Clustering_matplotlib
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
 from grafica_ploty import Lineas_plotly, Barras_plotly, Mapa_plotly, Scatter_plotly, Box_plotly, Histograma_plotly
 from scikit import Gausian, Kneighbors, Tree, Linear, Gradient, Isotonic, Kmeans, Mixture, DBscan
-from scikit import AllClustering, AllClasification, AllRegresion2, AllRegresionAntiguo
+from scikit import AllClustering, AllClasification, AllRegresion2
 from leerDatosSpark import ParsePokemonSpark
 
 
@@ -22,7 +22,7 @@ class Factory:
             
             2: ParseAccidentesTrafico,
             3: ParseParoEspaña,
-            4: ParseCovid,
+            4: ParseCovid2,
             5: ParseCpu,
             6: ParsePokemon,
             7: ParsePokemon2,
@@ -59,7 +59,7 @@ class Factory:
             20: AllClasification,
             21: AllRegresion2,
             22: AllClustering,
-            0: AllRegresionAntiguo
+            0: AllRegresion2
         }
         # 0: cluestering
 

@@ -105,7 +105,7 @@ class Usuario:
             # Si ha seleccionado la grafica tipo box quito el eje X y añado otras opciones de representacion
             # TO DO, mejorar la forma en la que oculto los elementos
             
-            if(opcionesEjesX.winfo_ismapped() & ((eleccionUsuario == 7) or (eleccionUsuario == 8) or (eleccionUsuario == 9)) ):
+            if(opcionesEjesX.winfo_ismapped() & ((eleccionUsuario == 8) or (eleccionUsuario == 9)) ):
                 opcionesEjesX.grid_remove()
                 labelEjeX.grid_remove()
 
@@ -139,8 +139,8 @@ class Usuario:
             botonGrafica.grid(column = 2, row = 24)
 
         # 5. QUINTO Metodo para llamar al metodo show y mostrar la grafica
-        def show(grafica, elegidos, ejeX, ejeY, dataS):
-            dataS.setSeleccionados(elegidos)
+        def show(grafica, elegidos, ejeX, ejeY, dataS): # Por que demonios saco los ejes si luego los voy a sacar del dataset??
+            dataS.setSeleccionados(elegidos) # limpiar
             dataS.setSeleccionEjeX(ejeX)
             dataS.setSeleccionEjeY(ejeY)
             Mediador.show(grafica, dataS) 
