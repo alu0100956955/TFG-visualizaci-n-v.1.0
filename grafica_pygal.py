@@ -70,8 +70,4 @@ class Box_pygal(Grafica):
         chart.render_to_file('output/box_pygal.html')
 
 
-
-#parse = Factory.parse('data/casos_2019.csv')
-#Box_pygal.show(parse)
-
 #asdfasdf
