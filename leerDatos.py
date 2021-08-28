@@ -983,6 +983,10 @@ class ParseCovid2:
         # Cuidado que hay que añadir la columna por la que luego se filtrara
         self.df = self.df[["location","total_cases","new_cases","total_deaths","new_deaths","date","continent","people_vaccinated","population",
             "population_density","median_age","life_expectancy","gdp_per_capita"]]
+        
+        #Cambio de string a tipo datetime las fecha
+        self.df["date"] = pd.to_datetime(self.df["date"])        
+
         data.setFiltrado("location")
         data.setDataset(self.df)
         data.setTiposGraficas(tiposGraficas) # Los tipos de graficas es una variable global

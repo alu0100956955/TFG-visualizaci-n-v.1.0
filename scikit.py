@@ -70,6 +70,11 @@ class Scikit:
     def dibujarDispersion(ejex, ejey,titulo, colores, dimension1, dimension2, posicion, xlabel, ylabel,etiqueta):
         #ejex,ejey = zip(*datos)
         color = list(set(colores)) # Los colores es un array que indica con int que clusters colorea según el punto ej [1,1,0,1,0,1,0,0]
+        #Aqui controlar si en el set de colores hay algun negativo convertirlo en el ultimo positivo osea si tenemos [1,2,3,-1]
+        # Que se convierta en 4
+        for i in range(len(color)):
+            if(color[i]<0):
+                color[i] = i
         plt.subplot(dimension1, dimension2, posicion)
         #print(colores)
         x = []
@@ -89,7 +94,7 @@ class Scikit:
                     x.append(ejex[z])
                     y.append(ejey[z])
                     co.append(colour)
-            plt.scatter(x,y, c = co,label = etiqueta[i] + str(i+1))
+            plt.scatter(x,y, c = co,label = etiqueta[i] + str(i+1)) # Aqui se sale de rango con la de diabetes
             x.clear()
             y.clear()
             co.clear()
@@ -401,13 +406,15 @@ class Regresion:
         plt.title("Error Cuadratico")
         plt.xlabel(data.getSeleccionEjeX())
         plt.ylabel(data.getSeleccionEjeY())
+        plt.xticks(rotation=70)
 
         plt.subplot(dim, dim, cantidadSeleccionados+2)
         plt.bar(seleccionados, mean_absolute, label = "Error absoluto")
         plt.title("Error Absoluto")
         plt.xlabel(data.getSeleccionEjeX())
         plt.ylabel(data.getSeleccionEjeY())
-        
+        plt.xticks(rotation=70)
+
         plt.suptitle(modelo.__name__)
         plt.tight_layout() # Para dar espacio a las subgraficas
 
@@ -503,6 +510,7 @@ class AllRegresion2:
                 plt.title(model.__class__.__name__)
                 plt.xlabel(data.getSeleccionEjeX())
                 plt.ylabel(data.getSeleccionEjeY())
+                plt.xticks(rotation=70)
                 
                 
 
@@ -515,6 +523,7 @@ class AllRegresion2:
             plt.title("Error Cuadratico")
             plt.xlabel(data.getSeleccionEjeX())
             plt.ylabel(data.getSeleccionEjeY())
+            plt.xticks(rotation=70)
 
             #plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)
             plt.subplot(dimensionx, dimensiony, len(modelos)+2)
@@ -523,6 +532,7 @@ class AllRegresion2:
             plt.title("Error Absoluto")
             plt.xlabel(data.getSeleccionEjeX())
             plt.ylabel(data.getSeleccionEjeY())
+            plt.xticks(rotation=70)
 
             plt.suptitle(seleccionados[i])
             plt.tight_layout()
@@ -565,7 +575,7 @@ class Clustering:
         #Clustering.dibujarDatosIniciales(data,dimensionx,dimensiony,1)
         Scikit.dibujarDispersionInicial(data,dimensionx,dimensiony,1, "Datos Pre Clustering" +data.getTitle())
         ejex, ejey , colores = Clustering.combinacionDatos(data) # Combinar para que?, si despues es más dificil mostrar las etiquetas
-       
+        plt.xticks(rotation=-70)
         
 
         # metodo clustering
@@ -587,6 +597,7 @@ class Clustering:
         
         plt.suptitle(modelo.__name__)
         plt.tight_layout() # Para dar espacio a las subgraficas
+        plt.xticks(rotation=70)
         #plt.legend(seleccionados)
         plt.show()
 

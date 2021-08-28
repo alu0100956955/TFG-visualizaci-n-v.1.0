@@ -5,7 +5,7 @@ from leerDatos import ParsePokemon2, ParseMushrooms2, ParseDiabetes
 from grafica_mat import Linea_mat, Box_matplotlib , Barras_matplotlib, Histograma_matplotlib, Scatter_matplotlib, Clustering_matplotlib
 from grafica_pygal import Linea_pygal, Box_pygal
 from clases_base import Grafica
-from grafica_ploty import Lineas_plotly, Barras_plotly, Mapa_plotly, Scatter_plotly, Box_plotly, Histograma_plotly
+from grafica_ploty import Lineas_plotly, Barras_plotly2, Mapa_plotly, Scatter_plotly, Box_plotly, Histograma_plotly
 from scikit import Gausian, Kneighbors, Tree, Linear, Gradient, Isotonic, Kmeans, Mixture, DBscan
 from scikit import AllClustering, AllClasification, AllRegresion2
 from leerDatosSpark import ParsePokemonSpark
@@ -31,8 +31,6 @@ class Factory:
         }
 
         return switcher.get(int(ruta))
-        #return ParseCasosConfirmados(ruta)
-        #return ParseAccidentesTrafico(ruta)
 
         # TODO: limpiar las opciones del switch
     def grafica(eleccion, contexto):
@@ -40,7 +38,7 @@ class Factory:
             1: Linea_mat,
             2: Linea_pygal,
             3: Lineas_plotly,
-            4: Barras_plotly,
+            4: Barras_plotly2,
             5: Mapa_plotly,
             6: Scatter_plotly,
             7: Scatter_matplotlib,
@@ -61,7 +59,6 @@ class Factory:
             22: AllClustering,
             0: AllRegresion2
         }
-        # 0: cluestering
 
         elec = switcher.get(int(eleccion))
         contexto.setGrafica(elec)

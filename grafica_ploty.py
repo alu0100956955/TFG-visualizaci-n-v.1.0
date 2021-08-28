@@ -34,11 +34,12 @@ class Barras_plotly(Grafica):
             #ejeY = auxiliar.comprobarDias(data.getEje(data.getSeleccionEjeY(),selec), data.getSeleccionEjeY())
             ejeX = data.getEje(data.getSeleccionEjeX(),selec)
             ejeY = data.getEje(data.getSeleccionEjeY(),selec)
-
-            fig.add_trace(go.Bar(y = data.getEje(data.getSeleccionEjeY(),selec), name = selec))
+            #POR QUE MIERDAS NO PONGO EL EJE x?
+            fig.add_trace(go.Bar( y = data.getEje(data.getSeleccionEjeY(),selec), name = selec))
         #fig.update_layout(title = 'Casos confirmados', xaxis_title="fecha",yaxis_title="Numero de casos")
         fig.update_layout(title = data.getTitle())
         # range(data.getEjeX().size)
+        
         ticksy = []
         for i in range(len(data.getEje(data.getSeleccionEjeX(),seleccionados[0]))):    # Que hace un 0 ahí??
             ticksy.append(i)
@@ -48,6 +49,21 @@ class Barras_plotly(Grafica):
         #                 yaxis=dict(title=data.getSeleccionEjeY())  )
         fig.show()
 
+class Barras_plotly2(Grafica):
+
+    def show(data):
+        
+        seleccionados =  data.getSeleccionados()
+        fig = go.Figure() # Declaro primero la figura
+        for selec in seleccionados:
+            fig.add_trace(go.Bar( x = data.getEje( data.getSeleccionEjeX(),selec), y = data.getEje(data.getSeleccionEjeY(),selec), name= selec))
+            #array = np.column_stack((data.getEje(data.getSeleccionEjeX(),selec),data.getEje(data.getSeleccionEjeY(),selec) ))
+            #df = pd.DataFrame(array,columns = seleccionados)# creo el dataframe
+            #fig = px.bar(df, x=data.getSeleccionEjeX(), y=data.getSeleccionEjeY()) # lo represento
+        #fig.update_xaxes(range = data.getEje(data.getSeleccionEjeX(),seleccionados[0]))
+        fig.update_layout(title = data.getTitle(), xaxis = dict(title=data.getSeleccionEjeX()),
+                                                yaxis=dict(title=data.getSeleccionEjeY())     )
+        fig.show()
 
 # TO DO: arreglar el ejeX
 #  Pillar el titulo del parse

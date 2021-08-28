@@ -303,6 +303,7 @@ class Usuario:
         seleccionEjeX = ""
 
 
+
         # ------------ Elementos de getGrafica --------------
         
         label2 = tk.Label(ventana, text="Seleccione el tipo de gráfica")
