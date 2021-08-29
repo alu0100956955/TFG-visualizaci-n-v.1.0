@@ -67,34 +67,45 @@ class Scikit:
         plt.xlabel(data.getSeleccionEjeX())
         plt.ylabel(data.getSeleccionEjeY())
 
+        # Parametros
+        # ejex, ejey = los ejes originales. titulo= el titulo de los datos, colores =  los colores a emplear
+        # Dimension1 y 2, las dimensiones en donde van ubicados en la ventana, posición= posición dentro de la ventana
+        # xlabel ylabel = las etiquetas para los ejes, etiqueta = etiquetas de la dispersión
     def dibujarDispersion(ejex, ejey,titulo, colores, dimension1, dimension2, posicion, xlabel, ylabel,etiqueta):
         #ejex,ejey = zip(*datos)
         color = list(set(colores)) # Los colores es un array que indica con int que clusters colorea según el punto ej [1,1,0,1,0,1,0,0]
         #Aqui controlar si en el set de colores hay algun negativo convertirlo en el ultimo positivo osea si tenemos [1,2,3,-1]
         # Que se convierta en 4
+        #print(color)
+        # Si las etiquetas son solo una, entonces significa que para todos los colores es la misma
+        if(isinstance(etiqueta,str)):
+            etiqueta = [etiqueta] * len(color)
+        # Si hay un color en negativo es Ruido de DBScan
         for i in range(len(color)):
             if(color[i]<0):
-                color[i] = i
+                #color[i] = i
+                etiqueta[i] = "Ruido "
         plt.subplot(dimension1, dimension2, posicion)
         #print(colores)
         x = []
         y = []
         co = []
-        if(isinstance(etiqueta,str)):
-            etiqueta = [etiqueta] * len(color)
+        
+        #print(etiqueta)
         for i in color:
             r = random.random()
             b = random.random()
             g = random.random()
             colour = (r, g, b)
-            #co = [colour for _ in range(len(ejex)) ] # Monto el array con el color del mismo len que el eje, ç
+            #co = [colour for _ in range(len(ejex)) ] # Monto el array con el color del mismo len que el eje, 
             # pero como no todos los elementos son los que quiero no lo puedo hacer asi
             for z in range(len(ejex)): # Solo guardo los elementos de los ejes que ha distinguido el cluster
                 if(colores[z] == i ):
                     x.append(ejex[z])
                     y.append(ejey[z])
                     co.append(colour)
-            plt.scatter(x,y, c = co,label = etiqueta[i] + str(i+1)) # Aqui se sale de rango con la de diabetes
+            # CAUTION En caso de que la cantidad de colores sea superior a las etiquetas generara un error
+            plt.scatter(x,y, c = co,label = etiqueta[i] + str(i+1)) # ^^
             x.clear()
             y.clear()
             co.clear()
@@ -106,6 +117,13 @@ class Scikit:
         plt.ylabel(ylabel)
         plt.legend()
 
+    # Metodo para calcular la eps en el metodo de cluster DBSCAN
+    # con el maximo y minimo de cada eje se sabe la amplitud de datos del eje, la parto en 9 porciones cada uno
+    # Y hago la media entre los dos ejes.
+    def eps(ejex, ejey):
+        # Previo a la llamada de este metodo ya se verifican los ejes, si no habrían que verificarlos 
+        eps = ( ((max(ejex)-min(ejex))/10) + ((max(ejey)-min(ejey))/10) ) / 2
+        return eps
     def show():
         pass
 
@@ -406,7 +424,7 @@ class Regresion:
         plt.title("Error Cuadratico")
         plt.xlabel(data.getSeleccionEjeX())
         plt.ylabel(data.getSeleccionEjeY())
-        plt.xticks(rotation=70)
+        plt.xticks(rotation=-70)
 
         plt.subplot(dim, dim, cantidadSeleccionados+2)
         plt.bar(seleccionados, mean_absolute, label = "Error absoluto")
@@ -588,7 +606,8 @@ class Clustering:
         if( isinstance(modelo(),GaussianMixture)): # si el modelo es Mixture
             model = modelo(n_components = cantidadSeleccionados)
         if( isinstance(modelo(),DBSCAN)): # si el modelo es DBscan
-            model = modelo().fit(puntos)
+            model = modelo(eps=Scikit.eps(EjeX,EjeY)).fit(puntos)
+            #model = modelo(eps=6).fit(puntos)
         # entrenarlo
         y_km = model.fit_predict(puntos)
         # representarlo
@@ -597,7 +616,7 @@ class Clustering:
         
         plt.suptitle(modelo.__name__)
         plt.tight_layout() # Para dar espacio a las subgraficas
-        plt.xticks(rotation=70)
+        plt.xticks(rotation=-70)
         #plt.legend(seleccionados)
         plt.show()
 
@@ -654,11 +673,11 @@ class AllClustering:
             if(isinstance(modelo(),GaussianMixture)):
                 model = modelo(n_components = cantidadSeleccionados)
             if(isinstance(modelo(),DBSCAN)):
-                model = modelo()
+                model = modelo(eps=Scikit.eps(EjeX,EjeY))
             y_km = model.fit_predict(puntos)
             #Clustering.dibujardatos(ejex,ejey,model.__class__.__name__,y_km,1,3,i,data.getSeleccionEjeX(),data.getSeleccionEjeY())
             Scikit.dibujarDispersion(ejex,ejey,model.__class__.__name__,y_km,1,3,i,
-                                       data.getSeleccionEjeX(),data.getSeleccionEjeY(), data.getSeleccionados())
+                                       data.getSeleccionEjeX(),data.getSeleccionEjeY(),"Cluster ")
             i = i+1
         plt.tight_layout() # Para dar espacio a las subgraficas
         plt.show()
