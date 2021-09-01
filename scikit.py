@@ -154,10 +154,10 @@ class Scikit:
 # Clase para representar los metodos de clasificacion
 class Representacion:
 
-    def show(data, algoritmo_):
+    def show(data, modelo):
 
         plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
-        algoritmo = algoritmo_()
+        #algoritmo = algoritmo_()
         #training_accuracy = []
         #test_accuracy = []
         dimensionx = 2
@@ -172,7 +172,7 @@ class Representacion:
 
         # Cambio el porcentaje de entrenamiento y testeo
         porcentajes = np.arange(0.3, 0.9, 0.05)
-        training_accuracy,test_accuracy = Scikit.accuracyModelo(algoritmo,datos,etiquetas,porcentajes)
+        training_accuracy,test_accuracy = Scikit.accuracyModelo(modelo,datos,etiquetas,porcentajes)
             
 
 
@@ -222,19 +222,20 @@ class Representacion:
         # 4º gráfica, representación de los datos de testeo con las etiquetas que precide el modelo
         # Como los datos pueden estar en formato string tengo que verificar los ejes para poder 
         X_train = Scikit.VerificarEjes(X_train)
-        algoritmo.fit(X_train, y_train) # Entreno el modelo  
+        #algoritmo.fit(X_train, y_train) # Entreno el modelo  
         ejex,ejey = list(zip(*X_test)) # Separa X_test por que es la que contiene los datos de los dos ejes 
         X_test = Scikit.VerificarEjes(X_test)
-        colores = Representacion.coloresClasificacionFit(algoritmo.predict(X_test), data.getSeleccionados()) # Hago el predict con los datos de testeo
+        predict_test, predict_train = Scikit.entrenarModelo(modelo, X_train, X_test, y_train, y_test)
+        colores = Representacion.coloresClasificacionFit(predict_test, data.getSeleccionados()) # Hago el predict con los datos de testeo
         
         Scikit.dibujarDispersion(ejex,ejey, "Datos clasificados",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
 
 
-        plt.suptitle(algoritmo_.__name__ + " _" + data.title) # para mostrar el modelo que se esta representando
+        plt.suptitle(type(modelo).__name__ + " _" + data.title) # para mostrar el modelo que se esta representando
         plt.tight_layout() # Para dar espacio a las subgraficas
 
         # 5º gráfica, la matriz de confusión
-        disp = metrics.plot_confusion_matrix(algoritmo, X_test, y_test, normalize = 'true')
+        disp = metrics.plot_confusion_matrix(modelo, X_test, y_test, normalize = 'true')
         disp.figure_.suptitle("Confusion Matrix")
 
         plt.show()
@@ -354,7 +355,6 @@ class AllClasification:
                 contador = contador + 1
   
             plt.tight_layout() # Para dar espacio a las subgraficas
-            plt.suptitle( data.title)
             plt.show()
 
 
@@ -362,19 +362,19 @@ class AllClasification:
 class Gausian:
 
     def show(data):
-        Representacion.show(data,GaussianNB)
+        Representacion.show(data,GaussianNB())
 
 
 class Kneighbors:
 
     def show(data):
-        Representacion.show(data,KNeighborsClassifier)
+        Representacion.show(data,KNeighborsClassifier())
 
 
 class Tree:
 
     def show(data):
-        Representacion.show(data,DecisionTreeClassifier)
+        Representacion.show(data,DecisionTreeClassifier())
 
 # ///////////////////////////////////////////////////// REGRESION ////////////////////////////////////////////////////////////////////////
 
