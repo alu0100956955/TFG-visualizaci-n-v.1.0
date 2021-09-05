@@ -139,7 +139,7 @@ class Scikit:
     def accuracyModelo(modelo, x, y, porcentajes):
         training_accuracy = []
         test_accuracy = []
-        for porcentaje in porcentajes:    # Bucle para hacer la gr�fica
+        for porcentaje in  porcentajes:    # Bucle para hacer la gr�fica
             # El primero seran los datos el segundo las etiquetas
             X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=porcentaje , random_state=0)
             modelo.fit(X_train, y_train)    
@@ -233,11 +233,12 @@ class Representacion:
 
         plt.suptitle(type(modelo).__name__ + " _" + data.title) # para mostrar el modelo que se esta representando
         plt.tight_layout() # Para dar espacio a las subgraficas
+        plt.subplots_adjust(top=0.85)
 
         # 5º gráfica, la matriz de confusión
         disp = metrics.plot_confusion_matrix(modelo, X_test, y_test, normalize = 'true')
         disp.figure_.suptitle("Confusion Matrix")
-
+        
         plt.show()
 
         # Devuelve los datos y las etiquetas necesarias para que tire el sistema
@@ -447,11 +448,11 @@ class Regresion:
         plt.title("Error Absoluto")
         plt.xlabel(data.getSeleccionEjeX())
         plt.ylabel(data.getSeleccionEjeY())
-        plt.xticks(rotation=70)
+        plt.xticks(rotation=-70)
 
         plt.suptitle(type(modelo).__name__ + " _" + data.title )
         plt.tight_layout() # Para dar espacio a las subgraficas
-
+        plt.subplots_adjust(top=0.85)
         plt.show()
 
         # Metodo para calcular la dimension de los subplot
@@ -545,7 +546,7 @@ class AllRegresion2:
                 plt.title(type(model).__name__)
                 plt.xlabel(data.getSeleccionEjeX())
                 plt.ylabel(data.getSeleccionEjeY())
-                plt.xticks(rotation=70)
+                plt.xticks(rotation=-70)
                 
                 
 
@@ -558,7 +559,7 @@ class AllRegresion2:
             plt.title("Error Cuadratico")
             plt.xlabel(data.getSeleccionEjeX())
             plt.ylabel(data.getSeleccionEjeY())
-            plt.xticks(rotation=70)
+            plt.xticks(rotation=-70)
 
             #plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)
             plt.subplot(dimensionx, dimensiony, len(modelos)+2)
@@ -567,16 +568,18 @@ class AllRegresion2:
             plt.title("Error Absoluto")
             plt.xlabel(data.getSeleccionEjeX())
             plt.ylabel(data.getSeleccionEjeY())
-            plt.xticks(rotation=70)
+            plt.xticks(rotation=-70)
 
             plt.suptitle(seleccionados[i] + " _" + data.title)
             plt.tight_layout()
+            plt.subplots_adjust(top=0.85)
 
 
         #plt.tight_layout() # Para dar espacio a las subgraficas | no va bien
         #plt.subplots_adjust(left=0.05,right=1.05,top=0.8)
         #plt.subplots_adjust(hspace=0.23)
         #plt.subplots_adjust(left=0.06,bottom=0.08, right=0.95,top=0.93)
+        plt.subplots_adjust(top=0.85)
         plt.show()
 
 
@@ -608,7 +611,7 @@ class Clustering:
         dimensionx = 1 # La cantidad de filas para los subplots
         dimensiony = 2 # La cntidad de columnas para los subplots
         #Clustering.dibujarDatosIniciales(data,dimensionx,dimensiony,1)
-        Scikit.dibujarDispersionInicial(data,dimensionx,dimensiony,1, "Datos Pre Clustering" +data.getTitle())
+        Scikit.dibujarDispersionInicial(data,dimensionx,dimensiony,1, data.getTitle())
         ejex, ejey , colores = Clustering.combinacionDatos(data) # Combinar para que?, si despues es más dificil mostrar las etiquetas
         plt.xticks(rotation=-70)
         
@@ -635,6 +638,7 @@ class Clustering:
         plt.tight_layout() # Para dar espacio a las subgraficas
         plt.xticks(rotation=-70)
         #plt.legend(seleccionados)
+        plt.subplots_adjust(top=0.85)
         plt.show()
 
 
@@ -699,6 +703,7 @@ class AllClustering:
             i = i+1
         plt.tight_layout() # Para dar espacio a las subgraficas
         plt.suptitle(data.title)
+        plt.subplots_adjust(top=0.85)
         plt.show()
 
 

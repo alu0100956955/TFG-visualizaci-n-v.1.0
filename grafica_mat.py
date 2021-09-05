@@ -285,7 +285,7 @@ class Histograma_matplotlib(Grafica):
         #plt.xlabel(data.getSeleccionEjeX())
         # TO DO: controlar si el usuario ha elegido algo que no es numerico
         #plt.xticks(Histograma_matplotlib.getTicks(ejeY,10))
-        
+        plt.suptitle("Histograma" + "_" + data.title)
         plt.show()
 
     # Metodo para saber cuantas graficas habra y poder ajustar las dimensiones de las columnas y filas
