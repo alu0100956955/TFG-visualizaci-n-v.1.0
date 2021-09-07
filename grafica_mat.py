@@ -12,6 +12,7 @@ import seaborn as sns
 from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
+import random
 #from scipy import scipy
 
 #import geopandas as gpd 
@@ -194,33 +195,36 @@ class Barras_matplotlib(Grafica):
 class Scatter_matplotlib(Grafica):
     # TODO: Leyendas para los ejes
     def show(data):
-        #print("Scatter matplotlib")
         plt.clf() # Para limpiar graficas anteriores
-        fig, ax = plt.subplots()
+        #fig, ax = plt.subplots()
         seleccionados = data.getSeleccionados()
         for selec in seleccionados:
-            ax.scatter(data.getEje(data.getSeleccionEjeX(),selec),data.getEje(data.getSeleccionEjeY(),selec),alpha=0.3,label=selec)
-        
-        ax.legend()
-        ax.grid(True)
-        # Para mostrar la regresion 
-        EjeX = data.getEjes(data.getSeleccionEjeX(), seleccionados)
-        EjeY = data.getEjes(data.getSeleccionEjeY(), seleccionados)
-        X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.4, random_state=0)
+            r = random.random()
+            b = random.random()
+            g = random.random()
+            colour = (r, g, b)
+            ejex = data.getEje(data.getSeleccionEjeX(),selec)
+            ejey = data.getEje(data.getSeleccionEjeY(),selec)
+            plt.scatter(ejex,ejey,alpha=0.3,label=selec)
+            plt.plot(ejex, Scatter_matplotlib.regresion(ejex,ejey).predict(np.reshape(ejex, (-1, 1))),c = colour, label = selec)
+        plt.legend()
+        #ax.grid(True)
+        plt.xlabel(data.getSeleccionEjeX())
+        plt.ylabel(data.getSeleccionEjeY())
+        plt.title("Dispersión con regresión " + data.title)
+        plt.show()
 
+        #Metodo para hacer la regresion lineal y poder añadirla a la gráfica de dispersion
+    def regresion(EjeX, EjeY):
+        X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.4, random_state=0)
         X_train = np.reshape(X_train, (-1, 1))
         X_test =  np.sort(X_test, kind = 'mergesort')
         X_test = np.reshape(X_test, (-1, 1))
         model = LinearRegression()
         model.fit(X_train,y_train)
-        regresion_y = model.predict(X_test)
-        plt.plot(X_test, regresion_y,c = 'red')
-        plt.xlabel(data.getSeleccionEjeX())
-        plt.ylabel(data.getSeleccionEjeY())
-        plt.title("Dispersión con regresión")
+        #regresion_y = model.predict(X_test)
+        return model
 
-
-        plt.show()
 
 class Box_matplotlib(Grafica):
 

@@ -104,8 +104,12 @@ class Scikit:
                     x.append(ejex[z])
                     y.append(ejey[z])
                     co.append(colour)
-            # CAUTION En caso de que la cantidad de colores sea superior a las etiquetas generara un error
-            plt.scatter(x,y, c = co,label = etiqueta[i] + str(i+1)) # ^^
+            
+            if(not etiqueta):
+                plt.scatter(x,y, c = co) 
+            else:
+                # CAUTION En caso de que la cantidad de colores sea superior a las etiquetas generara un error
+                plt.scatter(x,y, c = co,label = etiqueta[i] + str(i+1)) # ^^
             x.clear()
             y.clear()
             co.clear()
@@ -115,7 +119,8 @@ class Scikit:
         plt.title(titulo)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        plt.legend()
+        if(not etiqueta): # si las etiquetas que pasan estan vacias no interesa tener un cuadrado vacio
+            plt.legend()
 
     # Metodo para calcular la eps en el metodo de cluster DBSCAN
     # con el maximo y minimo de cada eje se sabe la amplitud de datos del eje, la parto en 9 porciones cada uno
@@ -124,6 +129,7 @@ class Scikit:
         # Previo a la llamada de este metodo ya se verifican los ejes, si no habrían que verificarlos 
         eps = ( ((max(ejex)-min(ejex))/10) + ((max(ejey)-min(ejey))/10) ) / 2
         return eps
+
     def show():
         pass
 
@@ -164,19 +170,14 @@ class Representacion:
         dimensiony = 2
         porcentajeTesteo = 0.4
 
-
         # Para los datos combinare los datos de los dos ejes empleando zip
         # Las etiquetas seran las opciones escogidas
         datos, etiquetas, Xlabels, Ylabels = Representacion.DatosEtiquetas(data,True)
 
-
         # Cambio el porcentaje de entrenamiento y testeo
         porcentajes = np.arange(0.3, 0.9, 0.05)
         training_accuracy,test_accuracy = Scikit.accuracyModelo(modelo,datos,etiquetas,porcentajes)
-            
-
-
-        
+                 
         # En los datos estan los datos de los ejes por lo que en X_train y X_test estan los datos para representar los ejes
         # En y_test e y_train estan las etiquetas, por lo que ojo cuidado a la hora de usar estas variables
         # Para cambiar el tamaño del set de pruebas | el test_size es bueno que sea más pequeño que el train set
@@ -184,7 +185,6 @@ class Representacion:
         X_train, X_test, y_train, y_test = train_test_split(datos, etiquetas, test_size=porcentajeTesteo , random_state=0)
 
         # 1º grafiaca Representacion de los datos de entrenamiento
-
         ejex, ejey = zip(*X_train)
         ejex=list(ejex)
         ejey=list(ejey)
@@ -200,15 +200,13 @@ class Representacion:
 
         # 2º grafica Representacion de los datos de testeo
         auxX,auxY = zip(*X_test)
-        colores2 = Representacion.coloresClasificacion(y_test ,len(auxX))
-        Scikit.dibujarDispersion(auxX,auxY, "Datos a clasificar" + str(( porcentajeTesteo * 100))  + "%" ,
+        #colores2 = Representacion.coloresClasificacion(y_test ,len(auxX))
+        colores2 = [0] * len(auxX) # En la validación no necesitamos saber las etiquetas
+        Scikit.dibujarDispersion(auxX,auxY, "Datos a validar" , 
                                  colores2, dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),
-                                 list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
+                                 False) # Uso y_train para seguir el orden inicial de posicion de los colores
+        # "Datos a clasificar" + str(( porcentajeTesteo * 100))  + "%"   |   list(set(y_train))
        
-        #Ahora le añado los valores de testeo, para que? | osea tendría que mostar solo los de testeo y pasarlos por el modelo
-        #ejex.extend(auxX) 
-        #ejey.extend(auxY)
-        #colores.extend(Representacion.coloresClasificacion(y_test ,len(auxX)))
 
         #3º gráfica representacion del accuraci del metodo con los diferentes porcentajes en las pruebas
         plt.subplot(dimensionx, dimensiony, 3)
@@ -231,7 +229,7 @@ class Representacion:
         Scikit.dibujarDispersion(ejex,ejey, "Datos clasificados",colores, dimensionx,dimensiony,4, data.getSeleccionEjeX(),data.getSeleccionEjeY(),list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
 
 
-        plt.suptitle(type(modelo).__name__ + " _" + data.title) # para mostrar el modelo que se esta representando
+        plt.suptitle(type(modelo).__name__ + "_" + data.title) # para mostrar el modelo que se esta representando
         plt.tight_layout() # Para dar espacio a las subgraficas
         plt.subplots_adjust(top=0.85)
 

@@ -255,4 +255,4 @@ class Histograma_plotly(Grafica):
         fig = px.histogram(dataframe,x=seleccionados[0])   
         fig.show()
 
-#asdfasdfasd
+#Fin
