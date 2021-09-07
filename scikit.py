@@ -119,7 +119,7 @@ class Scikit:
         plt.title(titulo)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        if(not etiqueta): # si las etiquetas que pasan estan vacias no interesa tener un cuadrado vacio
+        if(etiqueta): # si las etiquetas que pasan estan vacias no interesa tener un cuadrado vacio
             plt.legend()
 
     # Metodo para calcular la eps en el metodo de cluster DBSCAN
@@ -191,13 +191,16 @@ class Representacion:
         #https://stackoverflow.com/questions/8528178/list-of-zeros-in-python
         #colores = [0] * len(ejex)
         colores= Representacion.coloresClasificacion(y_train ,len(ejex))
-        plt.subplot(dimensionx, dimensiony, 1)
+        Scikit.dibujarDispersion(ejex,ejey, " Datos de entrenamiento " + str(((1- porcentajeTesteo) * 100))  + "%" , 
+                                 colores, dimensionx,dimensiony,1, data.getSeleccionEjeX(),data.getSeleccionEjeY(),
+                                 list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
+        #plt.subplot(dimensionx, dimensiony, 1)
 
-        plt.scatter(ejex,ejey,c=colores, label= "Entrenamiento")
-        plt.title(" Datos de entrenamiento " + str(((1- porcentajeTesteo) * 100))  + "%" )
-        plt.ylabel(data.getSeleccionEjeY())
-        plt.xlabel(data.getSeleccionEjeX())
-
+        #plt.scatter(ejex,ejey,c=colores, label= "Entrenamiento")
+        #plt.title(" Datos de entrenamiento " + str(((1- porcentajeTesteo) * 100))  + "%" )
+        #plt.ylabel(data.getSeleccionEjeY())
+        #plt.xlabel(data.getSeleccionEjeX())
+        #plt.legend()
         # 2º grafica Representacion de los datos de testeo
         auxX,auxY = zip(*X_test)
         #colores2 = Representacion.coloresClasificacion(y_test ,len(auxX))
