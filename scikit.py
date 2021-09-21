@@ -72,12 +72,7 @@ class Scikit:
         # Dimension1 y 2, las dimensiones en donde van ubicados en la ventana, posición= posición dentro de la ventana
         # xlabel ylabel = las etiquetas para los ejes, etiqueta = etiquetas de la dispersión
     def dibujarDispersion(ejex, ejey,titulo, colores, dimension1, dimension2, posicion, xlabel, ylabel,etiqueta):
-        #ejex,ejey = zip(*datos)
         color = list(set(colores)) # Los colores es un array que indica con int que clusters colorea según el punto ej [1,1,0,1,0,1,0,0]
-        #Aqui controlar si en el set de colores hay algun negativo convertirlo en el ultimo positivo osea si tenemos [1,2,3,-1]
-        # Que se convierta en 4
-        #print(color)
-        # Si las etiquetas son solo una, entonces significa que para todos los colores es la misma
         if(isinstance(etiqueta,str)):
             etiqueta = [etiqueta] * len(color)
         # Si hay un color en negativo es Ruido de DBScan
@@ -86,12 +81,10 @@ class Scikit:
                 #color[i] = i
                 etiqueta[i] = "Ruido "
         plt.subplot(dimension1, dimension2, posicion)
-        #print(colores)
         x = []
         y = []
         co = []
         
-        #print(etiqueta)
         for i in color:
             r = random.random()
             b = random.random()
@@ -114,8 +107,7 @@ class Scikit:
             y.clear()
             co.clear()
 
-        
-        #plt.scatter(ejex,ejey, c = colores)
+      
         plt.title(titulo)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
@@ -135,7 +127,6 @@ class Scikit:
 
     # Se puede aplicar al de clasificación, regresión simple y al de todas las regresiónes
     def entrenarModelo(modelo, X_train, X_test, y_train, y_test ):         
-        #modelo= modelo() 
         modelo.fit(X_train,y_train) # Entrenar ¡¡¡
         predict_test = modelo.predict(X_test) # Validar ¡¡¡ el principal
         predict_train = modelo.predict(X_train) # PREDICT ¡¡¡ para los errores cuadraticos
@@ -157,15 +148,12 @@ class Scikit:
     
 
 # Como por ahora las tres clases representan de la misma forma por ahora empleo esta clase para representar pasandole el algoritmo
-# Clase para representar los metodos de clasificacion
+# Clase para representar los metodos de CLASIFICACION
 class Representacion:
 
     def show(data, modelo):
 
         plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
-        #algoritmo = algoritmo_()
-        #training_accuracy = []
-        #test_accuracy = []
         dimensionx = 2
         dimensiony = 2
         porcentajeTesteo = 0.4
@@ -189,26 +177,17 @@ class Representacion:
         ejex=list(ejex)
         ejey=list(ejey)
         #https://stackoverflow.com/questions/8528178/list-of-zeros-in-python
-        #colores = [0] * len(ejex)
         colores= Representacion.coloresClasificacion(y_train ,len(ejex))
         Scikit.dibujarDispersion(ejex,ejey, " Datos de entrenamiento " + str(((1- porcentajeTesteo) * 100))  + "%" , 
                                  colores, dimensionx,dimensiony,1, data.getSeleccionEjeX(),data.getSeleccionEjeY(),
                                  list(set(y_train))) # Uso y_train para seguir el orden inicial de posicion de los colores
-        #plt.subplot(dimensionx, dimensiony, 1)
 
-        #plt.scatter(ejex,ejey,c=colores, label= "Entrenamiento")
-        #plt.title(" Datos de entrenamiento " + str(((1- porcentajeTesteo) * 100))  + "%" )
-        #plt.ylabel(data.getSeleccionEjeY())
-        #plt.xlabel(data.getSeleccionEjeX())
-        #plt.legend()
         # 2º grafica Representacion de los datos de testeo
         auxX,auxY = zip(*X_test)
-        #colores2 = Representacion.coloresClasificacion(y_test ,len(auxX))
         colores2 = [0] * len(auxX) # En la validación no necesitamos saber las etiquetas
         Scikit.dibujarDispersion(auxX,auxY, "Datos a validar" , 
                                  colores2, dimensionx,dimensiony,2, data.getSeleccionEjeX(),data.getSeleccionEjeY(),
                                  False) # Uso y_train para seguir el orden inicial de posicion de los colores
-        # "Datos a clasificar" + str(( porcentajeTesteo * 100))  + "%"   |   list(set(y_train))
        
 
         #3º gráfica representacion del accuraci del metodo con los diferentes porcentajes en las pruebas
@@ -346,8 +325,6 @@ class AllClasification:
                 plt.legend()
 
                 contador = contador + 1 # para la siguiente sub grafica
-                #La segunda gráfica 
-                #plt.subplot(len(modelos),2,contador)
                 
                 colores = Representacion.coloresClasificacionFit(algoritmo.predict(datosV), data.getSeleccionados())
                 ejex, ejey = list(zip(*datos))
@@ -362,19 +339,16 @@ class AllClasification:
 
 
 class Gausian:
-
     def show(data):
         Representacion.show(data,GaussianNB())
 
 
 class Kneighbors:
-
     def show(data):
         Representacion.show(data,KNeighborsClassifier())
 
 
 class Tree:
-
     def show(data):
         Representacion.show(data,DecisionTreeClassifier())
 
@@ -395,27 +369,19 @@ class Regresion:
         mean_absolute = [] # para guardar el error absoluto
 
         for i in range(cantidadSeleccionados):
-            # TODO: Tendria que controlar si se pasa un eje no numerico
-            #EjeX,Xlabels = Scikit.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
-            #EjeY,Ylabels = Scikit.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
 
-            #X_train, X_test, y_train, y_test = train_test_split( EjeX, EjeY, test_size=0.6, random_state=0)
             X_train, X_test, y_train, y_test = train_test_split(data.getEje(data.getSeleccionEjeX(),seleccionados[i]),data.getEje(data.getSeleccionEjeY(),seleccionados[i]), test_size=0.6, random_state=0)
             # Para meter las strin, tengo que hacer que el split sea como en la clasificacion
             # Que el ejeX tenga los datso y zipearlos mientras en el y las labels
 
-            #model = modelo()
             X_train,ejex = Scikit.VerificarEje(X_train)
             y_train,ejey = Scikit.VerificarEje(y_train)
             if(reshape):
                 X_train = np.reshape(X_train, (-1, 1))
-            #model.fit(X_train,y_train) # FIT ¡¡¡
-            
             X_test,ejex_t = Scikit.VerificarEje(X_test)
             X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
             if(reshape):    # if es de tipo isotonic no hago el reshape
                 X_test = np.reshape(X_test, (-1, 1))
-            #regresion_y = model.predict(X_test) # PREDICT ¡¡¡
             regresion_y, predict = Scikit.entrenarModelo(modelo, X_train, X_test, y_train, y_test)
             plt.subplot(dim, dim, i+1)
             if isinstance( ejex,bool):
@@ -428,8 +394,6 @@ class Regresion:
             plt.xlabel(data.getSeleccionEjeX())
             plt.ylabel(data.getSeleccionEjeY())
             
-
-            #predict = model.predict(X_train)
             mean_squared.append(mean_squared_error(y_train, predict)) # La y_train tiene los datos originales para comprarlos con la predicción
             mean_absolute.append(mean_absolute_error(y_train, predict))
 
@@ -501,39 +465,30 @@ class AllRegresion2:
         dimensionx = 2
         dimensiony = len(modelos)
         for i in range(len(seleccionados)):
-            #EjeX,Xlabels = Scikit.VerificarEje(data.getEje(data.getSeleccionEjeX(),seleccionados[i]))
-            #EjeY,Ylabels = Scikit.VerificarEje(data.getEje(data.getSeleccionEjeY(),seleccionados[i]))
 
-            #X_train, X_test, y_train, y_test = train_test_split( EjeX , EjeY , test_size=0.6, random_state=0) # dimensiones de los X-train
             X_train, X_test, y_train, y_test = train_test_split(data.getEje(data.getSeleccionEjeX(),seleccionados[i]),data.getEje(data.getSeleccionEjeY(),seleccionados[i]), test_size=0.6, random_state=0)
             
             mean_squared = [] # para guardar el error cuadratico
             mean_absolute = [] # para guardar el error absoluto
             plt.figure(i) # Sera una ventana por cada opción
-            #print(np.shape(X_train))
+
 
             X_train,ejex = Scikit.VerificarEje(X_train)
             y_train,ejey = Scikit.VerificarEje(y_train)
             X_test,ejex_t = Scikit.VerificarEje(X_test)
             for j in range(len(modelos)):
                 
-                #plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)  # Para marcar los subplots de las graficas
                 plt.subplot(dimensionx, dimensiony, j+1) # El indice no puede ser 0
                 indiceSubgrafica = indiceSubgrafica + 1
                 model = modelos[j]()
                 
                 if(j != 0):
                     X_train = np.reshape(X_train, (-1, 1))
-                #model.fit(X_train,y_train) # FIT ¡¡¡
-
                 
                 X_test =  np.sort(X_test, kind = 'mergesort') # Ordeno de menor a mayor, antes de hacer el reshape por que sino no me deja ordenar con este metodo
                 if(j != 0):    # if es de tipo isotonic no hago el reshape
                     X_test = np.reshape(X_test, (-1, 1))
 
-                #regresion_y = model.predict(X_test)
-
-                #predict = model.predict(X_train)
                 regresion_y, predict = Scikit.entrenarModelo(model, X_train, X_test, y_train, y_test)
                 mean_squared.append(mean_squared_error(y_train, predict)) # La y_train tiene los datos originales para comprarlos con la predicción
                 mean_absolute.append(mean_absolute_error(y_train, predict))
@@ -550,10 +505,7 @@ class AllRegresion2:
                 plt.xticks(rotation=-70)
                 
                 
-
-            #plt.figure() # Un ultima ventana para los errores
             graficas = ["Isotonic", "Linear", "Gradient"]
-            #plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)
             plt.subplot(dimensionx, dimensiony, len(modelos)+1)
             indiceSubgrafica = indiceSubgrafica + 1
             plt.bar(graficas,mean_squared, label="Error cuadratico" )
@@ -562,7 +514,6 @@ class AllRegresion2:
             plt.ylabel(data.getSeleccionEjeY())
             plt.xticks(rotation=-70)
 
-            #plt.subplot(cantidadSeleccionados, cantidadModelos, indiceSubgrafica)
             plt.subplot(dimensionx, dimensiony, len(modelos)+2)
             indiceSubgrafica = indiceSubgrafica + 1
             plt.bar(graficas, mean_absolute, label = "Error absoluto")
@@ -575,28 +526,19 @@ class AllRegresion2:
             plt.tight_layout()
             plt.subplots_adjust(top=0.85)
 
-
-        #plt.tight_layout() # Para dar espacio a las subgraficas | no va bien
-        #plt.subplots_adjust(left=0.05,right=1.05,top=0.8)
-        #plt.subplots_adjust(hspace=0.23)
-        #plt.subplots_adjust(left=0.06,bottom=0.08, right=0.95,top=0.93)
         plt.subplots_adjust(top=0.85)
         plt.show()
 
 
 class Linear:
-
-
     def show(data):
         Regresion.show(data,LinearRegression(),True)
 
 class Gradient: # falta incluirlo en las referencias y los import
-
     def show(data):
         Regresion.show(data,GradientBoostingRegressor(),True)  # Habria que añadir parametros extra
 
 class Isotonic:
-
     def show(data):
         Regresion.show(data,IsotonicRegression(),False)
 
@@ -607,11 +549,8 @@ class Clustering:
     def show(data, modelo):
 
         plt.clf() # Para limpiar las gracicas anteriores y que no se mezcle
-        #seleccionados = data.getSeleccionados() # Las opciones seleccionadas, pero para que guardarlo si puede llamar a este procedimiento?
-        #cantidadSeleccionados = len(seleccionados) # la cantidad de opciones seleccionadas
         dimensionx = 1 # La cantidad de filas para los subplots
         dimensiony = 2 # La cntidad de columnas para los subplots
-        #Clustering.dibujarDatosIniciales(data,dimensionx,dimensiony,1)
         Scikit.dibujarDispersionInicial(data,dimensionx,dimensiony,1, data.getTitle())
         ejex, ejey , colores = Clustering.combinacionDatos(data) # Combinar para que?, si despues es más dificil mostrar las etiquetas
         plt.xticks(rotation=-70)
@@ -621,24 +560,14 @@ class Clustering:
         EjeX,Xlabels = Scikit.VerificarEje(ejex)
         EjeY,Ylabels = Scikit.VerificarEje(ejey)
         puntos = list(zip(EjeX,EjeY))
-        
-        #if( isinstance(modelo(),KMeans)): # si el modelo es kmeans
-        #    model = modelo(n_clusters = cantidadSeleccionados).fit(puntos)# solo se puede hacer esto si es KMeans
-        #if( isinstance(modelo(),GaussianMixture)): # si el modelo es Mixture
-        #    model = modelo(n_components = cantidadSeleccionados)
-        #if( isinstance(modelo(),DBSCAN)): # si el modelo es DBscan
-        #    model = modelo(eps=Scikit.eps(EjeX,EjeY)).fit(puntos)
-            #model = modelo(eps=6).fit(puntos)
-        # entrenarlo
+
         y_km = modelo.fit_predict(puntos)
-        # representarlo
         Scikit.dibujarDispersion(ejex, ejey, "Clustering", y_km,dimensionx,dimensiony,2,
                                   data.getSeleccionEjeX(),data.getSeleccionEjeY(),"Cluster ")
         
         plt.suptitle(type(modelo).__name__ + "_" + data.title)
         plt.tight_layout() # Para dar espacio a las subgraficas
         plt.xticks(rotation=-70)
-        #plt.legend(seleccionados)
         plt.subplots_adjust(top=0.85)
         plt.show()
 
@@ -690,15 +619,9 @@ class AllClustering:
         modelos = [Kmeans,Mixture, DBscan]  # Los distintos tipos de clustering
         i = 1
         for modelo in modelos:
-            #if(isinstance(modelo(),KMeans)): 
-            #    model = modelo(n_clusters = cantidadSeleccionados).fit(puntos)
-            #if(isinstance(modelo(),GaussianMixture)):
-            #    model = modelo(n_components = cantidadSeleccionados)
-            #if(isinstance(modelo(),DBSCAN)):
-            #    model = modelo(eps=Scikit.eps(EjeX,EjeY))
+
             model = modelo.declare(data)
             y_km = model.fit_predict(puntos)
-            #Clustering.dibujardatos(ejex,ejey,model.__class__.__name__,y_km,1,3,i,data.getSeleccionEjeX(),data.getSeleccionEjeY())
             Scikit.dibujarDispersion(ejex,ejey,type(model).__name__,y_km,1,3,i,
                                        data.getSeleccionEjeX(),data.getSeleccionEjeY(),"Cluster ")
             i = i+1
@@ -710,7 +633,6 @@ class AllClustering:
 
 
 class Kmeans:
-
     def show(data):
         model =  Kmeans.declare(data)
         Clustering.show(data,model)
@@ -719,7 +641,6 @@ class Kmeans:
         return KMeans(n_clusters = len(data.getSeleccionados()) )
 
 class Mixture:
-
     def show(data):
         model = Mixture.declare(data)
         Clustering.show(data, model)
@@ -728,7 +649,6 @@ class Mixture:
 
 
 class DBscan:
-
     def show(data):
         model = DBscan.declare(data)
         Clustering.show(data,model)

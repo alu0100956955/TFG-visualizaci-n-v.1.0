@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter import scrolledtext as st
-from mediador import Mediador
+from mediador import Intermedio
 from dataset import Dataset
 #from tkinter import ttkwidgets
 
@@ -21,7 +21,7 @@ class Usuario:
     #, 5.Cajas pygal
 
 
-    # Le paso el mediador y aqui sera el loop principal, desde el mediador se haran los otros pasos
+    # Le paso el Intermedio y aqui sera el loop principal, desde el Intermedio se haran los otros pasos
     def ventanaUsuario():
 
 
@@ -36,7 +36,7 @@ class Usuario:
         # 1.1 PRIMERO Metodo para cuando se escoja la fuente de datos
         def graficasNuevo(event):
             nonlocal dataS
-            parse = Mediador.getParse(eleccionDropdown(dropdownFuenteDatos.get()))    # le pasamos la eleccion del usuario sobre la fuente de datos
+            parse = Intermedio.getParse(eleccionDropdown(dropdownFuenteDatos.get()))    # le pasamos la eleccion del usuario sobre la fuente de datos
             dataS = parse().getDataset() # El parse es uno de los parses ubicados en el fichero leerDatos
             #dataS.setNumeroFuenteDatos()
             label2.grid(column = 2, row = 4)
@@ -54,7 +54,7 @@ class Usuario:
         # TODO declarar todo lo necesario para este metdodo
         def graficasSpark(event):
             nonlocal dataS
-            parse = Mediador.getParseSpark(eleccionDropdown(dropdownFuenteDatos.get())) # dropdownFuenteDatosParalelo ponerlo cuando este el boton para escoger spakr
+            parse = Intermedio.getParseSpark(eleccionDropdown(dropdownFuenteDatos.get())) # dropdownFuenteDatosParalelo ponerlo cuando este el boton para escoger spakr
             dataS = parse().getDataset()
             # Espera si va a ser todo igual es mejor separar el metodo inicial con una condicion
             label2.grid(column = 2, row = 4)
@@ -71,7 +71,7 @@ class Usuario:
         #2. SEGUNDO Metodo para añadir a la ventana el dropdownList para quel usuario escoja los elementos que quiere seleccionar
         def getSeleccionados(event):
             #opcionesPack = dropDownSeleccion.winfo_ismapped() # Asi pregunto si ya esta metido dentro de la ventana antes de volver a declararlo
-            #dataS = Mediador.getParse(fuenteDatos.get()).getDataset()
+            #dataS = Intermedio.getParse(fuenteDatos.get()).getDataset()
             nonlocal dataS
             #label4.pack()
             #label3.pack(pady=10)
@@ -143,7 +143,7 @@ class Usuario:
             dataS.setSeleccionados(elegidos) # limpiar
             dataS.setSeleccionEjeX(ejeX)
             dataS.setSeleccionEjeY(ejeY)
-            Mediador.show(grafica, dataS) 
+            Intermedio.show(grafica, dataS) 
 
 
 

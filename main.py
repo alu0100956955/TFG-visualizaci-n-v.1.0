@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from leerDatos import ParseCasosConfirmados
-from mediador import Mediador
+from mediador import Intermedio
 from instalador import Instalador
 from interfaz_usuario import Usuario
 

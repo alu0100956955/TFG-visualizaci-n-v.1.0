@@ -12,7 +12,7 @@ from leerDatosSpark import ParsePokemonSpark
 
 
 # NO ES UN PATRON FACTORY, tengo que cambiarle el nombre y actualizar las referencias
-class Factory:
+class Selector:
 
     # este metodo devolvera el tipo de parse dependiendo de la ruta
     # To do analizar la ruta para decidir el tipo de parse | para esto primero hay que arreglar la estructura de los parse
